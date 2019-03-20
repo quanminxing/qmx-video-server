@@ -49,6 +49,7 @@ exports.main = function *(){
   const column_id = body.column_id;
   const openid = body.openid;
   const email = body.email;
+
   let result;
   if(oper === 'add'){
 
@@ -76,13 +77,20 @@ exports.main = function *(){
       email
     });
 
-    if(!this.session.user){ 
-      let mailText = '订单ID为XXX，订单内容如下：</br> 样片视频：139-依波女表</br> 样片时长：30S</br> 样片功能：室内场景</br> 公司名称：YYYY公司</br> 联系人：abc</br> 手机号：13640972721</br> 邮箱：qmx@bcd.com</br> 请及时联系客户。'
-      mail.sendMail('你收到一份来自全民星小视频的brief', mailText, function(info){   //'你收到一份来自全民星小视频的brief', '请在后台查看id为' + result.insertId +'的订单'
+    if(!this.session.user){
+      let mailHtmlText =  `订单ID为${result.insertId},订单内容如下：</br>` + 
+      `样片视频：139-依波女表</br>` + 
+      `样片时长：30S</br>` +
+      `样片功能：室内场景</br>` +
+      `公司名称：${business}</br>` +
+      `联系人：${name}</br>` +
+      `联系方式：${phone}</br>` +
+      `邮箱：${email}</br>` +
+      `请及时联系客户。`
+      mail.sendMail('这是一封测试用的邮件一份来自全民星小视频的brief', mailHtmlText, function(info){   //'你收到一份来自全民星小视频的brief', '请在后台查看id为' + result.insertId +'的订单'
         console.log(info);
-      })
+      });
     }
-
     this.body = 'success';
 
   }else if(oper === 'edit'){

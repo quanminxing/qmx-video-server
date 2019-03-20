@@ -2,7 +2,6 @@
 
 
 module.exports = app => {
-  console.log('这是service.bill')
   class MonthServer extends app.Service {
     * insert(obj) {
       const result = yield app.mysql.insert('video_bill', {

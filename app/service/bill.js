@@ -25,13 +25,13 @@ module.exports = app => {
 
     // 获取列表
     * list(pageNum, pageSize) {
-      const articles = yield app.mysql.query('select id,name,work_id,price,status,business,time,scale,channel,video_bill.timestamp,phone,category_id, platform_id,column_id,video_id,comment from video_bill order by timestamp desc limit ? offset ?;', [ pageSize, (pageNum - 1) * pageSize ]);
+      const articles = yield app.mysql.query('select id,name,work_id,price,status,business,scale,channel,timestamp,phone,category_id, platform_id,column_id,video_id,comment, email from video_bill order by timestamp desc limit ? offset ?;', [ pageSize, (pageNum - 1) * pageSize ]);
       return articles;
     }
 
     // 获取列表byren
-    * listByUser(openid) {
-      const articles = yield app.mysql.query('select video_bill.id,video_platform.name as platform_name,video_column.name as column_name,video_video.name as video_name, video_bill.name,video_bill.work_id,video_bill.price,video_bill.status,video_bill.business,video_bill.time,scale,channel,video_bill.timestamp,phone,video_bill.category_id,video_category.name, video_bill.platform_id,video_bill.column_id,video_bill.video_id,video_bill.comment from video_bill LEFT JOIN video_category on video_bill.category_id=video_category.id LEFT JOIN video_platform on video_bill.platform_id=video_platform.id  LEFT JOIN video_column on video_bill.column_id=video_column.id LEFT JOIN video_video on video_bill.video_id=video_video.id where openid = ? and video_bill.status != 3 order by timestamp desc;', [ openid ]);
+    * listByUser(openid, pageNum, pageSize) {
+      const articles = yield app.mysql.query('select video_bill.id,video_platform.name as platform_name,video_column.name as column_name,video_video.name as video_name, video_bill.name,video_bill.work_id,video_bill.price,video_bill.status,video_bill.business,video_bill.time,scale,channel,video_bill.timestamp,phone,video_bill.category_id,video_category.name, video_bill.platform_id,video_bill.column_id,video_bill.video_id,video_bill.comment, video_bill.email from video_bill LEFT JOIN video_category on video_bill.category_id=video_category.id LEFT JOIN video_platform on video_bill.platform_id=video_platform.id  LEFT JOIN video_column on video_bill.column_id=video_column.id LEFT JOIN video_video on video_bill.video_id=video_video.id where openid = ? and video_bill.status != 3 order by timestamp desc limit ? offset ?;', [ openid, pageSize, (pageNum - 1) * pageSize]);
       return articles;
     }
 

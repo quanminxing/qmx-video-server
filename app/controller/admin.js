@@ -6,8 +6,8 @@ exports.loginByWechat = function* () {
   console.log('wechat login')
   try {
     console.log(this)
-    let appId = this.config.wechatApp.appId;
-    let secret = this.config.wechatApp.secret;
+    let appId = 'wx52c4f518bbba52b5';
+    let secret = 'a03859eb4bcb57f3cc09995a01077c56';
     let { js_code } = this.request.body;
     console.log(js_code)
     let url = `https://api.weixin.qq.com/sns/jscode2session?appid=${appId}&secret=${secret}&js_code=${js_code}&grant_type=authorization_code`;

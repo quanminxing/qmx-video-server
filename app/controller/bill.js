@@ -176,7 +176,9 @@ exports.list = function* () {
 exports.listByUser = function* () {
   let result;
   const openid = this.query.openid;
-  result = yield this.service.bill.listByUser(openid);
+  const pageNum = parseInt(this.query.pageNum || 1);
+  const pageSize = parseInt(this.query.pageSize || 10)
+  result = yield this.service.bill.listByUser(openid, pageNum, pageSize);
   result = result.map((d)=>{
     d.timestamp = moment(d.timestamp).format('YYYY-MM-DD hh:mm:ss');
     return d;

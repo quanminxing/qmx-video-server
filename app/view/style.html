@@ -1,0 +1,438 @@
+{% extends "_layout.html" %}
+
+{% block style %}
+
+{% endblock %}
+
+{% block header %}
+
+{% endblock %}
+
+{% block body %}
+<!-- Main Content -->
+
+<div class="main-content">
+    <div class="main-content-inner">
+
+        <div class="page-content">
+
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="operator">
+                        <button class="btn btn-success" id="search">搜索</button>
+                        <button class="btn btn-success" id="add">添加</button>
+                    </div>
+
+
+                    <table id="grid-table"></table>
+
+                    <div id="grid-pager"></div>
+
+                    <!-- PAGE CONTENT ENDS -->
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.page-content -->
+    </div>
+</div><!-- /.main-content -->
+<textarea name="" id="users" cols="30" rows="10" style="display:none">{{users}}</textarea>
+
+{% endblock %}
+
+{% block script %}
+<!-- inline scripts related to this page -->
+<script type="text/javascript">
+window.users = JSON.parse($('#users').val());
+    var grid_data =
+        [
+            { id: 1, name: "Desktop Computer", work_id: 1, phone: 111222, status: 0 },
+            { id: 2, name: "Desktop 111", work_id: 3, phone: 43443, status: 1 },
+            { id: 3, name: "Desktop sasd", work_id: 4, phone: 213123, status: 3 },
+            { id: 4, name: "Desktop dsad", work_id: 2, phone: 32144, status: 1 },
+            { id: 5, name: "Desktop zccxz", work_id: 2, phone: 454345, status: 2 },
+            { id: 6, name: "Desktop cxzczzxc", work_id: 1, phone: 4234324, status: 0 },
+        ];
+        function style_search_filters(form) {
+					form.find('.delete-rule').val('X');
+					form.find('.add-rule').addClass('btn btn-xs btn-primary');
+					form.find('.add-group').addClass('btn btn-xs btn-success');
+					form.find('.delete-group').addClass('btn btn-xs btn-danger');
+				}
+				function style_search_form(form) {
+					var dialog = form.closest('.ui-jqdialog');
+                    var buttons = dialog.find('.EditTable')
+                    $('#fbox_grid-table_query').hide();
+					buttons.find('.EditButton a[id*="_reset"]').addClass('btn btn-sm btn-info').find('.ui-icon').attr('class', 'ace-icon fa fa-retweet');
+					buttons.find('.EditButton a[id*="_query"]').addClass('btn btn-sm btn-inverse').find('.ui-icon').attr('class', 'ace-icon fa fa-comment-o');
+					buttons.find('.EditButton a[id*="_search"]').addClass('btn btn-sm btn-purple').find('.ui-icon').attr('class', 'ace-icon fa fa-search');
+				}
+    //it causes some flicker when reloading or navigating grid
+    //it may be possible to have some custom formatter to do this as the grid is being created to prevent this
+    //or go back to default browser checkbox styles for the grid
+    function styleCheckbox(table) {
+        /**
+            $(table).find('input:checkbox').addClass('ace')
+            .wrap('<label />')
+            .after('<span class="lbl align-top" />')
+	
+	
+            $('.ui-jqgrid-labels th[id*="_cb"]:first-child')
+            .find('input.cbox[type=checkbox]').addClass('ace')
+            .wrap('<label />').after('<span class="lbl align-top" />');
+        */
+    }
+
+    //unlike navButtons icons, action icons in rows seem to be hard-coded
+    //you can change them like this in here if you want
+    function updateActionIcons(table) {
+        /**
+        var replacement = 
+        {
+            'ui-ace-icon fa fa-pencil' : 'ace-icon fa fa-pencil blue',
+            'ui-ace-icon fa fa-trash-o' : 'ace-icon fa fa-trash-o red',
+            'ui-icon-disk' : 'ace-icon fa fa-check green',
+            'ui-icon-cancel' : 'ace-icon fa fa-times red'
+        };
+        $(table).find('.ui-pg-div span.ui-icon').each(function(){
+            var icon = $(this);
+            var $class = $.trim(icon.attr('class').replace('ui-icon', ''));
+            if($class in replacement) icon.attr('class', 'ui-icon '+replacement[$class]);
+        })
+        */
+    }
+
+    //replace icons with FontAwesome icons like above
+
+    function updatePagerIcons(table) {
+        var replacement =
+        {
+            'ui-icon-seek-first': 'ace-icon fa fa-angle-double-left bigger-140',
+            'ui-icon-seek-prev': 'ace-icon fa fa-angle-left bigger-140',
+            'ui-icon-seek-next': 'ace-icon fa fa-angle-right bigger-140',
+            'ui-icon-seek-end': 'ace-icon fa fa-angle-double-right bigger-140'
+        };
+        $('.ui-pg-table:not(.navtable) > tbody > tr > .ui-pg-button > .ui-icon').each(function () {
+            var icon = $(this);
+            var $class = $.trim(icon.attr('class').replace('ui-icon', ''));
+
+            if ($class in replacement) icon.attr('class', 'ui-icon ' + replacement[$class]);
+        })
+    }
+
+    function enableTooltips(table) {
+        $('.navtable .ui-pg-button').tooltip({ container: 'body' });
+        $(table).find('.ui-pg-div').tooltip({ container: 'body' });
+    }
+
+    function addRow() {
+        var grid = $("#grid-table");
+        grid.editGridRow("new", { closeAfterAdd: true });
+    }
+    function delRow() {
+        var grid = $("#grid-table");
+        var rowKey = grid.getGridParam("selarrrow");
+        
+        if (rowKey) {
+            grid.delGridRow(rowKey);
+        }
+        else {
+            alert("No rows are selected");
+        }
+    }
+    function selectAll() {
+        $('#cb_grid-table').trigger('click')
+    }
+
+
+    $('#add').on('click', function () {
+        addRow()
+    })
+
+    var grid_selector = "#grid-table";
+    var pager_selector = "#grid-pager";
+    var operator = "#grid-operator";
+
+    var parent_column = $(grid_selector).closest('[class*="col-"]');
+    //resize to fit page size
+    $(window).on('resize.jqGrid', function () {
+        $(grid_selector).jqGrid('setGridWidth', parent_column.width());
+    })
+
+    //resize on sidebar collapse/expand
+    $(document).on('settings.ace.jqGrid', function (ev, event_name, collapsed) {
+        if (event_name === 'sidebar_collapsed' || event_name === 'main_container_fixed') {
+            //setTimeout is for webkit only to give time for DOM changes and then redraw!!!
+            setTimeout(function () {
+                $(grid_selector).jqGrid('setGridWidth', parent_column.width());
+            }, 20);
+        }
+    })
+    
+    function formatStatus(cellValue, options, rowObject) {
+        return ['生效', '失效'][cellValue]
+    };
+    function formatUser(cellValue, options, rowObject) {
+        console.log(cellValue, users.filter((d) => (d.id === cellValue)));
+        return users.filter((d) => (d.id === cellValue))[0].name
+    };
+
+
+    var userValue = '';
+    users.forEach((d, i) => {
+        userValue += d.id;
+        userValue += ':' + d.name;
+        if (i !== users.length - 1) {
+            userValue += ';'
+        }
+    });
+
+    $(grid_selector).jqGrid({
+        //direction: "rtl",
+        //data: grid_data,
+        //datatype: "local",
+        beforeProcessing: function () { console.log(111111);},
+        datatype : "json",
+        mtype: "GET",
+        url: '/style',
+        postData: {
+            //'userName': userName,
+        },
+        height: 400,
+        colNames: ['编号', '风格名称', '状态', '备注','操作'],
+
+        //{id:6,name:"Desktop cxzczzxc",work_id:"222",phone:4234324,status:0},
+        colModel: [
+            { name: 'id', index: 'id', width: 60, sorttype: "int", editable: false },
+            { name: 'name', index: 'name', width: 150, editable: true, editoptions: { size: "20", maxlength: "40" } },
+            { name: 'status', index: 'status', width: 60, editable: true, formatter: formatStatus, edittype: "select", editoptions: { value: "0:生效;1:失效" } },
+            { name: 'comment', index: 'comment', width: 150, editable: true, editoptions: { size: "20", maxlength: "40" } },
+            {
+                name: 'myac', index: '', width: 80, fixed: true, sortable: false, resize: false,
+                formatter: 'actions',
+                formatoptions: {
+                    keys: true,
+                    //delbutton: false,//disable delete button
+                    delformbutton: true,
+                    delOptions: { recreateForm: true, beforeShowForm: beforeDeleteCallback },
+                    editformbutton: true, editOptions: { recreateForm: true, beforeShowForm: beforeEditCallback,closeAfterEdit:true }
+                }
+            },
+        ],
+        jsonReader: {  
+            records:"totalRow"
+        },
+        viewrecords: true,
+        rowNum: 10,
+        rowList: [10, 20, 30, 40, 50],
+        pager: pager_selector,
+        altRows: true,
+        //toppager: true,
+
+        multiselect: true,
+        //multikey: "ctrlKey",
+        multiboxonly: true,
+
+        loadComplete: function () {
+            setTimeout(function(){
+                var table = this;
+				updatePagerIcons(table);
+			}, 0);
+        },
+
+        editurl: "/style",//nothing is saved
+
+        //,autowidth: true,
+
+
+        /**
+        ,
+        grouping:true, 
+        groupingView : { 
+             groupField : ['name'],
+             groupDataSorted : true,
+             plusicon : 'fa fa-chevron-down bigger-110',
+             minusicon : 'fa fa-chevron-up bigger-110'
+        },
+        caption: "Grouping"
+        */
+
+    });
+
+
+    $(window).triggerHandler('resize.jqGrid');//trigger window resize to make the grid get the correct size
+
+    function customButtonClicked() {
+        alert("You have clicked a custom button.");
+    }
+
+
+
+    //navButtons
+    $(grid_selector).jqGrid('navGrid', pager_selector,
+        { 	//navbar options
+            edit: false,
+            editicon: 'ace-icon fa fa-pencil blue',
+            add: false,
+            addicon: 'ace-icon fa fa-plus-circle purple',
+            del: false,
+            delicon: 'ace-icon fa fa-trash-o red',
+            search: true,
+            searchicon: 'ace-icon fa fa-search orange',
+            refresh: false,
+            refreshicon: 'ace-icon fa fa-refresh green',
+            view: false,
+            viewicon: 'ace-icon fa fa-search-plus grey',
+        },
+        {
+            //edit record form
+            closeAfterEdit: true,
+            //width: 700,
+            recreateForm: true,
+            beforeShowForm: function (e) {
+                var form = $(e[0]);
+                form.closest('.ui-jqdialog').find('.ui-jqdialog-titlebar').wrapInner('<div class="widget-header" />')
+                // style_edit_form(form);
+            }
+        },
+        {
+            //new record form
+            //width: 700,
+            closeAfterAdd: true,
+            recreateForm: true,
+            viewPagerButtons: false,
+            beforeShowForm: function (e) {
+                var form = $(e[0]);
+                form.closest('.ui-jqdialog').find('.ui-jqdialog-titlebar')
+                    .wrapInner('<div class="widget-header" />')
+                // style_edit_form(form);
+            }
+        },
+        {
+            //delete record form
+            recreateForm: true,
+            beforeShowForm: function (e) {
+                var form = $(e[0]);
+                if (form.data('styled')) return false;
+
+                form.closest('.ui-jqdialog').find('.ui-jqdialog-titlebar').wrapInner('<div class="widget-header" />')
+                style_delete_form(form);
+
+                form.data('styled', true);
+            },
+            onClick: function (e) {
+                //alert(1);
+            }
+        },
+        {
+            //search form
+            title: "高级搜索",
+            recreateForm: true,
+            afterShowSearch: function (e) {
+                var form = $(e[0]);
+                form.closest('.ui-jqdialog').find('.ui-jqdialog-title').wrap('<div class="widget-header" />')
+                style_search_form(form);
+            },
+            afterRedraw: function () {
+                style_search_filters($(this));
+            }
+            ,
+            onSearch: function () {
+                var $filter = $("#" + $.jgrid.jqID("fbox_" + this.id)),
+                    sql = $filter.jqFilter('toSQLString');
+
+                $(grid_selector).jqGrid('setGridParam', { postData: {sql : sql} });
+                console.log(sql);
+            },   
+            sopt:["cn","nc",'eq', 'ne'],//["eq","ne","lt","le","gt","ge","bw","bn","ew","en","cn","nc","nu","nn"]
+            multipleSearch: true,
+            closeAfterSearch:true
+            //multipleGroup:true,
+            //showQuery: true
+        },
+        {
+            //view record form
+            recreateForm: true,
+            beforeShowForm: function (e) {
+                var form = $(e[0]);
+                form.closest('.ui-jqdialog').find('.ui-jqdialog-title').wrap('<div class="widget-header" />')
+            }
+        }
+    )
+
+    // add first custom button
+    $(grid_selector).navButtonAdd(pager_selector,
+        {
+            buttonicon: "ui-icon-pencil",
+            title: "全选",
+            caption: "全选",
+            position: "last",
+            onClickButton: selectAll
+        });
+
+
+    /// add second custom button
+    $(grid_selector).navButtonAdd(pager_selector,
+        {
+            buttonicon: "ui-icon-trash",
+            title: "删除",
+            caption: "删除",
+            position: "last",
+            onClickButton: delRow
+        });
+
+        setTimeout(function(){
+            $('#search_grid-table div').append('高级搜索');
+        },100)
+/*
+    setTimeout(function(){
+        $.jgrid.setRegional('grid-table', { regional: 'cn' });
+    }, 0)
+*/
+    $('#search').click(function(){
+        $('#search_grid-table').trigger('click');
+    })
+
+    function beforeDeleteCallback(e) {
+        var form = $(e[0]);
+        if (form.data('styled')) return false;
+
+        form.closest('.ui-jqdialog').find('.ui-jqdialog-titlebar').wrapInner('<div class="widget-header" />')
+        form.data('styled', true);
+    }
+
+    function beforeEditCallback(e) {
+        var form = $(e[0]);
+        form.closest('.ui-jqdialog').find('.ui-jqdialog-titlebar').wrapInner('<div class="widget-header" />')
+    }
+
+    //var selr = jQuery(grid_selector).jqGrid('getGridParam','selrow');
+
+    $(document).one('ajaxloadstart.page', function (e) {
+        $.jgrid.gridDestroy(grid_selector);
+        $('.ui-jqdialog').remove();
+    });
+
+
+    function fetchData() {
+
+        var gridArrayData = [];
+        // show loading message
+        $(grid_selector)[0].grid.beginReq();
+        $.ajax({
+            url: "http://localhost:7001/style",
+            success: function (result) {
+                gridArrayData = gridArrayData.concat(result.rows);
+                console.log(gridArrayData);
+                // set the new data
+                $(grid_selector).jqGrid('setGridParam', { data: gridArrayData });
+                // hide the show message
+                $(grid_selector)[0].grid.endReq();
+                // refresh the grid
+                $(grid_selector).trigger('reloadGrid');
+            }
+        });
+    }
+    
+
+
+</script>
+{% endblock %}

@@ -1,0 +1,683 @@
+{% extends "_layout.html" %}
+
+{% block style %}
+
+<style>
+#addBatch{
+    width:160px;
+    background:#1fb1f2!important
+    }
+.ui-jqdialog{
+    width:1000px!important;
+}
+</style>
+
+
+{% endblock %}
+
+{% block header %}
+
+{% endblock %}
+
+{% block body %}
+<!-- Main Content -->
+
+
+
+<div class="main-content">
+    <div class="main-content-inner">
+
+        <div class="page-content">
+
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="operator">
+                        <button class="btn btn-success" id="search">搜索</button>
+                        <button class="btn btn-success" id="add">添加</button>
+                        <button href="#modal-form" role="button" data-toggle="modal" class="btn btn-success" id="addBatch">批量导入</button>
+                    </div>
+
+
+                    <div id="modal-form" class="modal" tabindex="-1">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        <h4 class="blue bigger">上传视频／图片</h4>
+                                    </div>
+                    
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div class="col-xs-12 col-sm-12">
+                                                <form action="">
+                                                        <a href="/public/assets/tpl.xlsx">点击下载excel模板</a>
+                                                        <div class="form-group">
+                                                                <label for="form-field-url">excel文件</label>
+                                
+                                                                <div>
+                                                                    <input type="file" id="form-field-url" placeholder="文件路径" value="" />
+                                                                    
+                                                                </div>
+                                                            </div>
+                                                </form>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                    
+                                    <div class="modal-footer">
+                                        <button class="btn btn-sm" data-dismiss="modal">
+                                            <i class="ace-icon fa fa-times"></i>
+                                            取消
+                                        </button>
+                    
+                                        <button class="btn btn-sm btn-primary" id="uploadExcel">
+                                            <i class="ace-icon fa fa-check"></i>
+                                            确定
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!-- PAGE CONTENT ENDS -->
+
+
+                    <table id="grid-table"></table>
+
+                    <div id="grid-pager"></div>
+
+                    <!-- PAGE CONTENT ENDS -->
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.page-content -->
+    </div>
+</div><!-- /.main-content -->
+
+<textarea name="" id="categorys" cols="30" rows="10" style="display:none">{{categorys}}</textarea>
+<textarea name="" id="users" cols="30" rows="10" style="display:none">{{users}}</textarea>
+<textarea name="" id="platforms" cols="30" rows="10" style="display:none">{{platforms}}</textarea>
+<textarea name="" id="columns" cols="30" rows="10" style="display:none">{{columns}}</textarea>
+<textarea name="" id="usages" cols="30" rows="10" style="display:none">{{usages}}</textarea>
+<textarea name="" id="styles" cols="30" rows="10" style="display:none">{{styles}}</textarea>
+{% endblock %}
+
+{% block script %}
+<!-- inline scripts related to this page -->
+<script type="text/javascript">
+
+  $('#uploadExcel').click(function(e) {
+        e.preventDefault();
+        var formData = new FormData();
+        // Attach file
+        formData.append('image', $('input[type=file]')[0].files[0]);
+        // console.log(formData);
+        $.ajax({
+            url: '/video/uploadBatch',
+            data: formData,
+            method: 'POST',
+            contentType: false, // NEEDED, DON'T OMIT THIS (requires jQuery 1.6+)
+            processData: false, // NEEDED, DON'T OMIT THIS
+            success: function(result) {
+                console.log(result);
+                if(result === 'success'){
+                    alert('批量上传成功!');
+                    $('#modal-form').modal('hide');
+                    location.reload()
+                }
+                //location.href = result.url;
+            },
+            error: function(responseStr) {
+                alert("error", responseStr);
+            }
+        })
+    });
+
+    window.categorys = JSON.parse($('#categorys').val());
+    window.platforms = JSON.parse($('#platforms').val());
+    window.usages = JSON.parse($('#usages').val());
+    window.styles = JSON.parse($('#styles').val());
+    window.columns = JSON.parse($('#columns').val());
+    window.users = JSON.parse($('#users').val());
+
+    var grid_data =
+        [
+            { id: 1, name: "Desktop Computer", work_id: 1, phone: 111222, status: 0 },
+            { id: 2, name: "Desktop 111", work_id: 3, phone: 43443, status: 1 },
+            { id: 3, name: "Desktop sasd", work_id: 4, phone: 213123, status: 3 },
+            { id: 4, name: "Desktop dsad", work_id: 2, phone: 32144, status: 1 },
+            { id: 5, name: "Desktop zccxz", work_id: 2, phone: 454345, status: 2 },
+            { id: 6, name: "Desktop cxzczzxc", work_id: 1, phone: 4234324, status: 0 },
+        ];
+        function style_search_filters(form) {
+					form.find('.delete-rule').val('X');
+					form.find('.add-rule').addClass('btn btn-xs btn-primary');
+					form.find('.add-group').addClass('btn btn-xs btn-success');
+					form.find('.delete-group').addClass('btn btn-xs btn-danger');
+				}
+				function style_search_form(form) {
+					var dialog = form.closest('.ui-jqdialog');
+                    var buttons = dialog.find('.EditTable')
+                    $('#fbox_grid-table_query').hide();
+					buttons.find('.EditButton a[id*="_reset"]').addClass('btn btn-sm btn-info').find('.ui-icon').attr('class', 'ace-icon fa fa-retweet');
+					buttons.find('.EditButton a[id*="_query"]').addClass('btn btn-sm btn-inverse').find('.ui-icon').attr('class', 'ace-icon fa fa-comment-o');
+					buttons.find('.EditButton a[id*="_search"]').addClass('btn btn-sm btn-purple').find('.ui-icon').attr('class', 'ace-icon fa fa-search');
+				}
+    //it causes some flicker when reloading or navigating grid
+    //it may be possible to have some custom formatter to do this as the grid is being created to prevent this
+    //or go back to default browser checkbox styles for the grid
+    function styleCheckbox(table) {
+        /**
+            $(table).find('input:checkbox').addClass('ace')
+            .wrap('<label />')
+            .after('<span class="lbl align-top" />')
+	
+	
+            $('.ui-jqgrid-labels th[id*="_cb"]:first-child')
+            .find('input.cbox[type=checkbox]').addClass('ace')
+            .wrap('<label />').after('<span class="lbl align-top" />');
+        */
+    }
+
+    //unlike navButtons icons, action icons in rows seem to be hard-coded
+    //you can change them like this in here if you want
+    function updateActionIcons(table) {
+        /**
+        var replacement = 
+        {
+            'ui-ace-icon fa fa-pencil' : 'ace-icon fa fa-pencil blue',
+            'ui-ace-icon fa fa-trash-o' : 'ace-icon fa fa-trash-o red',
+            'ui-icon-disk' : 'ace-icon fa fa-check green',
+            'ui-icon-cancel' : 'ace-icon fa fa-times red'
+        };
+        $(table).find('.ui-pg-div span.ui-icon').each(function(){
+            var icon = $(this);
+            var $class = $.trim(icon.attr('class').replace('ui-icon', ''));
+            if($class in replacement) icon.attr('class', 'ui-icon '+replacement[$class]);
+        })
+        */
+    }
+
+    //replace icons with FontAwesome icons like above
+
+    function updatePagerIcons(table) {
+        var replacement =
+        {
+            'ui-icon-seek-first': 'ace-icon fa fa-angle-double-left bigger-140',
+            'ui-icon-seek-prev': 'ace-icon fa fa-angle-left bigger-140',
+            'ui-icon-seek-next': 'ace-icon fa fa-angle-right bigger-140',
+            'ui-icon-seek-end': 'ace-icon fa fa-angle-double-right bigger-140'
+        };
+        $('.ui-pg-table:not(.navtable) > tbody > tr > .ui-pg-button > .ui-icon').each(function () {
+            var icon = $(this);
+            var $class = $.trim(icon.attr('class').replace('ui-icon', ''));
+
+            if ($class in replacement) icon.attr('class', 'ui-icon ' + replacement[$class]);
+        })
+    }
+
+    function enableTooltips(table) {
+        $('.navtable .ui-pg-button').tooltip({ container: 'body' });
+        $(table).find('.ui-pg-div').tooltip({ container: 'body' });
+    }
+
+    function addRow() {
+        var grid = $("#grid-table");
+        grid.editGridRow("new", { closeAfterAdd: true });
+        setTimeout(function () {
+            $('#tr_is_scene').show();
+            $('#tr_is_show').show();
+            $('#tr_is_model').show();
+            $('#tr_is_audio').show();
+            $('#tr_is_text').show();
+            $('#tr_url').show();
+            $('#tr_short_image').show();
+            $('#tr_work_id').hide();
+        }, 0)
+    }
+    function delRow() {
+        var grid = $("#grid-table");
+        var rowKey = grid.getGridParam("selarrrow");
+        
+        if (rowKey) {
+            grid.delGridRow(rowKey);
+        }
+        else {
+            alert("No rows are selected");
+        }
+    }
+    function selectAll() {
+        $('#cb_grid-table').trigger('click')
+    }
+
+
+    $('#add').on('click', function () {
+        addRow()
+    })
+
+    var grid_selector = "#grid-table";
+    var pager_selector = "#grid-pager";
+    var operator = "#grid-operator";
+
+    var parent_column = $(grid_selector).closest('[class*="col-"]');
+    //resize to fit page size
+    $(window).on('resize.jqGrid', function () {
+        $(grid_selector).jqGrid('setGridWidth', parent_column.width());
+    })
+
+    //resize on sidebar collapse/expand
+    $(document).on('settings.ace.jqGrid', function (ev, event_name, collapsed) {
+        if (event_name === 'sidebar_collapsed' || event_name === 'main_container_fixed') {
+            //setTimeout is for webkit only to give time for DOM changes and then redraw!!!
+            setTimeout(function () {
+                $(grid_selector).jqGrid('setGridWidth', parent_column.width());
+            }, 20);
+        }
+    })
+
+    function formatStatus(cellValue, options, rowObject) {
+        return ['待定', '进行中', '沟通中', '完成'][cellValue]
+    };
+    function formatCategory(cellValue, options, rowObject) {
+        console.log(cellValue, categorys.filter((d) => (d.id === cellValue)));
+        return categorys.filter((d) => (d.id === cellValue))[0].name
+    };
+    function formatUser(cellValue, options, rowObject) {
+        console.log(cellValue, users.filter((d) => (d.id === cellValue)));
+        return users.filter((d) => (d.id === cellValue))[0].name
+    };
+    function formatPlatform(cellValue, options, rowObject) {
+        console.log(cellValue, platforms.filter((d) => (d.id === cellValue)));
+        return cellValue ? platforms.filter((d) => (d.id === cellValue))[0].name : '';
+    };
+    function formatColumn(cellValue, options, rowObject) {
+        console.log(cellValue, columns.filter((d) => (d.id === cellValue)));
+        return cellValue ? columns.filter((d) => (d.id === cellValue))[0].name : '';
+    };
+    function formatUsage(cellValue, options, rowObject) {
+        console.log(cellValue, usages.filter((d) => (d.id === cellValue)));
+        return cellValue ? usages.filter((d) => (d.id === cellValue))[0].name : '';
+    };
+    function formatStyle(cellValue, options, rowObject) {
+        console.log(cellValue, styles.filter((d) => (d.id === cellValue)));
+        return cellValue ? styles.filter((d) => (d.id === cellValue))[0].name : '';
+    };
+
+    var userValue = '';
+    users.forEach((d, i) => {
+        userValue += d.id;
+        userValue += ':' + d.name;
+        if (i !== users.length - 1) {
+            userValue += ';'
+        }
+    });
+
+    var categoryValue = '';
+    categorys.forEach((d, i) => {
+        categoryValue += d.id;
+        categoryValue += ':' + d.name;
+        if (i !== categorys.length - 1) {
+            categoryValue += ';'
+        }
+    });
+
+    var columnValue = '';
+    columns.forEach((d, i) => {
+        columnValue += d.id;
+        columnValue += ':' + d.name;
+        if (i !== columns.length - 1) {
+            columnValue += ';'
+        }
+    });
+
+    var platformValue = '';
+    platforms.forEach((d, i) => {
+        platformValue += d.id;
+        platformValue += ':' + d.name;
+        if (i !== platforms.length - 1) {
+            platformValue += ';'
+        }
+    });
+
+    var styleValue = '';
+    styles.forEach((d, i) => {
+        styleValue += d.id;
+        styleValue += ':' + d.name;
+        if (i !== styles.length - 1) {
+            styleValue += ';'
+        }
+    });
+
+    var usageValue = '';
+    usages.forEach((d, i) => {
+        usageValue += d.id;
+        usageValue += ':' + d.name;
+        if (i !== usages.length - 1) {
+            usageValue += ';'
+        }
+    });
+
+    function createFreightEditElement(value, editOptions) {
+        console.log(editOptions);
+        var div = $("<div style='margin-bottom:5px;margin-top:-10px;'></div>");
+        var label = $("<label class='radio-inline'></label>");
+        var radio = $("<input>", { type: "radio", value: "1", name: editOptions.name, id: editOptions.id, checked: value ==1  });
+        label.append(radio).append("有");
+        var label1 = $("<label class='radio-inline'></label>");
+        var radio1 = $("<input>", { type: "radio", value: "0", name: editOptions.name, id: editOptions.id, checked: value != 1 });
+        label1.append(radio1).append("无");
+        div.append(label).append(label1);
+
+        return div;
+    }
+
+    function createVideoLink(value, options){
+        var link = $("<a href = '/manager/video/show?' >" + value + "</a>")
+        return link
+    }
+    /*
+    function getFreightElementValue(elem, oper, value) {
+        var name = $(elem).text();
+        return name;
+    }*/
+
+    // The javascript executed specified by JQGridColumn.EditTypeCustomGetValue when EditType = EditType.Custom
+    // One parameter passed - the custom element created in JQGridColumn.EditTypeCustomCreateElement
+    function getFreightElementValue(elem, oper, value) {
+        if (oper === "set") {
+            var radioButton = $(elem).find("input:radio[value='" + value + "']");
+            if (radioButton.length > 0) {
+                radioButton.prop("checked", true);
+            }
+        }
+
+        if (oper === "get") {
+            return $(elem).find("input:radio:checked").val();
+        }
+    }
+
+    function formatLink(cellValue, options, rowObject) {
+            var linkHtml = "<a href='/manager/video/detail?id="+ rowObject.id+"'>"+ cellValue+"</a>";
+            return linkHtml;
+        }
+        
+    $(grid_selector).jqGrid({
+        //direction: "rtl",
+        //data: grid_data,
+        //datatype: "local",
+        beforeProcessing: function () { console.log(111111);},
+        datatype : "json",
+        mtype: "GET",
+        url: '/video',
+        postData: {
+            //'userName': userName,
+        },
+        height: 400,
+        colNames: ['编号','文件链接','缩略图', '名称', '类目', '价格', '需求方', '上传人','视频功能','视频风格','平台','栏目', '时长', '格式', '备注','样片说明','详情图片','操作'],
+        edit:{
+            closeAfterEdit:true,
+        },
+        //{id:6,name:"Desktop cxzczzxc",work_id:"222",phone:4234324,status:0},
+        colModel: [
+            { name: 'id', index: 'id', width: 60, sorttype: "int", editable: false},
+            { name: 'url', index: 'url', hidden: true, width: 150, editable: true, editoptions: { size: "50", maxlength: "1000" },formoptions: {rowpos:1,colpos:1} },
+            { name: 'short_image', index: 'short_image', hidden: true, width: 150, editable: true, editoptions: { size: "50", maxlength: "1000" },formoptions: {rowpos:2,colpos:1} },
+            { name: 'name', index: 'name', width: 150, editable: true, formatter: "showlink", formatoptions:{baseLinkUrl:"/manager/video/detail",idName: "id"}, editoptions: { size: "20", maxlength: "100" },formoptions: {rowpos:3,colpos:1}},
+            { name: 'category_id', index: 'category_id', formatter: formatCategory, width: 70, editable: true, edittype: "select", editoptions: { value: categoryValue },formoptions: {rowpos:1,colpos:2} },
+            { name: 'price', index: 'price', width: 60, editable: true, editoptions: { size: "10", maxlength: "20" },formoptions: {rowpos:6,colpos:2} },
+            { name: 'business', index: 'business', width: 150, editable: true, editoptions: { size: "20", maxlength: "100" },formoptions: {rowpos:4,colpos:1} },
+            { name: 'work_id', index: 'work_id', formatter: formatUser, width: 70, editable: true, edittype: "select", editoptions: { value: userValue } },
+            { name: 'usage_id', index: 'usage_id', formatter: formatUsage, width: 100, editable: true, edittype: "select", editoptions: { value: usageValue },formoptions: {rowpos:4,colpos:2} },
+            { name: 'style_id', index: 'style_id', formatter: formatStyle, width: 100, editable: true, edittype: "select", editoptions: { value: styleValue },formoptions: {rowpos:5,colpos:2} },
+            { name: 'platform_id', index: 'platform_id', formatter: formatPlatform, width: 70, editable: true, edittype: "select", editoptions: { value: platformValue },formoptions: {rowpos:2,colpos:2} },
+            { name: 'column_id', index: 'column_id', formatter: formatColumn, width: 70, editable: true, edittype: "select", editoptions: { value: columnValue },formoptions: {rowpos:3,colpos:2} },
+            { name: 'time', index: 'time', width: 60, editable: true, editoptions: { size: "10", maxlength: "30" },formoptions: {rowpos:6,colpos:1} },
+            { name: 'format', index: 'format', width: 60, editable: true, edittype: "select", editoptions: { value: "MP4:MP4;MOV:MOV;WMV:WMV" },formoptions: {rowpos:5,colpos:1} },
+            { name: 'description', index: 'description', width: 150, editable: true, editoptions: { size: "20", maxlength: "100" },formoptions: {rowpos:7,colpos:1} },
+            
+            // { name: 'keystring', index: 'keystring', width: 300, editable: true, edittype:"textarea", editoptions:{rows:"10",cols:"40"},formoptions: {rowpos:8,colpos:1,rowspan:2} },
+            { name: 'demo_description', index: 'demo_description', width: 150, editable: true, edittype:"textarea", editoptions:{rows:"10",cols:"40"},formoptions: {rowpos:8,colpos:2} },
+            { name: 'demo_pic', index: 'demo_pic', width: 150, editable: true, edittype:"textarea", editoptions:{rows:"5",cols:"40"},formoptions: {rowpos:9,colpos:2} },
+            /*
+            { name: 'is_scene', index: 'is_scene', width: 70, hidden: true, editable: true, edittype: "custom",
+                        editoptions: {
+                            custom_value: getFreightElementValue,
+                            custom_element: createFreightEditElement
+                        } }
+           ,*/{
+                name: 'myac', index: '', width: 80, fixed: true, sortable: false, resize: false,
+                formatter: 'actions',
+                formatoptions: {
+                    keys: true,
+                    //delbutton: false,//disable delete button
+                    delformbutton: true,
+                    delOptions: { recreateForm: true, beforeShowForm: beforeDeleteCallback },
+                    editformbutton: true, editOptions: { recreateForm: true, beforeShowForm: beforeEditCallback,closeAfterEdit:true }
+                }
+            },
+        ],
+
+        viewrecords: true,
+        rowNum: 10,
+        rowList: [10, 20, 30, 40, 50],
+        pager: pager_selector,
+        altRows: true,
+        //toppager: true,
+
+        multiselect: true,
+        //multikey: "ctrlKey",
+        multiboxonly: true,
+
+        loadComplete: function () {
+            setTimeout(function(){
+                var table = this;
+				updatePagerIcons(table);
+			}, 0);
+        },
+
+        editurl: "/video",//nothing is saved
+        jsonReader: {  
+            records:"totalRow"
+        },
+
+        /**
+        ,
+        grouping:true, 
+        groupingView : { 
+             groupField : ['name'],
+             groupDataSorted : true,
+             plusicon : 'fa fa-chevron-down bigger-110',
+             minusicon : 'fa fa-chevron-up bigger-110'
+        },
+        caption: "Grouping"
+        */
+
+    });
+
+
+    $(window).triggerHandler('resize.jqGrid');//trigger window resize to make the grid get the correct size
+
+    function customButtonClicked() {
+        alert("You have clicked a custom button.");
+    }
+
+
+
+    //navButtons
+    $(grid_selector).jqGrid('navGrid', pager_selector,
+        { 	//navbar options
+            edit: false,
+            editicon: 'ace-icon fa fa-pencil blue',
+            add: false,
+            addicon: 'ace-icon fa fa-plus-circle purple',
+            del: false,
+            delicon: 'ace-icon fa fa-trash-o red',
+            search: true,
+            searchicon: 'ace-icon fa fa-search orange',
+            refresh: false,
+            refreshicon: 'ace-icon fa fa-refresh green',
+            view: false,
+            viewicon: 'ace-icon fa fa-search-plus grey',
+        },
+        {
+            //edit record form
+            //closeAfterEdit: true,
+            //width: 700,
+            recreateForm: true,
+            beforeShowForm: function (e) {
+                var form = $(e[0]);
+                form.closest('.ui-jqdialog').find('.ui-jqdialog-titlebar').wrapInner('<div class="widget-header" />')
+                // style_edit_form(form);
+            }
+        },
+        {
+            //new record form
+            //width: 700,
+            closeAfterAdd: true,
+            recreateForm: true,
+            viewPagerButtons: false,
+            beforeShowForm: function (e) {
+                var form = $(e[0]);
+                form.closest('.ui-jqdialog').find('.ui-jqdialog-titlebar')
+                    .wrapInner('<div class="widget-header" />')
+                // style_edit_form(form);
+            }
+        },
+        {
+            //delete record form
+            recreateForm: true,
+            beforeShowForm: function (e) {
+                var form = $(e[0]);
+                if (form.data('styled')) return false;
+
+                form.closest('.ui-jqdialog').find('.ui-jqdialog-titlebar').wrapInner('<div class="widget-header" />')
+                style_delete_form(form);
+
+                form.data('styled', true);
+            },
+            onClick: function (e) {
+                //alert(1);
+            }
+        },
+        {
+            //search form
+            title: "高级搜索",
+            recreateForm: true,
+            afterShowSearch: function (e) {
+                var form = $(e[0]);
+                form.closest('.ui-jqdialog').find('.ui-jqdialog-title').wrap('<div class="widget-header" />')
+                style_search_form(form);
+            },
+            afterRedraw: function () {
+                style_search_filters($(this));
+            }
+            ,
+            onSearch: function () {
+                var $filter = $("#" + $.jgrid.jqID("fbox_" + this.id)),
+                    sql = $filter.jqFilter('toSQLString');
+
+                $(grid_selector).jqGrid('setGridParam', { postData: {sql : sql} });
+                console.log(sql);
+            },   
+
+            sopt:["cn","nc",'eq', 'ne'],//["eq","ne","lt","le","gt","ge","bw","bn","ew","en","cn","nc","nu","nn"]
+            multipleSearch: true,
+            closeAfterSearch:true
+            //multipleGroup:true,
+            //showQuery: true
+        },
+        {
+            //view record form
+            recreateForm: true,
+            beforeShowForm: function (e) {
+                var form = $(e[0]);
+                form.closest('.ui-jqdialog').find('.ui-jqdialog-title').wrap('<div class="widget-header" />')
+            }
+        }
+    )
+
+    // add first custom button
+    $(grid_selector).navButtonAdd(pager_selector,
+        {
+            buttonicon: "ui-icon-pencil",
+            title: "全选",
+            caption: "全选",
+            position: "last",
+            onClickButton: selectAll
+        });
+
+
+    /// add second custom button
+    $(grid_selector).navButtonAdd(pager_selector,
+        {
+            buttonicon: "ui-icon-trash",
+            title: "删除",
+            caption: "删除",
+            position: "last",
+            onClickButton: delRow
+        });
+
+        setTimeout(function(){
+            $('#search_grid-table div').append('高级搜索');
+        },100)
+/*
+    setTimeout(function(){
+        $.jgrid.setRegional('grid-table', { regional: 'cn' });
+    }, 0)
+*/
+    $('#search').click(function(){
+        $('#search_grid-table').trigger('click');
+    })
+
+    function beforeDeleteCallback(e) {
+        var form = $(e[0]);
+        if (form.data('styled')) return false;
+
+        form.closest('.ui-jqdialog').find('.ui-jqdialog-titlebar').wrapInner('<div class="widget-header" />')
+        form.data('styled', true);
+    }
+
+    function beforeEditCallback(e) {
+        var form = $(e[0]);
+        $('#tr_is_scene').show();
+        $('#tr_is_show').show();
+        $('#tr_is_model').show();
+        $('#tr_is_audio').show();
+        $('#tr_is_text').show();
+        $('#tr_url').show();
+        $('#tr_short_image').show();
+        $('#tr_work_id').hide();
+        
+        form.closest('.ui-jqdialog').find('.ui-jqdialog-titlebar').wrapInner('<div class="widget-header" />')
+    }
+
+    //var selr = jQuery(grid_selector).jqGrid('getGridParam','selrow');
+
+    $(document).one('ajaxloadstart.page', function (e) {
+        $.jgrid.gridDestroy(grid_selector);
+        $('.ui-jqdialog').remove();
+    });
+
+
+    function fetchData() {
+
+        var gridArrayData = [];
+        // show loading message
+        $(grid_selector)[0].grid.beginReq();
+        $.ajax({
+            url: "http://localhost:7001/business",
+            success: function (result) {
+                gridArrayData = gridArrayData.concat(result.rows);
+                console.log(gridArrayData);
+                // set the new data
+                $(grid_selector).jqGrid('setGridParam', { data: gridArrayData });
+                // hide the show message
+                $(grid_selector)[0].grid.endReq();
+                // refresh the grid
+                $(grid_selector).trigger('reloadGrid');
+            }
+        });
+    }
+    
+
+
+</script>
+{% endblock %}

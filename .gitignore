@@ -56,6 +56,15 @@ typings/
 
 # dotenv environment variables file
 .env
+.DS_Store
+npm-debug.log
+node_modules
 
 # next.js build output
 .next
+docs/
+
+run/
+coverage/
+cov/
+logs/

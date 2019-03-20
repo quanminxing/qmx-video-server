@@ -1,0 +1,111 @@
+{% extends "_layout.html" %}
+
+{% block style %}
+
+<link rel="stylesheet" href="/public/assets/ztree/css/zTreeStyle/zTreeStyle.css" type="text/css">
+<link rel="stylesheet" href="/public/assets/ztree/css/awesomeStyle/awesome.css" type="text/css">
+<link rel="stylesheet" href="/public/assets/css/bpage.css" type="text/css">
+
+
+<style>
+.title{
+    font-family:STHeitiSC-Medium;
+    font-weight:500;
+    color:rgba(51,51,51,1);
+    line-height:16px;
+}
+video, embed{
+    height:594px;
+    width: 100%;
+    background: rgba(0,0,0,0.1);
+}
+.video-table{
+    width:100%;
+}
+.video-table td{
+    height:40px;
+    padding-left:51px;
+    line-height: 40px;
+    border:1px solid rgba(238,238,238,1);
+}
+.video-table tr td:nth-of-type(2n-1){
+    background:rgba(239,244,250,1);
+}
+</style>
+{% endblock %}
+
+{% block header %}
+
+{% endblock %}
+
+{% block body %}
+<!-- Main Content -->
+
+<div class="main-content">
+    <div class="main-content-inner">
+            <div class="page-content">
+                <h4 class="title">{{detail.video_name}}.{{detail.format}}</h4>
+                {% if detail.isqq === 1 %} {{detail.url | safe}} {% endif %}
+                {% if detail.isqq === 0 %} <video src="{{detail.url}}" autoplay controls="controls"></video> {% endif %}
+                <h4 class="title">视频信息：</h4>
+
+
+
+            </div> 
+        </div>
+    </div><!-- /.main-content -->
+
+    {% endblock %}
+
+    {% block script %}
+        <script src="/public/assets/js/bpage.js"></script>
+    <script>
+
+        //javascript初始化
+        $('#page3').bPage({
+            url: '/manager/list',
+            //开启异步处理模式
+            asyncLoad: true,
+            //关闭服务端页面模式
+            serverSidePage: false,
+            asyncType: 'GET',
+            //数据自定义填充
+            render: function (data) {
+                console.log(data);
+                let html = '<table class="user-action"><tr><th>时间</th><th>事件</th><th>地点</th></tr>';
+                data.list.forEach(function(d){
+                        html += `<tr><td>${d.time}</td><td>${d.event}</td><td>${d.place}</td></tr>`
+                    });
+                    html += '</table>'
+                    console.log(html);
+                    $('#list').html(html)
+            },
+            params: function () {
+                return {
+                    userName: 'zhangsan',
+                    age: 42
+                };
+            }
+        });
+
+        $('#uploadKeyUnit').click(function(){
+            $.ajax({
+                type: "POST",
+                url: "/keyunit",
+                data: {
+                    name: $('#form-field-name').val(),
+                    price :$('#form-field-price').val(),
+                    url :$('#form-field-url').val(),
+                    description :$('#form-field-description').val(),
+                    oper:'add',
+                    key_id : 1,
+                },
+                success: function (data) {
+
+                }
+            });   
+        })
+
+    </script>
+
+    {% endblock %}

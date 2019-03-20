@@ -1,0 +1,270 @@
+{% extends "_layout.html" %}
+
+{% block style %}
+
+<link rel="stylesheet" href="/public/assets/ztree/css/zTreeStyle/zTreeStyle.css" type="text/css">
+<link rel="stylesheet" href="/public/assets/ztree/css/awesomeStyle/awesome.css" type="text/css">
+<link rel="stylesheet" href="/public/assets/css/bpage.css" type="text/css">
+
+
+<style>
+.activity-box{
+    width:152px;
+    height:120px;
+    background:rgba(255,255,255,1);
+    display:inline-block;
+    box-shadow:0px -1px 8px 1px rgba(49,55,68,0.1);
+    margin-right: 20px;
+}
+
+.activity-box .activity-number{
+    display:block;
+font-size:48px;
+font-family:STHeitiSC-Medium;
+font-weight:500;
+color:rgba(68,68,68,1);
+    line-height: 86px;
+height:84px;
+width:100%
+}
+
+.profile-user-info-striped{
+    border:none
+}
+.profile-info-name{
+    background-color:white;
+        width: 56px;
+}
+.profile-user-info-striped .profile-info-name{
+    background-color:white;
+    text-align:left
+}
+
+.profile-user-info-striped .profile-info-value{
+    border-top: none;
+    text-align:left
+}
+
+
+.activity-box .activity-info{
+    display:block;
+    font-size:16px;
+    font-family:STHeitiSC-Medium;
+    font-weight:500;
+    color:rgba(102,102,102,1);
+    line-height: 34px;
+    height:36px;
+    background:rgba(238,238,238,1);
+}
+
+.username{
+    font-size:28px;
+font-family:STHeitiSC-Medium;
+font-weight:500;
+color:rgba(51,51,51,1);
+line-height: 42px;
+}
+.profile-user-info{
+    width:100%;
+    line-height:1
+}
+.user-position{
+    font-size:12px;
+font-family:STHeitiSC-Medium;
+font-weight:500;
+color:rgba(102,102,102,1);
+line-height:16px;
+}
+
+.title{
+    font-family:STHeitiSC-Medium;
+font-weight:500;
+color:rgba(51,51,51,1);
+line-height:16px;
+margin-left: -12px;
+}
+.user-action th{
+    background:rgba(239,244,250,1);
+    height: 40px;
+    line-height: 40px;
+    padding-left:20px
+}
+.user-action tr{
+
+}
+.user-action td{
+    padding-left:20px;
+    height: 40px;
+    line-height: 40px;
+}
+.user-action{
+    width: 100%;
+    padding: 0 20px;
+    border:1px solid rgba(238,238,238,1);
+    font-size:14px;
+    font-family:STHeitiSC-Medium;
+    font-weight:500;
+    color:rgba(68,68,68,1);
+}
+</style>
+{% endblock %}
+
+{% block header %}
+
+{% endblock %}
+
+{% block body %}
+<!-- Main Content -->
+
+<div class="main-content">
+    <div class="main-content-inner">
+
+
+        <div class="page-content">
+
+            <h4 class="title">人员信息</h4>
+            <div class="row">
+            
+                        <div id="user-profile-1" class="user-profile row">
+										<div class="col-xs-12 col-sm-3">
+                                            <span class="username">{{user.name}}</span>
+                                            <span class="user-position">{{user.position}}</span>
+
+
+											<div class="profile-user-info profile-user-info-striped">
+												<div class="profile-info-row">
+													<div class="profile-info-name"> 编号： </div>
+
+													<div class="profile-info-value">
+														<span class="" id="userid">{{user.id}}</span>
+													</div>
+												</div>
+
+												<div class="profile-info-row">
+													<div class="profile-info-name"> 电话：  </div>
+
+													<div class="profile-info-value">
+														<span class="" id="">{{user.phone}}</span>
+													</div>
+												</div>
+
+												<div class="profile-info-row">
+													<div class="profile-info-name">  备注： </div>
+
+													<div class="profile-info-value">
+														<span class="" id="">{{user.description}}</span>
+													</div>
+												</div>
+
+											</div>
+
+										</div>
+
+										<div class="col-xs-12 col-sm-9">
+											<div class="center">
+												<span class="activity-box no-hover">
+													<span class="activity-number"> {{video}} </span>
+													<span class="activity-info"> 上传视频数 </span>
+												</span>
+
+												<span class="activity-box no-hover">
+													<span class="activity-number"> {{key}} </span>
+													<span class="activity-info"> 颗粒 </span>
+												</span>
+
+												<span class="activity-box no-hover">
+													<span class="activity-number"> {{bill}} </span>
+													<span class="activity-info"> 订单 </span>
+												</span>
+
+												<span class="activity-box no-hover">
+													<span class="activity-number"> {{business}} </span>
+													<span class="activity-info"> 商家 </span>
+												</span>
+
+											</div>
+
+
+										</div>
+									</div>
+            
+            </div>
+            
+            </div>
+
+        <div class="page-content">
+         <h4 class="title">操作记录</h4>
+                    <div class="row">
+                <div class="col-xs-12" id="keyunit-box">
+
+                    <div class="row placeholders" id="list">
+
+                    R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw
+
+                    </div>
+                    <div id="page3"></div>
+
+
+
+                        <!-- PAGE CONTENT ENDS -->
+                        
+                    </div><!-- /.col -->
+                </div><!-- /.row -->
+        </div> 
+
+        </div>
+    </div><!-- /.main-content -->
+
+    {% endblock %}
+
+    {% block script %}
+        <script src="/public/assets/js/bpage.js"></script>
+    <script>
+
+        //javascript初始化
+        $('#page3').bPage({
+            url: '/manager/list',
+            //开启异步处理模式
+            asyncLoad: true,
+            //关闭服务端页面模式
+            serverSidePage: false,
+            asyncType: 'GET',
+            //数据自定义填充
+            render: function (data) {
+                console.log(data);
+                let html = '<table class="user-action"><tr><th width="300">时间</th><th>事件</th><th>地点</th></tr>';
+                data.list.forEach(function(d){
+                        html += `<tr><td>${d.time}</td><td>${d.event}</td><td>${d.place}</td></tr>`
+                    });
+                    html += '</table>'
+                    console.log(html);
+                    $('#list').html(html)
+            },
+            params: function () {
+                return {
+                    userid :$('#userid').text()
+                };
+            }
+        });
+detail[0].timestamp = moment(detail[0].timestamp).format('YYYY-MM-DD hh:mm:ss')
+        $('#uploadKeyUnit').click(function(){
+            $.ajax({
+                type: "POST",
+                url: "/keyunit",
+                data: {
+                    name: $('#form-field-name').val(),
+                    price :$('#form-field-price').val(),
+                    url :$('#form-field-url').val(),
+                    description :$('#form-field-description').val(),
+                    oper:'add',
+                    key_id : 1,
+                },
+                success: function (data) {
+
+                }
+            });   
+        })
+
+    </script>
+
+    {% endblock %}

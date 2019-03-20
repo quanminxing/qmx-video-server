@@ -1,0 +1,690 @@
+{% extends "_layout.html" %}
+
+{% block style %}
+
+<link rel="stylesheet" href="/public/assets/ztree/css/zTreeStyle/zTreeStyle.css" type="text/css">
+<link rel="stylesheet" href="/public/assets/ztree/css/awesomeStyle/awesome.css" type="text/css">
+<link rel="stylesheet" href="/public/assets/css/bpage.css" type="text/css">
+
+
+<style>
+
+    #tree-box{
+    box-shadow:2px 6px 8px rgba(49,55,68,0.1);
+}
+
+ul.ztree {
+    height:800px;
+    overflow-y:scroll;
+    overflow-x:auto;
+}
+
+.page-content {
+    padding: 0 14px;
+}
+
+.operator{
+    text-align: left;
+    margin-top: 30px;
+}
+
+.operator button{
+    margin-right: 2px;
+}
+.btn.btn-success{
+                width:auto;
+                height:32px;
+                background:rgba(49,187,69,1)!important;
+                border-radius:6px;
+                border:none;
+}
+.btn.btn-danger,.btn.btn-default{
+                width:auto;
+                height:32px;
+                border-radius:6px;
+                border:none;
+}
+
+.ztree li span.button{
+    background-image: initial;
+    width:22px
+}
+.ztree li span.button.switch{
+    width:22px;
+}
+
+.ztree, .ztree *{
+
+        background-color: initial;
+        color:black;
+        font-size:16px;
+        font-family:STHeitiSC-Medium;
+        font-weight:500;
+}
+
+.ztree li span{
+    color: #444444;
+    line-height: 28px;
+}
+
+.ztree li a.curSelectedNode {
+    padding-top: 0px;
+    background-color: inherit;
+    color: #1FB1F2;
+    height: 28px;
+    opacity: 0.8;
+    border: 0 none
+}
+
+.ztree li a{
+    height: 28px;
+}
+.ztree li a:hover, .ztree li a:hover span{
+    color: #1FB1F2;
+}
+
+.ztree li span.button::before {
+    color: #000000;
+    padding-top: 15px;
+}
+.ztree li a.curSelectedNode span{
+    color: #1FB1F2;
+}
+
+.ztree li span.button.root_close::before,
+.ztree li span.button.ico_open::before,
+.ztree li span.button.ico_close::before,
+.ztree li span.button.ico_docu::before,
+.ztree li span.button.center_open::before,
+.ztree li span.button.root_open::before,
+.ztree li span.button.center_close::before,
+.ztree li span.button.bottom_close::before,
+.ztree li span.button.bottom_open::before {
+    color: #000000;
+    padding-top: 15px;
+}
+.form-group div{
+    display: inline-block;
+    vertical-align: top;
+    width:50%
+}
+.form-group label{
+    font-weight: 400;
+    font-size: 14px;
+    /* height: 20px; */
+    line-height: 35px;
+    margin-bottom: 0;
+    width: 100px;
+    text-align: right;
+    padding-right: 10px;
+}
+.form-group input{width:400px}
+
+.keyunit input{
+    visibility: hidden;
+    margin-left: 45%;
+    font-size: 30px;
+}
+#keyunit-box{
+
+    height: 882px;
+    position: relative;
+
+}
+
+.delete-active{
+    border: 1px dotted red;
+}
+
+#keyunit-box #page3{
+    position: absolute;
+    bottom: 6%;
+    /* left: 50%; */
+    /* transform: translateX(-66%); */
+    width: 100%;
+}
+embed{
+    width:180px;
+    height:180px
+}
+div.bPage.bPageRight{
+    text-align: center;
+}
+.ztree li a input.rename{
+    line-height: 14px;
+}
+</style>
+{% endblock %}
+
+{% block header %}
+
+{% endblock %}
+
+{% block body %}
+<!-- Main Content -->
+
+<div class="main-content">
+    <div class="main-content-inner">
+
+        <div class="page-content">
+
+            <div class="row">
+                <div class="col-xs-3" id="tree-box">
+                    <div class="operator">
+                        <button class="btn btn-success" id="addLeaf">添加颗粒</button>
+                        <button class="btn btn-success" id="edit">修改名称</button>
+                        <button class="btn btn-danger" id="remove">删除</button>
+                    </div>
+                    <ul id="treeDemo" class="ztree"></ul>
+
+                    <!-- PAGE CONTENT ENDS -->
+                </div><!-- /.col -->
+                <div class="col-xs-9" id="keyunit-box">
+
+                    <div class="operator">
+                        <a href="#modal-form" role="button" data-toggle="modal" class="btn btn-success" id="addKeyUnit">上传</a>
+                        <button class="btn btn-danger" id="removeKeyUnit">删除</button>
+                        <button class="btn btn-danger" id="confirmKeyUnit">确认</button>
+                        <button class="btn btn-default" id="cancelKeyUnit">取消</button>
+                    </div>
+
+                    <div id="modal-detail" class="modal" tabindex="-1">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        <h4 class="blue bigger">颗粒度详情</h4>
+                                    </div>
+    
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div class="col-xs-6 col-sm-6" id="unit-box">
+                                                    <img id="unit-url" src="111"
+                                    width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
+                                    <video id="unit-url-video" src="111" autoplay width="200" height="200" controls="controls"></video>
+
+                                            </div>
+                                            <div class="col-xs-6 col-sm-6">
+                                                <p>编号：<span id="unit-id"></span></p>
+                                                <p>名称：<span id="unit-name"></span></p>
+                                                <p>价格：<span id="unit-price"></span></p>
+                                                <p>介绍：<span id="unit-desc"></span></p>
+                                            </div>
+                                        </div>
+                                    </div>
+    
+                                    <div class="modal-footer">
+                                        <button class="btn btn-sm" data-dismiss="modal">
+                                            <i class="ace-icon fa fa-times"></i>
+                                            关闭
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!-- PAGE CONTENT ENDS -->
+
+
+                    <div id="modal-form" class="modal" tabindex="-1">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="blue bigger">上传视频／图片</h4>
+                                </div>
+
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-12">
+                                            <div class="form-group">
+                                                <label for="form-field-url">文件链接</label>
+
+                                                <div>
+                                                    <input type="text" id="form-field-url" placeholder="文件链接" value="" />
+                                                    
+                                                </div>
+                                            </div>
+                                            <div class="space-4"></div>
+
+                                            <div class="form-group">
+                                                <label for="form-field-name">名称</label>
+                                                <div>
+                                                    <input type="text" id="form-field-name" placeholder="名称" value="" />
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="form-field-price">价格</label>
+                                                <div>
+                                                    <input type="text" id="form-field-price" placeholder="价格" value="" />
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="form-field-description">介绍</label>
+                                                <div>
+                                                    <textarea id="form-field-description" placeholder="介绍" value=""></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button class="btn btn-sm" data-dismiss="modal">
+                                        <i class="ace-icon fa fa-times"></i>
+                                        取消
+                                    </button>
+
+                                    <button class="btn btn-sm btn-primary" id="uploadKeyUnit">
+                                        <i class="ace-icon fa fa-check"></i>
+                                        确定
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div><!-- PAGE CONTENT ENDS -->
+
+
+                    <div class="row placeholders" id="list">
+                    </div>
+                    <div id="page3">
+
+
+
+                        <!-- PAGE CONTENT ENDS -->
+                    </div><!-- /.col -->
+                </div><!-- /.row -->
+            </div><!-- /.page-content -->
+        </div>
+    </div><!-- /.main-content -->
+
+    {% endblock %}
+
+    {% block script %}
+    <script type="text/javascript" src="/public/assets/ztree/js/jquery.ztree.core.js"></script>
+    <script type="text/javascript" src="/public/assets/ztree/js/jquery.ztree.excheck.js"></script>
+    <script type="text/javascript" src="/public/assets/ztree/js/jquery.ztree.exedit.js"></script>
+    <script src="/public/assets/js/bpage.js"></script>
+
+    <script>
+
+        var setting = {
+            view: {
+                selectedMulti: false
+            },
+            edit: {
+                enable: true,
+                showRemoveBtn: false,
+                showRenameBtn: false
+            },
+            check: {
+                enable: false
+                , chkStyle: 'radio'
+                , radioType: "level"
+            },
+            data: {
+                keep: {
+                    parent: true,
+                    leaf: false
+                },
+                simpleData: {
+                    enable: true
+                }
+            },
+            callback: {
+                beforeDrag: beforeDrag,
+                beforeRemove: beforeRemove,
+                beforeRename: beforeRename,
+                onRemove: onRemove,
+                onRename: zTreeOnRename,
+                onClick: onClick
+            }
+        };
+
+
+        var zNodes = [
+            { id: 1, pId: 0, name: "全部", open: true },
+            { id: 2, pId: 1, name: "父节点 1", open: true },
+            { id: 11, pId: 2, name: "叶子节点 1-1" },
+            { id: 111, pId: 11, name: "叶子节点 1-1-1" },
+            { id: 12, pId: 2, name: "叶子节点 1-2" },
+            { id: 13, pId: 2, name: "叶子节点 1-3" },
+            { id: 3, pId: 1, name: "父节点 2", open: true },
+            { id: 21, pId: 3, name: "叶子节点 2-1" },
+            { id: 22, pId: 3, name: "叶子节点 2-2" },
+            { id: 23, pId: 3, name: "叶子节点 2-3" },
+            { id: 4, pId: 1, name: "父节点 3", open: true },
+            { id: 31, pId: 4, name: "叶子节点 3-1" },
+            { id: 32, pId: 4, name: "叶子节点 3-2" },
+            { id: 33, pId: 4, name: "叶子节点 3-3" }
+        ];
+        var log, className = "dark";
+        function beforeDrag(treeId, treeNodes) {
+            return false;
+        }
+        function beforeRemove(treeId, treeNode) {
+            className = (className === "dark" ? "" : "dark");
+            showLog("[ " + getTime() + " beforeRemove ]&nbsp;&nbsp;&nbsp;&nbsp; " + treeNode.name);
+            return confirm("确认删除 节点 -- " + treeNode.name + " 吗？");
+        }
+        function onRemove(e, treeId, treeNode) {
+            showLog("[ " + getTime() + " onRemove ]&nbsp;&nbsp;&nbsp;&nbsp; " + treeNode.name);
+        }
+        function beforeRename(treeId, treeNode, newName) {
+            if (newName.length == 0) {
+                alert("节点名称不能为空.");
+                var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+                setTimeout(function () { zTree.editName(treeNode) }, 10);
+                return false;
+            }
+            return true;
+        }
+        function showLog(str) {
+            if (!log) log = $("#log");
+            log.append("<li class='" + className + "'>" + str + "</li>");
+            if (log.children("li").length > 8) {
+                log.get(0).removeChild(log.children("li")[0]);
+            }
+        }
+        function getTime() {
+            var now = new Date(),
+                h = now.getHours(),
+                m = now.getMinutes(),
+                s = now.getSeconds(),
+                ms = now.getMilliseconds();
+            return (h + ":" + m + ":" + s + " " + ms);
+        }
+
+        var newCount = 1;
+        function add(e) {
+            var zTree = $.fn.zTree.getZTreeObj("treeDemo"),
+                isParent = e.data.isParent,
+                nodes = zTree.getSelectedNodes(),
+                treeNode = nodes[0];
+
+            let level = treeNode.level;
+
+            if (level === 3) {
+                isParent = false;
+            } else {
+                isParent = true;
+            }
+            let name = "新颗粒度";
+            $.ajax({
+                type: "POST",
+                url: "/key",
+                data: {
+                    oper: 'add',
+                    name,
+                    parent_id: treeNode.id,
+                    level: level + 1
+                },
+                success: function (data) {
+                    treeNode = zTree.addNodes(treeNode, { id: data.insertId, pId: treeNode.id, isParent, name });
+                    // zTree.editName(treeNode);
+                }
+            });
+        };
+        function zTreeOnRename(event, treeId, treeNode, isCancel) {
+            $.ajax({
+                type: "POST",
+                url: "/key",
+                data: {
+                    oper: 'edit',
+                    name: treeNode.name,
+                    id: treeNode.id,
+                },
+                success: function (data) {
+                    alert('修改成功');
+                }
+            });
+        }
+        function edit() {
+            var zTree = $.fn.zTree.getZTreeObj("treeDemo"),
+                nodes = zTree.getSelectedNodes(),
+                treeNode = nodes[0];
+            if (nodes.length == 0) {
+                alert("请先选择一个节点");
+                return;
+            }
+            zTree.editName(treeNode);
+        };
+        function remove(e) {
+            var zTree = $.fn.zTree.getZTreeObj("treeDemo"),
+                nodes = zTree.getSelectedNodes(),
+                treeNode = nodes[0];
+            if (nodes.length == 0) {
+                alert("请先选择一个节点");
+                return;
+            }
+            var callbackFlag = $("#callbackTrigger").attr("checked");
+            $.ajax({
+                type: "POST",
+                url: "/key",
+                data: {
+                    oper: 'del',
+                    id: treeNode.id,
+                },
+                success: function (data) {
+                    alert('删除成功');
+                    zTree.removeNode(treeNode, callbackFlag);
+                }
+            });
+
+        };
+        function clearChildren(e) {
+            var zTree = $.fn.zTree.getZTreeObj("treeDemo"),
+                nodes = zTree.getSelectedNodes(),
+                treeNode = nodes[0];
+            if (nodes.length == 0 || !nodes[0].isParent) {
+                alert("请先选择一个父节点");
+                return;
+            }
+            zTree.removeChildNodes(treeNode);
+        };
+
+        $(document).ready(function () {
+            $.ajax({
+                type: "GET",
+                url: "/key",
+                success: function (data) {
+                    console.log(data);
+
+                    const result = data.rows.map((d) => {
+                        d.pId = d.parent_id;
+
+                        return d
+                    });
+                    result.push({ id: 0, pId: 0, name: "全部", open: true });
+                    console.log(result);
+                    $.fn.zTree.init($("#treeDemo"), setting, result);
+                }
+            });
+            $("#addParent").bind("click", { isParent: true }, add);
+            $("#addLeaf").bind("click", { isParent: false }, add);
+            $("#edit").bind("click", edit);
+            $("#remove").bind("click", remove);
+            $("#clearChildren").bind("click", clearChildren);
+        });
+
+        var key_id;
+
+        $(document).delegate('.keyunit', 'click', function(d){
+            
+            if(isDelete){
+                console.log($(this));
+                $(this).find('input[type=checkbox]').prop('checked', !$(this).find('input[type=checkbox]').prop('checked'))
+                return
+                $(this).toggleClass('delete-active');
+            }else{
+                $('#unit-id').text($(this).attr('data-id'));
+                $('#unit-name').text($(this).attr('data-name'));
+                $('#unit-price').text($(this).attr('data-price'));
+                $('#unit-desc').text($(this).attr('data-desc'));
+                if($(this).attr('data-type')==='pic'){
+                    $('#unit-url').show().attr('src', $(this).attr('data-url'));
+                    $('#unit-url-video').hide();
+                    $('#unit-box').find('embed').remove();
+                }else if($(this).attr('data-type')==='qq'){
+                    $('#unit-box').prepend($(this).find('embed').clone());
+                    $('#unit-url-video').hide();
+                    $('#unit-url').hide();
+                }else{
+                    $('#unit-url-video').show().attr('src', $(this).attr('data-url'));
+                    $('#unit-url').hide();
+                    $('#unit-box').find('embed').remove();
+                }
+            
+                $('#modal-detail').modal('show');
+            }
+        });
+
+
+        $('#page3').bPage({
+                url: '/keyunit',
+                //开启异步处理模式
+                asyncLoad: true,
+                //关闭服务端页面模式
+                serverSidePage: false,
+                asyncType: 'GET',
+                pageSize:'8',
+                pageSizeMenu: [8],
+                //数据自定义填充
+                render: function (data) {
+                    let html = '';
+                    data.list.forEach(function(d){
+                            
+
+                    if(d.url.toLowerCase().indexOf('png') !==-1 || d.url.toLowerCase().indexOf('jpg') !==-1 || d.url.toLowerCase().indexOf('jpeg') !==-1){
+                        html += `<div class="col-sm-3 placeholder keyunit" data-type="pic" data-url="${d.url}" data-id="${d.id}" data-url="${d.url}" data-desc="${d.description}" data-price="${d.price}">
+                            
+                            <input type=checkbox  data-id="${d.id}"/>
+                        <img src="${d.url}"
+                            width="180" height="180" class="img-responsive" alt="Generic placeholder thumbnail">
+                        <h4>价格：${d.price}</h4>
+                        <span class="text-muted">${d.name}</span>
+                        
+                    </div>`
+                    }else if(d.url.indexOf('embed')!==-1){
+                        html += `<div class="col-sm-3 placeholder keyunit" data-type="qq" data-id="${d.id}" data-desc="${d.description}" data-price="${d.price}">
+                            <input type=checkbox  data-id="${d.id}"/>
+                        ${d.url}
+                        <h4>价格：${d.price}</h4>
+                        <span class="text-muted">${d.name}</span>
+                        
+                        </div>`
+
+                    }else{
+                        html += `<div class="col-sm-3 placeholder keyunit" data-type="video" data-url="${d.url}" data-id="${d.id}" data-url="${d.url}" data-desc="${d.description}" data-price="${d.price}">
+                            <input type=checkbox  data-id="${d.id}"/>
+                        <video src="${d.url}" width="180" height="180" controls="controls" ></video>
+                        <h4>价格：${d.price}</h4>
+                        <span class="text-muted">${d.name}</span>
+                        
+                        </div>`
+                    }
+                        });
+                        $('#list').html(html)
+                },
+                params: function () {
+                    return {
+                        key_id,
+                    };
+                }
+            });
+
+        function onClick(event, treeId, treeNode){
+            window.key_id = treeNode.id;
+            console.log(treeNode.id);
+            $('#page3').bPageRefresh({key_id});
+
+        }
+
+
+        $('#uploadKeyUnit').click(function(){
+            if(!key_id){
+                alert('请先选择一个颗粒度');
+                return
+            }
+            $.ajax({
+                type: "POST",
+                url: "/keyunit",
+                data: {
+                    name: $('#form-field-name').val(),
+                    price :$('#form-field-price').val(),
+                    url :$('#form-field-url').val(),
+                    description :$('#form-field-description').val(),
+                    oper:'add',
+                    key_id : window.key_id,
+                },
+                success: function (data) {
+                    $('#modal-form').modal('hide');
+                    $('#page3').bPageRefresh({key_id});
+                }
+            });   
+        })
+            $('#confirmKeyUnit').hide();
+            $('#cancelKeyUnit').hide();
+        var isDelete = false;
+        $('#removeKeyUnit').click(function(){
+            isDelete = true; 
+            $('.keyunit input').each(function(){
+                $(this).css('visibility','visible');
+            })
+            $('#confirmKeyUnit').show();
+            $('#cancelKeyUnit').show();
+            $('#removeKeyUnit').hide();
+        });
+        $('#cancelKeyUnit').click(function(){
+            
+            isDelete = false; 
+            $('#confirmKeyUnit').hide();
+            $('#cancelKeyUnit').hide();
+            $('#removeKeyUnit').show();
+            $('.keyunit input').each(function(){
+                $(this).css('visibility','hidden');
+            })
+            /*
+            let actives = $('.delete-active');
+            actives.each(function(){
+                $(this).toggleClass('delete-active');
+            })*/
+        });
+        $('#confirmKeyUnit').click(function(){
+            let actives = $('.keyunit input:checked')
+            if(actives.length===0){
+                alert('请点击选择要删除的颗粒');
+                return
+            }
+            let ids = [];
+            actives.each(function(){
+                ids.push($(this).attr('data-id'));
+            });        
+            $.ajax({
+                type: "POST",
+                url: "/keyunit",
+                data: {
+                    oper:'del',
+                    ids
+                },
+                success: function (data) {
+                    alert('删除成功!');
+                    location.reload();
+                    isDelete = false;
+                    $('#confirmKeyUnit').hide();
+                    $('#removeKeyUnit').show();
+                    $('#cancelKeyUnit').hide();
+                    $('.keyunit input').each(function(){
+                        $(this).css('visibility','hidden');
+                    })
+                }
+            });   
+        });
+
+        // 颗粒度导航
+        // 点击预览
+        // 点击删除
+
+    </script>
+
+    {% endblock %}

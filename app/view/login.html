@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>全民星</title>
+    <style>
+    
+    body{
+        background-image: url(/public/assets/images/bg.png);
+        background-repeat:no-repeat;
+        width: 1366px;
+        height: 768px;
+        font-size:16px;
+        font-family:STHeitiSC-Light;
+        font-weight:300;
+        color:rgba(153,153,153,1);
+    }
+    #loginform button{
+        width:300px;
+        height:40px;
+        background:rgba(31,177,242,1);
+        border-radius:6px;
+        margin-left: -44px;
+        font-size:18px;
+        font-family:STHeitiSC-Light;
+        font-weight:300;
+        color:rgba(255,255,255,1);
+        line-height:18px;
+    }
+    #loginform{
+        position: absolute;
+    top: 341px;
+    left: 577px;
+    }
+    #loginform input {
+        display: block;
+        height: 34px;
+    border: none;
+    width: 253px;
+    margin-bottom: 24px;
+    color:#999
+
+    }
+    input:focus{
+        outline: none
+    }
+    input::placeholder{
+        color:#999
+    }
+    button:focus{
+        outline: none
+    }
+    </style>
+</head>
+<body>
+    <form id="loginform" action="/login" method="POST">
+
+        <input type="text" placeholder="用户名" name="name">
+        <input type="password" placeholder="密码" name="password">
+        <button type="submit">登录</button>
+        <p>{{msg}}</p>
+
+    </form>
+</body>
+</html>

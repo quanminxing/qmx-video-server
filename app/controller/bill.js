@@ -79,7 +79,7 @@ exports.main = function *(){
     });
 
     newResult = yield this.service.bill.list(1, 1, 'where V.id = ' + video_id);
-    
+
     const video_name = newResult[0].video_name ? newResult[0].video_name : '无'
     const video_time = newResult[0].video_time ? newResult[0].video_time.split(':').join('分') + '秒': '无'
     if(!this.session.user){
@@ -183,10 +183,10 @@ exports.listByUser = function* () {
   const pageNum = parseInt(this.query.pageNum || 1);
   const pageSize = parseInt(this.query.pageSize || 10)
   result = yield this.service.bill.listByUser(openid, pageNum, pageSize);
-  result = result.map((d)=>{
-    d.timestamp = moment(d.timestamp).format('YYYY-MM-DD hh:mm:ss');
-    return d;
-  });
+  // result = result.map((d)=>{
+  //   d.timestamp = moment(d.timestamp).format('YYYY-MM-DD hh:mm:ss');
+  //   return d;
+  // });
   this.body = {
     rows: result
   };

@@ -58,7 +58,7 @@ module.exports = app => {
         const count = yield app.mysql.query('select count(*) from video_bill where ?', [where]);
 
         return count[0]['count(*)'];
-    } 
+    }
 
     // 更新
     * update(data) {

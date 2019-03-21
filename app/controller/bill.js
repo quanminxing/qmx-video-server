@@ -146,7 +146,6 @@ exports.main = function *(){
     this.body = 'success';
   }
 
-
 }
 
 exports.list = function* () {

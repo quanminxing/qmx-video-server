@@ -13,11 +13,13 @@ module.exports = app => {
         platform_id:obj.platform_id,
         column_id:obj.column_id,
         video_id:obj.video_id,
+        time: obj.time,
         phone:obj.phone,
         comment:obj.comment,
         category_id:obj.category_id,
         openid: obj.openid,
         timestamp: app.mysql.literals.now,
+        email:obj.email
       });
 
       return result;
@@ -25,7 +27,7 @@ module.exports = app => {
 
     // 获取列表
     * list(pageNum, pageSize) {
-      const articles = yield app.mysql.query('select id,name,work_id,price,status,business,scale,channel,timestamp,phone,category_id, platform_id,column_id,video_id,comment, email from video_bill order by timestamp desc limit ? offset ?;', [ pageSize, (pageNum - 1) * pageSize ]);
+      const articles = yield app.mysql.query("select id,name,work_id,price,status,business,scale,channel,date_format(timestamp,'%Y-%m-%d %h:%m:%s') as 'timestamp',phone,category_id, platform_id,column_id,video_id,comment, email from video_bill order by timestamp desc limit ? offset ?;", [ pageSize, (pageNum - 1) * pageSize ]);
       return articles;
     }
 

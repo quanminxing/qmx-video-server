@@ -291,7 +291,7 @@
         //     //'userName': userName,
         // },
         height: 400,
-        colNames: ['编号', '商家名称','联系方式', '类目', '订单金额', '联系人', '对接人', '状态', '联系邮箱', '平台', '栏目', '样片名称', '用户留言', '下单时间', '操作'],
+        colNames: ['编号', '商家名称','联系方式', '类目', '订单金额', '联系人', '对接人', '状态', '联系邮箱', '平台', '栏目', '样片视频', '用户留言', '下单时间', '操作'],
         jsonReader: {  
             records:"totalRow"
         },
@@ -311,7 +311,7 @@
             { name: 'video_name', index: 'video_name',width: 70, hidden:true, editable: true, editoptions: {size: "20", editable:true}, formoptions: {rowpos:4,colpos:2} },
             //{ name: 'video_url', index: 'video_url', formatter: formatColumn, width: 95, editable: true, edittype: "select", editoptions: { value: columnValue },formoptions: {rowpos:5,colpos:2} },
             { name: 'comment', comment: 'channel', editable: true, edittype:"textarea", editoptions:{rows:"4",cols:"41"} },
-            { name: 'timestamp', index: 'timestamp', width: 160, sorttype: "string",editable: true, editoptions: {size: "20", maxlength: "5"}, formoptions: {rowpos:5,colpos:2}}, 
+            { name: 'timestamp', index: 'timestamp', width: 160, editable: true, editoptions: {size: "20", maxlength: "5"}, formoptions: {rowpos:5,colpos:2}}, 
             {
                 name: 'myac', index: '', width: 80, fixed: true, sortable: false, resize: false,
                 formatter: 'actions',

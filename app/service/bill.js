@@ -26,8 +26,9 @@ module.exports = app => {
     }
 
     // 获取列表
-    * list(pageNum, pageSize) {
-      const articles = yield app.mysql.query("select B.id,B.name,B.work_id,B.price,B.status,B.business,B.scale,B.channel,date_format(B.timestamp,'%Y-%m-%d %h:%m:%s') as 'timestamp',B.phone,B.category_id, B.platform_id,B.column_id,B.video_id, B.comment, B.email, V.name AS video_name, V.url AS video_url, V.short_image AS video_short_image from video_bill AS B LEFT JOIN video_video AS V on B.video_id = V.id order by timestamp desc limit ? offset ?;", [ pageSize, (pageNum - 1) * pageSize ]);
+    * list(pageNum, pageSize, param) {
+      const cond = param ? param : ''
+      const articles = yield app.mysql.query(`select B.id,B.name,B.work_id,B.price,B.status,B.business,B.scale,B.channel,date_format(B.timestamp,'%Y-%m-%d %H:%i') as 'timestamp',B.phone,B.category_id, B.platform_id,B.column_id,B.video_id, B.comment, B.email, V.name AS video_name, V.url AS video_url, V.short_image AS video_short_image, V.time AS video_time from video_bill AS B LEFT JOIN video_video AS V on B.video_id = V.id ${cond} order by timestamp desc limit ? offset ?;`, [ pageSize, (pageNum - 1) * pageSize ]);
       return articles;
     }
 

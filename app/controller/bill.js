@@ -51,6 +51,7 @@ exports.main = function *(){
   const email = body.email;
 
   let result;
+  let newResult;
   if(oper === 'add'){
 
     result = yield this.service.bill.insert({
@@ -77,11 +78,15 @@ exports.main = function *(){
       email
     });
 
+    newResult = yield this.service.bill.list(1, 1, 'where V.id = ' + video_id);
+    
+    const video_name = newResult[0].video_name ? newResult[0].video_name : '无'
+    const video_time = newResult[0].video_time ? newResult[0].video_time.split(':').join('分') + '秒': '无'
     if(!this.session.user){
       let mailHtmlText =  `订单ID为${result.insertId},订单内容如下：</br>` + 
-      `样片视频：139-依波女表</br>` + 
-      `样片时长：30S</br>` +
-      `样片功能：室内场景</br>` +
+      `样片视频：${video_name}</br>` +
+      `样片时长：${video_time}</br>` +
+      //`样片功能：室内场景</br>` +
       `公司名称：${business}</br>` +
       `联系人：${name}</br>` +
       `联系方式：${phone}</br>` +

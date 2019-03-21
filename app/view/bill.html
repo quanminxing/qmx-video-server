@@ -291,7 +291,7 @@
         //     //'userName': userName,
         // },
         height: 400,
-        colNames: ['编号', '商家名称','联系方式', '类目', '订单金额', '联系人', '对接人', '状态', '联系邮箱', '平台', '栏目', '用户留言', '下单时间', '操作'],
+        colNames: ['编号', '商家名称','联系方式', '类目', '订单金额', '联系人', '对接人', '状态', '联系邮箱', '平台', '栏目', '样片名称', '用户留言', '下单时间', '操作'],
         jsonReader: {  
             records:"totalRow"
         },
@@ -301,15 +301,17 @@
             { name: 'business', index: 'business', width: 150, editable: true, editoptions: { size: "20", maxlength: "40" },formoptions: {rowpos:1,colpos:1}},
             { name: 'phone', index: 'phone', width: 150, editable: true, editoptions: { size: "20", maxlength: "40" },formoptions: {rowpos:2,colpos:1} },
             { name: 'category_id', index: 'category_id', formatter: formatCategory, width: 70, editable: true, edittype: "select", editoptions: { value: categoryValue },formoptions: {rowpos:1,colpos:2} },
-            { name: 'price', index: 'price', width: 150, editable: true, editoptions: { size: "20", maxlength: "40" } },
+            { name: 'price', index: 'price', width: 95, editable: true, editoptions: { size: "20", maxlength: "40" } },
             { name: 'name', index: 'name', width: 70, hidden: true,editable: true, editoptions: {size: "20", maxlength: "40"}, editrules:{ edithidden:true}},
             { name: 'work_id', index: 'work_id', formatter: formatUser, width: 100, editable: true, edittype: "select", editoptions: { value: userValue },formoptions: {rowpos:3,colpos:1} },
-            { name: 'status', index: 'status', width: 150, editable: true, formatter: formatStatus, edittype: "select", editoptions: { value: "0:未沟通;1:进行中;2:已结算;3:作废" } },
+            { name: 'status', index: 'status', width: 80, editable: true, formatter: formatStatus, edittype: "select", editoptions: { value: "0:未沟通;1:进行中;2:已结算;3:作废" } },
             { name: 'email', index: 'email', width: 70, hidden: true, editable: true, editrules:{ edithidden:true}},
             { name: 'platform_id', index: 'platform_id', formatter: formatPlatform, width: 70, editable: true, edittype: "select", editoptions: { value: platformValue },formoptions: {rowpos:2,colpos:2} },
-            { name: 'column_id', index: 'column_id', formatter: formatColumn, width: 70, editable: true, edittype: "select", editoptions: { value: columnValue },formoptions: {rowpos:3,colpos:2} },
-            { name: 'comment', comment: 'channel',width: 250, editable: true, edittype:"textarea", editoptions:{rows:"4",cols:"60"} },
-            { name: 'timestamp', index: 'timestamp', width: 150, sorttype: "string",editable: false, editoptions: {size: "20", maxlength: "5"}}, 
+            { name: 'column_id', index: 'column_id', formatter: formatColumn, width: 95, editable: true, edittype: "select", editoptions: { value: columnValue },formoptions: {rowpos:3,colpos:2} },
+            { name: 'video_name', index: 'video_name',width: 70, hidden:true, editable: true, editoptions: {size: "20", editable:true}, formoptions: {rowpos:4,colpos:2} },
+            //{ name: 'video_url', index: 'video_url', formatter: formatColumn, width: 95, editable: true, edittype: "select", editoptions: { value: columnValue },formoptions: {rowpos:5,colpos:2} },
+            { name: 'comment', comment: 'channel', editable: true, edittype:"textarea", editoptions:{rows:"4",cols:"41"} },
+            { name: 'timestamp', index: 'timestamp', width: 160, sorttype: "string",editable: true, editoptions: {size: "20", maxlength: "5"}, formoptions: {rowpos:5,colpos:2}}, 
             {
                 name: 'myac', index: '', width: 80, fixed: true, sortable: false, resize: false,
                 formatter: 'actions',
@@ -511,6 +513,8 @@
         $('#tr_is_model').show();
         $('#tr_is_audio').show();
         $('#tr_is_text').show();
+        $('#video_name').attr('readOnly', true);
+        $('#timestamp').attr('readOnly', true)
         form.closest('.ui-jqdialog').find('.ui-jqdialog-titlebar').wrapInner('<div class="widget-header" />')
     }
 

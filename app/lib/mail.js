@@ -23,10 +23,10 @@ exports.sendMail = function(title, htmlText, cb){
     const mailOptions = {
         from: 'qmx_alert@163.com', // sender address
         //to: 'jtyjty99999@126.com', // list of receivers
-        //to:'bd@qmxpower.com',
+        to:'bd@qmxpower.com',
         //to: '742624033@qq.com',
         //测试邮箱
-        to:'13253314257@163.com',
+        //to:'13253314257@163.com',
         //bcc: 'lisong2721@dingtalk.com',
         subject: title, // Subject line
         html: htmlText, // plaintext body

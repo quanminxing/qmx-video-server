@@ -1,10 +1,11 @@
 {
   "name": "egg-showcase-aliyun-blog",
   "version": "1.0.0",
-  "description": "基于aliyun-egg的演示博客",
-  "main": "index.js",
+  "description": "",
   "scripts": {
-    "start": "node index.js",
+    "start": "egg-scripts start --daemon --env=prod --title=start main server",
+    "stop": "egg-scripts stop",
+    "local": "egg-scripts start --daemon --env=sit --workers=2 --title=主程序",
     "dev": "egg-bin dev",
     "lint": "eslint app config test index.js",
     "test": "npm run test-local",
@@ -12,18 +13,17 @@
     "cov": "egg-bin cov",
     "ci": "npm run lint && npm run cov"
   },
-  "repository": {
-    "type": "git",
-    "url": "git@github.com:eggjs/egg-showcase-aliyun-blog.git"
-  },
-  "keywords": [
-    "egg",
-    "aliyun-egg"
-  ],
   "dependencies": {
-    "aliyun-egg": "^0.1.0",
     "bufferhelper": "^0.2.1",
     "crypto": "0.0.3",
+    "egg": "^2.20.2",
+    "egg-alinode": "^1.1.0",
+    "egg-mysql": "^2.0.0",
+    "egg-oss": "^2.0.0",
+    "egg-scripts": "^2.11.0",
+    "egg-static": "^2.2.0",
+    "egg-userrole": "^0.1.0",
+    "egg-view-nunjucks": "^2.0.0",
     "marked": "^0.3.5",
     "moment": "^2.13.0",
     "node-xlsx": "^0.12.1",
@@ -32,22 +32,17 @@
     "upyun": "~2.0.4"
   },
   "devDependencies": {
-    "egg": "~0.1.0",
     "egg-bin": "^1.3.0",
     "egg-mock": "^0.0.4",
-    "egg-mysql": "~1.0.0",
     "eslint": "^3.4.0",
     "eslint-config-egg": "^3.1.0",
     "pedding": "^1.0.0",
     "should": "^11.1.0",
     "supertest": "^2.0.0",
     "urllib": "~2.16.0",
-    "utility": "^1.8.0"
+    "utility": "^1.16.1"
   },
   "engines": {
-    "node": "6.9.1",
-    "install-node": "6.9.1"
-  },
-  "author": "xinglong.wangwxl",
-  "license": "MIT"
+    "node": ">=8.9.0"
+  }
 }

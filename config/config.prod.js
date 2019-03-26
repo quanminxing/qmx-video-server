@@ -1,7 +1,15 @@
 'use strict';
 const env = process.env;
 
-
+exports.mysql = {
+  client: {
+    host: '39.105.186.226',
+    port: 3306,
+    user: 'root',
+    password: 'jtyJTYjty99999',
+    database: 'video',
+  },
+};
 
 exports.security = {
     csrf: false

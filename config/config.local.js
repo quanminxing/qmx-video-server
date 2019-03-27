@@ -63,10 +63,10 @@ exports.alipay = {
 
 exports.oss = {
   client: {
-    accessKeyId: env.ALI_SDK_OSS_ID,
-    accessKeySecret: env.ALI_SDK_OSS_SECRET,
-    endpoint: env.ALI_SDK_OSS_ENDPOINT,
-    bucket: 'ali-oss-test-bucket-test99',
+    accessKeyId: 'LTAIEcGWDcS9bLAI',
+    accessKeySecret: '4bplw4xzM54fgYnXSnaI11SirQcqVh',
+    endpoint: 'oss-cn-hangzhou-internal.aliyuncs.com',
+    bucket: 'qmx-video',
   },
 };
 

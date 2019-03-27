@@ -68,3 +68,6 @@ run/
 coverage/
 cov/
 logs/
+config/config.local.js
+config/config.prod.js
+config/config.sit.js

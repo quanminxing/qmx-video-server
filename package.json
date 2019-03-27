@@ -18,7 +18,7 @@
     "crypto": "0.0.3",
     "egg": "^2.20.2",
     "egg-alinode": "^1.1.0",
-    "egg-mysql": "^2.0.0",
+    "egg-mysql": "^3.0.0",
     "egg-oss": "^2.0.0",
     "egg-scripts": "^2.11.0",
     "egg-static": "^2.2.0",

@@ -100,7 +100,6 @@ module.exports = app => {
   app.post('/video/uploadBatch', app.controller.video.upload);
 
   // 微信api登录
-
   app.post('/api/login', app.controller.admin.loginByWechat)
 
   // 微信api日志
@@ -127,6 +126,9 @@ module.exports = app => {
 
   app.get('/api/sendMail',app.controller.mail.sendMail)
 
+  //微信api banner
+  app.get('/api/banner', app.controller.banner.banner)
+
   //app.get('/manager', admin, app.controller.admin.manager);
 
 
@@ -141,4 +143,6 @@ module.exports = app => {
  // app.get('/500', app.controller.site.error);
 
   // app.get('/*', app.controller.site.notFound);
+
+  app.get('/api/sql', app.controller.sql.checksql)
 };

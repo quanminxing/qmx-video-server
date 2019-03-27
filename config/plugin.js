@@ -10,7 +10,7 @@ exports.alinode = {
     package: 'egg-alinode',
 },
 exports.oss = {
-    enable: true,
+    enable: false,
     package: 'egg-oss',
 };
 

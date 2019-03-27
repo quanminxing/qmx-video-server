@@ -1,10 +1,11 @@
 const Service = require('egg').Service;
 
 class BannerService extends Service {
-    async list() {
-      let results = await this.app.mysql.query("select id, img_name, img_url, url_name, url_id, type_id, date_format(timestamp,'%Y-%m-%d %H:%i') as timestamp from video_banner where is_show = 1;");
-      // select COLUMN_NAME from information_schema.COLUMNS where table_name = ?;
-      return results;
+    async list(param) {
+        const cond = param ? 'where B.platform = ' + param : 'where B.platform = ""'
+        let results = await this.app.mysql.query(`select A.*, date_format(A.timestamp,'%Y-%m-%d %H:%i'), as timestamp from video_banner  AS A left join video_banner_type AS B on A.type_id = B.id ${cond};`);
+        // select COLUMN_NAME from information_schema.COLUMNS where table_name = ?;
+        return results;
     }
 }
 

@@ -77,7 +77,7 @@ module.exports = app => {
   app.post('/bill', app.controller.bill.main);
   app.get('/bill', admin, app.controller.bill.list);
   app.get('/manager/bill', admin, app.controller.bill.index);
-  app.get('/bill/listByUser', app.controller.bill.listByUser); 
+  app.get('/bill/listByUser', app.controller.bill.listByUser);
   
   //颗粒度管理
   app.post('/key', admin, app.controller.key.main);
@@ -126,8 +126,13 @@ module.exports = app => {
 
   app.get('/api/sendMail',app.controller.mail.sendMail)
 
-  //微信api banner
-  app.get('/api/banner', app.controller.banner.banner)
+  //banner
+  app.post('/api/banner', admin, app.controller.banner.banner)
+  app.post('/api/banner/del', admin, app.controller.banner.remove)
+  app.get('/api/banner', app.controller.banner.list)
+  app.get('/api/banner/all', admin, app.controller.banner.listAll)
+  app.get('/api/banner/listById', admin, app.controller.banner.listById)
+
 
   //app.get('/manager', admin, app.controller.admin.manager);
 

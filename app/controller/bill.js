@@ -8,26 +8,26 @@ const mail = require('../lib/mail');
 
 exports.index = function* () {
   let categorys = yield this.service.category.list();
-  categorys = categorys.filter((d)=>{return d.level === 1});
+  categorys = categorys.filter((d) => { return d.level === 1 });
   let platforms = yield this.service.platform.list();
   let columns = yield this.service.column.list();
   let users = yield this.service.people.listAll()
-  yield this.render('bill.html',{
-    current:"bill",
+  yield this.render('bill.html', {
+    current: "bill",
     columns: JSON.stringify(columns),
     categorys: JSON.stringify(categorys),
     platforms: JSON.stringify(platforms),
-    users : JSON.stringify(users),
-    title:"订单管理"
+    users: JSON.stringify(users),
+    title: "订单管理"
   });
 };
 
 // 新增
 
-exports.main = function *(){
+exports.main = function* () {
 
   const body = this.request.body;
-  const oper = body.oper; 
+  const oper = body.oper;
   let id = body.id;
   const name = body.name;
   const price = body.price;
@@ -52,10 +52,10 @@ exports.main = function *(){
 
   let result;
   let newResult;
-  if(oper === 'add'){
+  if (oper === 'add') {
 
     result = yield this.service.bill.insert({
-      work_id:this.session.user? this.session.user.id : null,
+      work_id: this.session.user ? this.session.user.id : null,
       name,
       price,
       business,
@@ -81,30 +81,30 @@ exports.main = function *(){
     newResult = yield this.service.bill.list(1, 1, 'where V.id = ' + video_id);
 
     const video_name = newResult[0].video_name ? newResult[0].video_name : '无'
-    const video_time = newResult[0].video_time ? newResult[0].video_time.split(':').join('分') + '秒': '无'
-    if(!this.session.user){
-      let mailHtmlText =  `订单ID为${result.insertId},订单内容如下：</br>` + 
-      `样片视频：${video_name}</br>` +
-      `样片时长：${video_time}</br>` +
-      //`样片功能：室内场景</br>` +
-      `公司名称：${business}</br>` +
-      `联系人：${name}</br>` +
-      `联系方式：${phone}</br>` +
-      `邮箱：${email}</br>` +
-      `请及时联系客户。`
-      mail.sendMail('这是一封测试用的邮件一份来自全民星小视频的brief', mailHtmlText, function(info){   //'你收到一份来自全民星小视频的brief', '请在后台查看id为' + result.insertId +'的订单'
+    const video_time = newResult[0].video_time ? newResult[0].video_time.split(':').join('分') + '秒' : '无'
+    if (!this.session.user) {
+      let mailHtmlText = `订单ID为${result.insertId},订单内容如下：</br>` +
+        `样片视频：${video_name}</br>` +
+        `样片时长：${video_time}</br>` +
+        //`样片功能：室内场景</br>` +
+        `公司名称：${business}</br>` +
+        `联系人：${name}</br>` +
+        `联系方式：${phone}</br>` +
+        `邮箱：${email}</br>` +
+        `请及时联系客户。`
+      mail.sendMail('这是一封测试用的邮件一份来自全民星小视频的brief', mailHtmlText, function (info) {   //'你收到一份来自全民星小视频的brief', '请在后台查看id为' + result.insertId +'的订单'
         console.log(info);
       });
     }
     this.body = 'success';
 
-  }else if(oper === 'edit'){
+  } else if (oper === 'edit') {
 
     let work_id = this.session.user.id;
 
     yield this.service.bill.update({
       id,
-      work_id:body.work_id,
+      work_id: body.work_id,
       name,
       price,
       business,
@@ -126,24 +126,24 @@ exports.main = function *(){
       email
     });
     yield this.service.workerLog.insert({
-      event: '修改订单'+ name,
-      place:'订单管理',
+      event: '修改订单' + name,
+      place: '订单管理',
       work_id
     });
     this.body = 'success';
 
-  }else if(oper === 'del'){
+  } else if (oper === 'del') {
 
     let work_id = this.session.user.id;
 
     id = id.split(',');
-    for(let i =0, l = id.length;i<l; i++){
+    for (let i = 0, l = id.length; i < l; i++) {
 
       yield this.service.bill.remove(id[i]);
 
       yield this.service.workerLog.insert({
-        event: '删除订单'+ id[i],
-        place:'订单管理',
+        event: '删除订单' + id[i],
+        place: '订单管理',
         work_id
       });
     }
@@ -160,10 +160,10 @@ exports.list = function* () {
   const sql = this.query.sql;
   let result, total;
 
-  if(_search !== 'true'){
+  if (_search !== 'true') {
     result = yield this.service.bill.list(pageNum, pageSize);
     total = yield this.service.bill.count('1=1');
-  }else{
+  } else {
     result = yield this.service.bill.search(pageNum, pageSize, sql);
     total = yield this.service.bill.count(sql);
   }
@@ -173,7 +173,7 @@ exports.list = function* () {
   this.body = {
     total: total > pageSize ? (parseInt(total / pageSize) + 1) : 1,
     rows: result,
-    totalRow:total,
+    totalRow: total,
   };
 }
 

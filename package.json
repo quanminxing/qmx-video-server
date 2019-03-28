@@ -5,7 +5,7 @@
   "scripts": {
     "start": "egg-scripts start --daemon --env=prod --title=start main server",
     "stop": "egg-scripts stop",
-    "sit": "egg-scripts start --daemon --env=sit --workers=1 --title=主程序",
+    "sit": "egg-scripts start --daemon --workers=1 --title=主程序",
     "dev": "egg-bin dev",
     "lint": "eslint app config test index.js",
     "test": "npm run test-local",

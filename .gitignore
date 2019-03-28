@@ -74,3 +74,7 @@ config/config.prod.js
 config/config.sit.js
 
 package-lock.json
+config/plugin.local.js
+config/plugin.prod.js
+config/plugin.sit.js
+package-lock.json

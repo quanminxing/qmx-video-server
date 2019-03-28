@@ -3,7 +3,6 @@
 /**
  * Module dependencies.
  */
-console.log('这是app.js')
 
 var fs = require('fs');
 var UpYun = require('upyun');

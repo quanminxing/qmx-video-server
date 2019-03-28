@@ -50,8 +50,8 @@ class BannerController extends Controller {
 		ctx.body = { results: res };
 	}
 	async listAll() {
-		const pageNum = this.ctx.request.query.pageNum;
-		const pageSize = this.ctx.request.query.pageSize;
+		const pageNum = this.ctx.request.query.pageNum || 1;
+		const pageSize = this.ctx.request.query.pageSize || 10;
 		const res = await this.service.banner.listAll(pageNum, pageSize);
 		this.ctx.body = { results: res }
 	}

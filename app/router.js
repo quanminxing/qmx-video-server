@@ -12,12 +12,15 @@ module.exports = app => {
   app.get('/manager/list', app.controller.admin.list)
   app.post('/login', app.controller.admin.login);
 
+  // //获取上传文件临时验证凭证
+  // app.get('/api/getSTS', app.controller.admin.getSTS);
+
 
   //商家库
   app.post('/business', admin, app.controller.business.main);
   app.get('/business', admin, app.controller.business.list);
   app.get('/manager/business', admin, app.controller.business.index);
-  
+
   //套餐管理
   app.post('/package', admin, app.controller.package.main);
   app.get('/package', app.controller.package.list);
@@ -28,32 +31,32 @@ module.exports = app => {
   app.post('/platform', admin, app.controller.platform.main);
   app.get('/platform', app.controller.platform.list);
   app.get('/manager/platform', admin, app.controller.platform.index);
-  
+
   //视频功能管理
   app.post('/usage', admin, app.controller.usage.main);
   app.get('/usage', app.controller.usage.list);
   app.get('/manager/usage', admin, app.controller.usage.index);
-  
+
   //视频风格管理
   app.post('/style', admin, app.controller.style.main);
   app.get('/style', app.controller.style.list);
   app.get('/manager/style', admin, app.controller.style.index);
-  
+
   //栏目管理
   app.post('/column', admin, app.controller.column.main);
   app.get('/column', app.controller.column.list);
   app.get('/column/listall', app.controller.column.listAll);
   app.get('/manager/column', admin, app.controller.column.index);
-  
+
   //推荐管理
   app.post('/recommand', admin, app.controller.recommand.main);
   app.get('/recommand', admin, app.controller.recommand.list);
   app.get('/manager/recommand', admin, app.controller.recommand.index);
-  
+
 
   //视频库
   app.get('/manager/video/detail', admin, app.controller.video.detail);
-  
+
   app.post('/video', admin, app.controller.video.main);
   app.get('/video', admin, app.controller.video.list);
   app.get('/video/listByColumn', app.controller.video.listByColumn);
@@ -63,7 +66,7 @@ module.exports = app => {
   app.get('/video/listByHot', app.controller.video.listByHot);
   app.get('/video/listByRecommand', app.controller.video.listByRecommand);
   app.get('/video/listByFilter', app.controller.video.listByFilter);
-  
+
   app.get('/video/searchByKeyword', app.controller.video.searchByKeyword);
   app.get('/video/detail', app.controller.video.getDetail);
   app.get('/manager/video', admin, app.controller.video.index);
@@ -72,13 +75,13 @@ module.exports = app => {
   app.post('/people', admin, app.controller.people.main);
   app.get('/people', admin, app.controller.people.list);
   app.get('/manager/people', admin, app.controller.people.index);
-  
+
   //订单管理
   app.post('/bill', app.controller.bill.main);
   app.get('/bill', admin, app.controller.bill.list);
   app.get('/manager/bill', admin, app.controller.bill.index);
   app.get('/bill/listByUser', app.controller.bill.listByUser);
-  
+
   //颗粒度管理
   app.post('/key', admin, app.controller.key.main);
   app.get('/key', admin, app.controller.key.list);
@@ -108,12 +111,12 @@ module.exports = app => {
   app.get('/api/log/listByUser', app.controller.log.listByUser)
   app.post('/api/log/deleteLog', app.controller.log.deleteLog)
 
-    // 微信api收藏
-    app.post('/api/fav', app.controller.fav.fav)
-    app.get('/api/fav/listByUser', app.controller.fav.listByUser)
-    app.get('/api/fav/findByUser', app.controller.fav.findByUser)
-    app.post('/api/fav/deleteFav', app.controller.fav.deleteFav)
-    
+  // 微信api收藏
+  app.post('/api/fav', app.controller.fav.fav)
+  app.get('/api/fav/listByUser', app.controller.fav.listByUser)
+  app.get('/api/fav/findByUser', app.controller.fav.findByUser)
+  app.post('/api/fav/deleteFav', app.controller.fav.deleteFav)
+
 
   // 微信api搜索词
 
@@ -124,14 +127,15 @@ module.exports = app => {
   app.get('/api/user', app.controller.user.find)
   app.post('/api/user/save', app.controller.user.save)
 
-  app.get('/api/sendMail',app.controller.mail.sendMail)
+  app.get('/api/sendMail', app.controller.mail.sendMail)
 
   //banner
-  app.post('/api/banner', admin, app.controller.banner.banner)
-  app.post('/api/banner/del', admin, app.controller.banner.remove)
+  app.post('/api/banner',  app.controller.banner.banner)
+  app.post('/api/banner/del', app.controller.banner.remove)
   app.get('/api/banner', app.controller.banner.list)
-  app.get('/api/banner/all', admin, app.controller.banner.listAll)
-  app.get('/api/banner/listById', admin, app.controller.banner.listById)
+  app.get('/api/banner/all', app.controller.banner.listAll)
+  app.get('/api/banner/listById', app.controller.banner.listById)
+
 
 
   //app.get('/manager', admin, app.controller.admin.manager);
@@ -142,10 +146,10 @@ module.exports = app => {
 
 
   // 管理员登陆
- // app.get('/adminlogin', app.controller.site.adminLogin);
- // app.get('/adminLogout', app.controller.site.adminLogout);
+  // app.get('/adminlogin', app.controller.site.adminLogin);
+  // app.get('/adminLogout', app.controller.site.adminLogout);
 
- // app.get('/500', app.controller.site.error);
+  // app.get('/500', app.controller.site.error);
 
   // app.get('/*', app.controller.site.notFound);
 

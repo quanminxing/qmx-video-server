@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<meta charset="UTF-8">
+	<meta name="Author" content="Ivy">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<title>全民星后台管理</title>
+	<!--<link rel="icon" type="image/x-icon" href="" />-->
+	
+	<!-- bootstrap -->
+	<link rel="stylesheet" href="../modules/ace/css/bootstrap.min.css">
+	<link rel="stylesheet" href="../modules/ace/font-awesome/css/font-awesome.min.css">
+	
+	<!-- text font -->
+	<link rel="stylesheet" href="../modules/ace/css/fonts.googleapis.com.css">
+	
+	<!-- ace style-->
+	<link rel="stylesheet" href="../modules/ace/css/ace.min.css" class="ace-main-stylesheet" id="main-ace-style" />
+	
+	<!--[if lte IE 9]>
+	<link rel="stylesheet" href="../modules/ace/css/ace-part2.min.css" class="ace-main-stylesheet" />
+	<![endif]-->
+	
+	<link rel="stylesheet" href="../modules/ace/css/ace-skins.min.css" />
+	<link rel="stylesheet" href="../modules/ace/css/ace-rtl.min.css" />
+	<link rel="stylesheet" href="../css/banner-setting.css">
+	
+	<!--[if lte IE 9]>
+	<link rel="stylesheet" href="../modules/ace/css/ace-ie.min.css" />
+	<![endif]-->
+	
+	<!-- ace settings handler -->
+	<script src="../modules/ace/js/ace-extra.min.js"></script>
+	
+	<!--[if lte IE 8]>
+	<script src="../modules/ace/js/html5shiv.min.js"></script>
+	<script src="../modules/ace/js/respond.min.js"></script>
+	<![endif]-->
+	
+</head>
+<body class="no-skin">
+	<!-- nav bar-->
+	<div class="navbar navbar-default ace-save-state" id="navbar">
+		<div id="navbar-container" class="navbar-container ace-save-state">
+			<!-- 菜单隐藏时显示按钮 -->
+			<button type="button" class="navbar-toggle menu-toggler pull-left" id="menu-toggler" data-target="#sidebar">
+				<span class="sr-only"> 隐藏菜单 </span>
+				
+				<span class="icon-bar"></span>
+				
+				<span class="icon-bar"></span>
+				
+				<span class="icon-bar"></span>
+			</button><!-- 菜单隐藏时的按钮 -->
+			
+			<!-- navbar header left -->
+			<div class="navbar-header pull-left">
+				<a href="banner-setting.html" class="navbar-brand">
+					<small>
+						<i class="fa fa-leaf"></i>
+						全民星-后台
+					</small>
+				</a>
+			</div><!-- navbar header left -->
+			
+			<!-- navbar header righte -->
+			<div class="navbar-buttons navbar-header pull-right" role="navigation">
+				<ul class="nav ace-nav">
+					<li class="light-blue dropdown-modal">
+						<a data-toggle="dropdown" href="#" class="dropdown-toggle">
+							<img class="nav-user-photo" src="../modules/ace/images/avatars/admin.png" alt="管理员" />
+							<span class="user-info">
+									<small>欢迎</small>
+									admin
+								</span>
+							
+							<i class="ace-icon fa fa-caret-down"></i>
+						</a>
+						
+						<ul class="user-menu dropdown-menu-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
+							<li>
+								<a href="#">
+									<i class="ace-icon fa fa-cog"></i>
+									设置
+								</a>
+							</li>
+							
+							<li>
+								<a href="#">
+									<i class="ace-icon fa fa-user"></i>
+									个人信息
+								</a>
+							</li>
+							
+							<li class="divider"></li>
+							
+							<li>
+								<a href="#">
+									<i class="ace-icon fa fa-power-off"></i>
+									退出
+								</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</div><!-- navbar header righte -->
+			
+		</div>
+	</div><!-- nav bar-->
+	
+	<!-- main container-->
+	<div class="main-container ace-save-state" id="main-container">
+		<script>
+			try{ace.settings.loadState('main-container')}catch(e){}
+		</script>
+		
+		<!-- sidebar -->
+		<div class="sidebar responsive ace-save-state" id="sidebar">
+			<script type="text/javascript">
+				try{ace.settings.loadState('sidebar')}catch(e){}
+			</script>
+			
+			<ul class="nav nav-list">
+				<li class="active">
+					<a href="banner-setting.html">
+						<i class="menu-icon fa fa-tachometer"></i>
+						<span class="menu-text"> 小程序banner配置 </span>
+					</a>
+					<b class="arrow"></b>
+				</li>
+			</ul>
+			
+			<!-- 收起 sidebar -->
+			<div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">
+				<i id="sidebar-toggle-icon" class="ace-icon fa fa-angle-double-left ace-save-state" data-icon1="ace-icon fa fa-angle-double-left" data-icon2="ace-icon fa fa-angle-double-right"></i>
+			</div>
+		</div><!-- sidebar -->
+		
+		<!-- 主要内容区 main-content -->
+		<div class="main-content">
+			<div class="main-content-inner">
+				<!-- 面包屑导航 + 搜索 -->
+				<div class="breadcrumbs ace-save-state" id="breadcrumbs">
+					<!-- 面包屑 -->
+					<ul class="breadcrumb">
+						<li>
+							<i class="ace-icon fa fa-home home-icon"></i>
+							<a href="/manager/index"> 首页</a>
+						</li>
+						<li class="active">小程序banner配置</li>
+					</ul><!-- 面包屑 -->
+					
+					<!-- 搜索 -->
+					<div class="nav-search" id="nav-search">
+						<form class="form-search">
+						<span class="input-icon">
+							<input type="text" placeholder="搜索" class="nav-search-input" id="nav-search-input" autocomplete="off" />
+							<i class="ace-icon fa fa-search nav-search-icon"></i>
+						</span>
+						</form>
+					</div>
+				</div><!-- 面包屑导航 + 搜索 -->
+				
+				<!-- 页面内容 -->
+				<div class="page-content">
+					<!-- 侧边设置按钮-->
+					<div class="ace-settings-container" id="ace-settings-container">
+						<!-- 设置图标 -->
+						<div class="btn btn-app btn-xs btn-warning ace-settings-btn" id="ace-settings-btn">
+							<i class="ace-icon fa fa-cog bigger-130"></i>
+						</div><!-- 设置图标 -->
+						
+						<!-- 设置选项 -->
+						<div class="ace-settings-box" id="ace-settings-box">
+							<div class="ace-settings-item">
+								<div class="pull-left">
+									<select id="skin-colorpicker" class="hide">
+										<option data-skin="default" value="#438EB9">#438EB9</option>
+										<option data-skin="skin-1" value="#222A2D">#222A2D</option>
+										<option data-skin="skin-2" value="#C6487E">#C6487E</option>
+										<option data-skin="skin-3" value="#D0D0D0">#D0D0D0</option>
+									</select>
+								</div>
+								<span>&nbsp; 选择皮肤</span>
+							</div>
+							
+							<div class="ace-settings-item">
+								<input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-navbar" />
+								<label class="lbl" for="ace-settings-navbar"> 固定导航条</label>
+							</div>
+							
+							<div class="ace-settings-item">
+								<input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-sidebar" />
+								<label class="lbl" for="ace-settings-sidebar"> 固定侧边栏</label>
+							</div>
+							
+							<div class="ace-settings-item">
+								<input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-breadcrumbs" />
+								<label class="lbl" for="ace-settings-breadcrumbs">固定面包屑</label>
+							</div>
+							
+							<div class="ace-settings-item">
+								<input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-rtl" />
+								<label class="lbl" for="ace-settings-rtl">切换到左边</label>
+							</div>
+							
+							<div class="ace-settings-item">
+								<input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-add-container" />
+								<label class="lbl" for="ace-settings-add-container">
+									切换窄屏
+									<b></b>
+								</label>
+							</div>
+							
+							<div class="ace-settings-item">
+								<input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-hover" autocomplete="off" />
+								<label class="lbl" for="ace-settings-hover">二级菜单悬停显示</label>
+							</div>
+							
+							<div class="ace-settings-item">
+								<input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-compact" autocomplete="off" />
+								<label class="lbl" for="ace-settings-compact">窄式侧边栏</label>
+							</div>
+							
+							<div class="ace-settings-item">
+								<input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-highlight" autocomplete="off" />
+								<label class="lbl" for="ace-settings-highlight">菜单选中图标</label>
+							</div>
+						</div><!-- 设置选项 -->
+					</div><!-- 侧边设置按钮-->
+					
+					<!-- banner信息表 -->
+					<div class="page-main row">
+						
+						<!-- 添加按钮 -->
+						<div class="page-header banner-add">
+							<div class="add-btn">
+								<a class="btn btn-lg btn-success" href="./banner-edit.html?oper=add">
+									<i class="ace-icon fa fa-plus-square"></i>
+									添加
+								</a>
+							</div>
+						</div>
+						
+						<div class="banner-table col-xs-12">
+							<table id="simple-table" class="table table-bordered table-hover">
+								<thead>
+									<tr>
+										<th>ID</th>
+										<th>名称</th>
+										<th>跳转链接</th>
+										<th>状态</th>
+										<th>编辑</th>
+									</tr>
+								</thead>
+								
+								<tbody></tbody>
+							</table>
+						</div>
+						<div class="pagination-wrap col-xs-12">
+							<ul class="pagination">
+								<li class="disabled">
+									<a href="#">
+										<i class="ace-icon fa fa-angle-double-left"></i>
+									</a>
+								</li>
+								
+								<li class="active">
+									<a href="#">1</a>
+								</li>
+								
+								<li>
+									<a href="#">2</a>
+								</li>
+								
+								<li>
+									<a href="#">3</a>
+								</li>
+								
+								<li>
+									<a href="#">4</a>
+								</li>
+								
+								<li>
+									<a href="#">5</a>
+								</li>
+								
+								<li>
+									<a href="#">
+										<i class="ace-icon fa fa-angle-double-right"></i>
+									</a>
+								</li>
+							</ul>
+						</div>
+					</div><!-- banner信息表 -->
+				</div><!-- 页面内容 -->
+			</div>
+		</div><!-- 主要内容区 main-content -->
+		
+		<!-- 到顶部 -->
+		<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+			<i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
+		</a>
+	
+	</div>
+	
+	<!-- basic scripts -->
+	<script src="../modules/ace/js/jquery-3.3.1.min.js"></script>
+	<script src="../modules/ace/js/bootstrap.min.js"></script>
+	
+	<!-- page plugin -->
+	<script src="../modules/ace/js/jquery.dataTables.min.js"></script>
+	<script src="../modules/ace/js/jquery.dataTables.bootstrap.min.js"></script>
+	<!--<script src="../modules/ace/js/dataTables.buttons.min.js"></script>-->
+	<!--<script src="../modules/ace/js/buttons.flash.min.js"></script>-->
+	<!--<script src="../modules/ace/js/buttons.html5.min.js"></script>-->
+	<!--<script src="../modules/ace/js/buttons.print.min.js"></script>-->
+	<!--<script src="../modules/ace/js/buttons.colVis.min.js"></script>-->
+	<!--<script src="../modules/ace/js/dataTables.select.min.js"></script>-->
+	<!--<script src="../modules/ace/js/jquery.validate.min.js"></script>-->
+	<!--<script src="../modules/ace/js/dropzone.min.js"></script>-->
+	
+	<!-- ace  script-->
+	<script src="../modules/ace/js/ace-elements.min.js"></script>
+	<script src="../modules/ace/js/ace.min.js"></script>
+
+	<!-- page script -->
+	<script>
+		jQuery(function($) {
+			const domain = 'https://test.qmxpower.com';
+			// 删除数据
+			$('#simple-table').on('click', '.delete', function (e) {
+				let $this = $(this);
+				console.log($(this).attr('data-id'));
+				let id = $(this).attr('data-id');
+				$.ajax({
+					url:'https://test.qmxpower.com/api/banner/del',
+					headers: {
+						Accept: "application/json; charset=utf-8"
+					},
+					type: "post",
+					data: {
+						id
+					},
+					success: function(data, status) {
+						console.log(data)
+						console.log(status)
+						console.log('删除成功');
+						console.log($this.parents('tr'));
+						console.log($this.parents('tr.table-row'));
+						$this.parents('tr').remove('.table-row');
+					},
+					fail: function (err) {
+						console.log(err)
+					}
+				});
+			})
+			// 请求列表数据
+			$.ajax({
+				url:"https://test.qmxpower.com/api/banner/all",
+				headers: {
+					Accept: "application/json; charset=utf-8",
+					Cookie: "EGG_SESS=dJrZPNMvUtbRppfOZCQPTkeWd0B7BnqxnTANmi3c7yoHWjQVwq63eHgcUvq8NBe1U1FazePys33zEXwm1y3rKFuuroodcdbqgxCODE6fFYWSd2znT09I6ptHXoWX_dPqgkUWfMxGPSPHwMpl8KwFRFFjZ8w2EQ4TvnIrJPQDthgjewpaSN935SHxf3pI74yEvd7FC0oOcX01-b4Vq-ZTC3UgAiwJym-fSIzU7aeQZ32CnhFZvfiGAkY9KL1XWAlYH6SYI78eeiXHr0PlwW4OfBBvldhuF1sw3Zq37xNl5sNSlMcmX3wAP49JHpSWjsaMxCv6bV_HuurB0f6pm8qgZxHBRU-ggFNMF4ZEL1atw9gyjOUS4TuKuFTuEqld9Tnhxq5OOoGurpDyffQFTWbVVB70PHi5Qv8mgQ8rid_H90zP9p13TmwutVIsWNq5WT7Z0maVIrwoYzR8-5NsonX6mQ=="
+				},
+				type: "get",
+				success: function (data) {
+					console.log(data);
+					let $fragment = $('tbody')
+					$.each(data.results, function (index, item) {
+						console.log(item);
+						item.oper = 'edit';
+						let state = '显示';
+						if(item.is_show === 0) {
+							state = '不显示'
+						}
+						$fragment.append(`<tr class="table-row">
+										<td>
+											<a href="#">${item.id}</a>
+										</td>
+										<td>${item.url_name}</td>
+										<td>${item.url}</td>
+										<td>
+											<span class="label label-sm label-warning">${state}</span>
+										</td>
+										<td>
+											<div class="hidden-xs btn-group">
+												<a class="btn btn-xs btn-info" href="./banner-edit.html?oper=edit&id=${item.id}" title="编辑">
+													<i class="ace-icon fa fa-pencil bigger-120"></i>
+												</a>
+												
+												<button class="delete btn btn-xs btn-danger" data-id="${item.id}">
+													<i class="ace-icon fa fa-trash-o bigger-120"></i>
+												</button>
+											</div>
+											
+											<div class="hidden-sm hidden-lg hidden-md">
+												<div class="inline pos-rel">
+													<button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto">
+														<i class="ace-icon fa fa-cog icon-only bigger-110"></i>
+													</button>
+													
+													<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
+														
+														<li class="detail-edit-btn">
+															<a href="./banner-edit.html?oper=edit&id=${item.id}" class="tooltip-success" data-rel="tooltip" title="编辑">
+																<span class="green">
+																	<i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
+																</span>
+															</a>
+														</li>
+														
+														<li class="delete" data-id="${item.id}">
+															<a href="javascript: void(0);" class="tooltip-error" data-rel="tooltip" title="删除">
+																<span class="red">
+																	<i class="ace-icon fa fa-trash-o bigger-120"></i>
+																</span>
+															</a>
+														</li>
+													</ul>
+												</div>
+											</div>
+										</td>
+									</tr>`)
+					});
+					console.log($fragment)
+					console.log($fragment.find('.delete').attr('class'))
+					$('#simple-table').append($fragment);
+				}
+			});
+			
+		})
+	</script>
+
+</body>
+</html>

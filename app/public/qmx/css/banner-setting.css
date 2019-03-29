@@ -1,0 +1,13 @@
+@charset "UTF-8";
+/* page-content add */
+.page-content .banner-add {
+	padding: 15px 30px;
+	text-align: right;
+}
+.banner-table {
+	min-height: 450px;
+}
+.pagination-wrap {
+	text-align: center;
+}
+

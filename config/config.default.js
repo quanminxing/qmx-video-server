@@ -53,14 +53,14 @@ exports.alipay = {
     sign_type:"MD5"
 };
 
-exports.oss = {
-  client: {
-    accessKeyId: env.ALI_SDK_OSS_ID,
-    accessKeySecret: env.ALI_SDK_OSS_SECRET,
-    endpoint: env.ALI_SDK_OSS_ENDPOINT,
-    bucket: 'ali-oss-test-bucket-test99',
-  },
-};
+// exports.oss = {
+//   client: {
+//     accessKeyId: env.ALI_SDK_OSS_ID,
+//     accessKeySecret: env.ALI_SDK_OSS_SECRET,
+//     endpoint: env.ALI_SDK_OSS_ENDPOINT,
+//     bucket: 'ali-oss-test-bucket-test99',
+//   },
+// };
 
 exports.userrole = {
   failureHandler(action) {

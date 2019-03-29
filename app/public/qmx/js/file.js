@@ -68,5 +68,5 @@ function putimage(stsurl, filename, file, callback) {
             console.log('加载oss文件')
         };
     }
-    script.src = 'http://file.qmxpower.com/scripts/aliyun-oss-sdk.min.js';
+    script.src = 'https://file.qmxpower.com/scripts/aliyun-oss-sdk.min.js';
     document.getElementsByTagName("head")[0].appendChild(script);

@@ -78,3 +78,5 @@ config/plugin.local.js
 config/plugin.prod.js
 config/plugin.sit.js
 package-lock.json
+app/lib/file.min.js
+app/public/assets/js/file.js

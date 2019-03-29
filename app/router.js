@@ -12,8 +12,8 @@ module.exports = app => {
   app.get('/manager/list', app.controller.admin.list)
   app.post('/login', app.controller.admin.login);
 
-  // //获取上传文件临时验证凭证
-  // app.get('/api/getSTS', app.controller.admin.getSTS);
+  //获取上传文件临时验证凭证
+  app.get('/api/getSTS', app.controller.admin.getSTS);
 
 
   //商家库

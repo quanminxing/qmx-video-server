@@ -136,6 +136,9 @@ module.exports = app => {
   app.get('/api/banner/all', app.controller.banner.listAll)
   app.get('/api/banner/listById', app.controller.banner.listById)
 
+  //获取信息
+  app.get('/api/info/banner', app.controller.info.banner);
+
 
 
   //app.get('/manager', admin, app.controller.admin.manager);

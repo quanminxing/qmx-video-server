@@ -146,7 +146,7 @@
 					<ul class="breadcrumb">
 						<li>
 							<i class="ace-icon fa fa-home home-icon"></i>
-							<a href="/manager/index"> 首页</a>
+							<a href="#"> 首页</a>
 						</li>
 						<li class="active">小程序banner配置</li>
 					</ul><!-- 面包屑 -->
@@ -250,6 +250,7 @@
 										<th>ID</th>
 										<th>名称</th>
 										<th>跳转链接</th>
+										<th>链接类型</th>
 										<th>状态</th>
 										<th>编辑</th>
 									</tr>
@@ -258,7 +259,7 @@
 								<tbody></tbody>
 							</table>
 						</div>
-						<div class="pagination-wrap col-xs-12">
+						<!--<div class="pagination-wrap col-xs-12">
 							<ul class="pagination">
 								<li class="disabled">
 									<a href="#">
@@ -292,7 +293,7 @@
 									</a>
 								</li>
 							</ul>
-						</div>
+						</div>-->
 					</div><!-- banner信息表 -->
 				</div><!-- 页面内容 -->
 			</div>
@@ -371,8 +372,24 @@
 						console.log(item);
 						item.oper = 'edit';
 						let state = '显示';
+						let type = '套餐';
 						if(item.is_show === 0) {
 							state = '不显示'
+						}
+						switch (item.type_id) {
+							case 0:
+								type = '套餐';
+								break
+							case 1:
+								type = '视频';
+								break
+							case 2:
+								type = '促销';
+								break
+							case 3:
+								type = '外链';
+								break
+							default: type = '套餐'
 						}
 						$fragment.append(`<tr class="table-row">
 										<td>
@@ -380,12 +397,13 @@
 										</td>
 										<td>${item.url_name}</td>
 										<td>${item.url}</td>
+										<td>${type}</td>
 										<td>
 											<span class="label label-sm label-warning">${state}</span>
 										</td>
 										<td>
 											<div class="hidden-xs btn-group">
-												<a class="btn btn-xs btn-info" href="./banner-edit.html?oper=edit&id=${item.id}" title="编辑">
+												<a class="btn btn-xs btn-info" href="./banner-edit.html?oper=edit&id=${item.id}&type_id=${item.type_id}" title="编辑">
 													<i class="ace-icon fa fa-pencil bigger-120"></i>
 												</a>
 												
@@ -403,7 +421,7 @@
 													<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
 														
 														<li class="detail-edit-btn">
-															<a href="./banner-edit.html?oper=edit&id=${item.id}" class="tooltip-success" data-rel="tooltip" title="编辑">
+															<a href="./banner-edit.html?oper=edit&id=${item.id}&type_id=${item.type_id}" class="tooltip-success" data-rel="tooltip" title="编辑">
 																<span class="green">
 																	<i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
 																</span>

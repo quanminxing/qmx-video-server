@@ -146,7 +146,7 @@
 				<ul class="breadcrumb">
 					<li>
 						<i class="ace-icon fa fa-home home-icon"></i>
-						<a href="/manager/index"> 首页</a>
+						<a href="#"> 首页</a>
 					</li>
 					<li><a href="./banner-setting.html">小程序banner配置</a></li>
 					<li class="active">编辑</li>
@@ -246,6 +246,15 @@
 							<div class="banner-info banner-url">
 								<label class="banner-label"><i class="require-icon">*</i> 跳转链接</label>
 								<input class="banner-input url" id="url" type="text" placeholder="填写跳转链接" required>
+							</div>
+							<div class="banner-info banner-type">
+								<label class="banner-label"><i class="require-icon">*</i> 状态</label>
+								<select class="url-type" id="type" name="type" required>
+									<option value="0" selected>套餐</option>
+									<option value="1">视频</option>
+									<option value="2">促销</option>
+									<option value="3">外链</option>
+								</select>
 							</div>
 							<div class="banner-info banner-state">
 								<label class="banner-label"><i class="require-icon">*</i> 状态</label>
@@ -371,6 +380,7 @@
 						console.log(data);
 						data.url_name && $('#url_name').val(data.url_name);
 						data.url && $('#url').val(data.url);
+						data.type_id && $('#type').val(data.type_id);
 						let is_show = data.is_show || 0;
 						$('#is_show').val(is_show);
 						data.img_url && $imgPreview.attr('src', data.img_url), $('#choose-img').text('重新上传');
@@ -436,6 +446,7 @@
 						is_show: $('#is_show').val(),
 						img_url:  imgNetUrl,
 						oper: paramData.oper,
+						type_id: $('#type').val()
 					};
 					if(!!id) {
 						data.id = id;

@@ -77,7 +77,7 @@ module.exports = app => {
     * search(pageNum, pageSize, where) {
         let sql = 'select * from video_video where deleted = 0 and'
         sql += ' '+ where;
-        sql += 'and is_wechat = 1 order by timestamp asc limit ? offset ?;'
+        sql += ' and is_wechat = 1 order by timestamp asc limit ? offset ?;'
         const articles = yield app.mysql.query(sql, [pageSize, (pageNum - 1) * pageSize ]);
         return articles;
     }

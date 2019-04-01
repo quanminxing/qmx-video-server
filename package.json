@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "start": "egg-scripts start --daemon --env=prod --title=start main server",
+    "start": "egg-scripts start --daemon --env=prod --title=主程序",
     "stop": "egg-scripts stop",
     "sit": "egg-scripts start --daemon --env=sit --workers=1 --title=主程序",
     "dev": "egg-bin dev",

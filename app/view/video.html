@@ -411,7 +411,7 @@
             //'userName': userName,
         },
         height: 400,
-        colNames: ['编号','文件链接','缩略图', '名称', '类目', '价格', '需求方', '上传人','视频功能','视频风格','平台','栏目', '时长', '格式', '备注','样片说明','详情图片','操作'],
+        colNames: ['编号','文件链接','缩略图', '名称', '类目', '价格', '需求方', '上传人','视频功能','视频风格','平台','栏目', '时长', '格式', '备注','颗粒度', '样片说明','详情图片','操作'],
         edit:{
             closeAfterEdit:true,
         },
@@ -433,7 +433,7 @@
             { name: 'format', index: 'format', width: 60, editable: true, edittype: "select", editoptions: { value: "MP4:MP4;MOV:MOV;WMV:WMV" },formoptions: {rowpos:5,colpos:1} },
             { name: 'description', index: 'description', width: 150, editable: true, editoptions: { size: "20", maxlength: "100" },formoptions: {rowpos:7,colpos:1} },
             
-            // { name: 'keystring', index: 'keystring', width: 300, editable: true, edittype:"textarea", editoptions:{rows:"10",cols:"40"},formoptions: {rowpos:8,colpos:1,rowspan:2} },
+            { name: 'keystring', index: 'keystring',hidden: true, width: 300, editable: true, edittype:"textarea", editoptions:{rows:"10",cols:"40"},formoptions: {rowpos:8,colpos:1,rowspan:2} },
             { name: 'demo_description', index: 'demo_description', width: 150, editable: true, edittype:"textarea", editoptions:{rows:"10",cols:"40"},formoptions: {rowpos:8,colpos:2} },
             { name: 'demo_pic', index: 'demo_pic', width: 150, editable: true, edittype:"textarea", editoptions:{rows:"5",cols:"40"},formoptions: {rowpos:9,colpos:2} },
             /*

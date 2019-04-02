@@ -78,35 +78,33 @@ exports.main = function* () {
         comment,
         email
       });
-      newResult = yield this.service.bill.list(1, 1, 'where V.id = ' + video_id);
-      let video_name;
-      let video_time;
-      if (newResult.length > 0) {
-        video_name = newResult[0].video_name ? newResult[0].video_name : '无'
-        video_time = newResult[0].video_time ? newResult[0].video_time.split(':').join('分') + '秒' : '无'
-      }
-      if (!this.session.user) {
-        let mailHtmlText = `订单ID为${result.insertId},订单内容如下：</br>` +
-          `样片视频：${video_name}</br>` +
-          `样片时长：${video_time}</br>` +
-          //`样片功能：室内场景</br>` +
-          `公司名称：${business}</br>` +
-          `联系人：${name}</br>` +
-          `联系方式：${phone}</br>` +
-          `邮箱：${email}</br>` +
-          `请及时联系客户。`
-        mail.sendMail('这是一封测试用的邮件一份来自全民星小视频的brief', mailHtmlText, function (info) {   //'你收到一份来自全民星小视频的brief', '请在后台查看id为' + result.insertId +'的订单'
-          console.log(info);
-        });
-        this.body = 'success';
-      }
     } catch (err) {
       this.body = {
         status: 503,
-        err_message: err.message
+        err_message: err.err_message
       }
     }
+    
 
+    newResult = yield this.service.bill.list(1, 1, 'where V.id = ' + video_id);
+
+    const video_name = newResult[0].video_name ? newResult[0].video_name : '无'
+    const video_time = newResult[0].video_time ? newResult[0].video_time.split(':').join('分') + '秒' : '无'
+    if (!this.session.user) {
+      let mailHtmlText = `订单ID为${result.insertId},订单内容如下：</br>` +
+        `样片视频：${video_name}</br>` +
+        `样片时长：${video_time}</br>` +
+        //`样片功能：室内场景</br>` +
+        `公司名称：${business}</br>` +
+        `联系人：${name}</br>` +
+        `联系方式：${phone}</br>` +
+        `邮箱：${email}</br>` +
+        `请及时联系客户。`
+      mail.sendMail('这是一封测试用的邮件一份来自全民星小视频的brief', mailHtmlText, function (info) {   //'你收到一份来自全民星小视频的brief', '请在后台查看id为' + result.insertId +'的订单'
+        console.log(info);
+      });
+    }
+    this.body = 'success';
 
   } else if (oper === 'edit') {
 

@@ -30,7 +30,8 @@ exports.main = function* () {
   const oper = body.oper;
   let id = body.id;
   const name = body.name;
-  const price = body.price || '';
+  console.log(typeof(null))
+  const price = body.price != 'null'? body.price : '';
   const business = body.business;
   const status = body.status;
   const is_scene = body.is_scene;

@@ -48,16 +48,6 @@
 
 {% block script %}
 <!-- inline scripts related to this page -->
-<script src="/public/assets/js/file.js"></script>
-<script type="text/javascript">
-    function up() {
-        console.log('upload txt')
-        var file = document.getElementById('video').files[0];
-        putimage('http://127.0.0.1:7001/api/getSTS?filetype=image', 'test.txt', file, function (res) {
-            console.log(res)
-        })
-    }
-</script>
 <script type="text/javascript">
     window.categorys = JSON.parse($('#categorys').val());
     window.users = JSON.parse($('#users').val());
@@ -211,15 +201,15 @@
 
     function formatCategory(cellValue, options, rowObject) {
         console.log(cellValue, categorys.filter((d) => (d.id === cellValue)));
-        return cellValue==0 || cellValue==null ? categorys.filter((d) => (d.id === cellValue))[0].name : '';
+        return cellValue != 0 || cellValue != null ? categorys.filter((d) => (d.id === cellValue))[0].name : '';
     };
     function formatPlatform(cellValue, options, rowObject) {
         console.log(cellValue, platforms.filter((d) => (d.id === cellValue)));
-        return cellValue==0 || cellValue==null ? platforms.filter((d) => (d.id === cellValue))[0].name : '';
+        return cellValue != 0 || cellValue != null ? platforms.filter((d) => (d.id === cellValue))[0].name : '';
     };
     function formatColumn(cellValue, options, rowObject) {
         console.log(cellValue, columns.filter((d) => (d.id === cellValue)));
-        return cellValue==0 || cellValue==null ? columns.filter((d) => (d.id === cellValue))[0].name : '';
+        return cellValue != 0 || cellValue != null ? columns.filter((d) => (d.id === cellValue))[0].name : '';
     };
 
 

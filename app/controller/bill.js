@@ -43,8 +43,8 @@ exports.main = function* () {
   const channel = body.channel;
   const phone = body.phone;
   const category_id = body.category_id;
-  const video_id = body.video_id || null;
-  const platform_id = body.platform_id || null;
+  const video_id = body.video_id || '';
+  const platform_id = body.platform_id || '';
   const comment = body.comment;
   const column_id = body.column_id;
   const openid = body.openid;
@@ -87,9 +87,16 @@ exports.main = function* () {
     
 
     newResult = yield this.service.bill.list(1, 1, 'where V.id = ' + video_id);
-
-    const video_name = newResult[0].video_name ? newResult[0].video_name : '无'
-    const video_time = newResult[0].video_time ? newResult[0].video_time.split(':').join('分') + '秒' : '无'
+    let video_name, video_time;
+    if(newResult.length > 0) {
+       video_name = newResult[0].video_name ? newResult[0].video_name : '无'
+       video_time = newResult[0].video_time ? newResult[0].video_time.split(':').join('分') + '秒' : '无'
+    } else {
+      video_name = '无'
+      video_time = '无'
+    }
+     //video_name = newResult[0].video_name ? newResult[0].video_name : '无'
+     //video_time = newResult[0].video_time ? newResult[0].video_time.split(':').join('分') + '秒' : '无'
     if (!this.session.user) {
       let mailHtmlText = `订单ID为${result.insertId},订单内容如下：</br>` +
         `样片视频：${video_name}</br>` +

@@ -117,7 +117,6 @@ module.exports = app => {
   app.get('/api/fav/findByUser', app.controller.fav.findByUser)
   app.post('/api/fav/deleteFav', app.controller.fav.deleteFav)
 
-
   // 微信api搜索词
 
   app.post('/api/keyword', app.controller.keyword.add)

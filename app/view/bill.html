@@ -211,15 +211,15 @@
 
     function formatCategory(cellValue, options, rowObject) {
         console.log(cellValue, categorys.filter((d) => (d.id === cellValue)));
-        return categorys ? categorys.filter((d) => (d.id === cellValue))[0].name : '';
+        return cellValue==0 || cellValue==null ? categorys.filter((d) => (d.id === cellValue))[0].name : '';
     };
     function formatPlatform(cellValue, options, rowObject) {
         console.log(cellValue, platforms.filter((d) => (d.id === cellValue)));
-        return cellValue ? platforms.filter((d) => (d.id === cellValue))[0].name : '';
+        return cellValue==0 || cellValue==null ? platforms.filter((d) => (d.id === cellValue))[0].name : '';
     };
     function formatColumn(cellValue, options, rowObject) {
         console.log(cellValue, columns.filter((d) => (d.id === cellValue)));
-        return cellValue ? columns.filter((d) => (d.id === cellValue))[0].name : '';
+        return cellValue==0 || cellValue==null ? columns.filter((d) => (d.id === cellValue))[0].name : '';
     };
 
 

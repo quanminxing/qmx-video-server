@@ -108,7 +108,7 @@ exports.main = function* () {
         `联系方式：${phone}</br>` +
         `邮箱：${email}</br>` +
         `请及时联系客户。`
-      mail.sendMail('这是一封测试用的邮件一份来自全民星小视频的brief', mailHtmlText, function (info) {   //'你收到一份来自全民星小视频的brief', '请在后台查看id为' + result.insertId +'的订单'
+      mail.sendMail('你收到一份来自全民星小视频的brief', mailHtmlText, function (info) {   //'你收到一份来自全民星小视频的brief', '请在后台查看id为' + result.insertId +'的订单'
         console.log(info);
       });
     }

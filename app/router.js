@@ -48,6 +48,21 @@ module.exports = app => {
   app.get('/column/listall', app.controller.column.listAll);
   app.get('/manager/column', admin, app.controller.column.index);
 
+  //频道管理
+  app.post('/api/channel', app.controller.channel.channel);
+  app.get('/api/channel', app.controller.channel.list);
+  app.get('/api/channel/listall', app.controller.channel.listAll);
+  app.get('/api/channel/findById', app.controller.channel.findById);
+  app.post('/api/channel/del', app.controller.channel.remove);
+
+  //价格区间
+  app.post('/api/priceRange', app.controller.priceRange.priceRange);
+  app.get('/api/priceRange', app.controller.priceRange.list);
+  app.get('/api/priceRange/listall', app.controller.priceRange.listAll);
+  app.get('/api/priceRange/findById', app.controller.priceRange.findById);
+  app.get('/api/priceRange/listByChannel', app.controller.priceRange.listByChannel);
+  app.post('/api/priceRange/del', app.controller.priceRange.remove);
+
   //推荐管理
   app.post('/recommand', admin, app.controller.recommand.main);
   app.get('/recommand', admin, app.controller.recommand.list);
@@ -57,18 +72,19 @@ module.exports = app => {
   //视频库
   app.get('/manager/video/detail', admin, app.controller.video.detail);
 
-  app.post('/video', admin, app.controller.video.main);
-  app.get('/video', admin, app.controller.video.list);
-  app.get('/video/listByColumn', app.controller.video.listByColumn);
-  app.get('/video/listByCategory', app.controller.video.listByCategory);
-  app.get('/video/listByUsage', app.controller.video.listByUsage);
-  app.get('/video/listByStyle', app.controller.video.listByStyle);
-  app.get('/video/listByHot', app.controller.video.listByHot);
-  app.get('/video/listByRecommand', app.controller.video.listByRecommand);
-  app.get('/video/listByFilter', app.controller.video.listByFilter);
+  app.post('/api/video', admin, app.controller.video.main);
+  app.get('/api/video', app.controller.video.list);
+  app.get('/api/video/listAll', app.controller.video.listAll);
+  app.get('/api/video/listByColumn', app.controller.video.listByColumn);
+  app.get('/api/video/listByCategory', app.controller.video.listByCategory);
+  app.get('/api/video/listByUsage', app.controller.video.listByUsage);
+  app.get('/api/video/listByStyle', app.controller.video.listByStyle);
+  app.get('/api/video/listByHot', app.controller.video.listByHot);
+  app.get('/api/video/listByRecommand', app.controller.video.listByRecommand);
+  app.get('/api/video/searchByKeyword', app.controller.video.searchByKeyword);
 
-  app.get('/video/searchByKeyword', app.controller.video.searchByKeyword);
-  app.get('/video/detail', app.controller.video.getDetail);
+  app.get('/api/video/detail', app.controller.video.getDetail);
+  app.post('/api/video/top', app.controller.video.top);
   app.get('/manager/video', admin, app.controller.video.index);
 
   //人员管理
@@ -100,7 +116,7 @@ module.exports = app => {
   app.get('/keyunit', admin, app.controller.keyUnit.list);
 
   //文件上传
-  app.post('/video/uploadBatch', app.controller.video.upload);
+  // app.post('/video/uploadBatch', app.controller.video.upload);
 
   // 微信api登录
   app.post('/api/login', app.controller.admin.loginByWechat)
@@ -137,6 +153,7 @@ module.exports = app => {
 
   //获取信息
   app.get('/api/info/banner', app.controller.info.banner);
+  app.get('/api/info/operateVideo', app.controller.info.operateVideo)
 
 
 

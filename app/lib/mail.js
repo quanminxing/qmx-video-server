@@ -1,7 +1,7 @@
 const nodemailer = require('nodemailer');
 
-exports.sendMail = function(title, htmlText, cb){
-
+exports.sendMail = function(title, htmlText, address, cb){
+    console.log(this)
     const transporter = nodemailer.createTransport({
         host: "smtp.163.com",
         secureConnection: true, // use SSL
@@ -23,7 +23,7 @@ exports.sendMail = function(title, htmlText, cb){
     const mailOptions = {
         from: 'qmx_alert@163.com', // sender address
         //to: 'jtyjty99999@126.com', // list of receivers
-        to:'bd@qmxpower.com',
+        to:address,
         //to: '742624033@qq.com',
         //测试邮箱
         //to:'13253314257@163.com',

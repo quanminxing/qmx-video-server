@@ -1,36 +1,39 @@
 'use strict';
 
 const moment = require('moment');
-
+const Controller = require('egg').Controller;
 // 新增
-
-exports.find = function* () {
+class UserController extends Controller{
+async find() {
     let result;
-    const openid = this.query.openid;
-    result = yield this.service.user.find(openid);
-    this.body = {
+    const query = this.ctx.request.query;
+    const openid = query.openid;
+    result = await this.service.user.find(openid);
+    this.ctx.body = {
         rows: result
     };
 }
 
 
-exports.save = function* () {
+async save() {
     let result;
-    const openid = this.request.body.openid;
-    const type = this.request.body.type;
+    const openid = this.ctx.request.body.openid;
+    const type = this.ctx.request.body.type;
     const obj = {
         id: openid
     }
-    obj[type] = this.request.body.inputVal;
+    obj[type] = this.ctx.request.body.inputVal;
 
-    let user = yield this.service.user.find(openid);
+    let user = await this.service.user.find(openid);
 
-    if(!user){
-        result = yield this.service.user.insert(obj);
-    }else{
-        result = yield this.service.user.update(obj);
+    if (!user) {
+        result = await this.service.user.insert(obj);
+    } else {
+        result = await this.service.user.update(obj);
     }
-    this.body = {
+    this.ctx.body = {
         rows: result
     };
 }
+}
+module.exports = UserController;

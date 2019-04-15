@@ -111,7 +111,7 @@
         formData.append('image', $('input[type=file]')[0].files[0]);
         // console.log(formData);
         $.ajax({
-            url: '/video/uploadBatch',
+            url: '/api/video/uploadBatch',
             data: formData,
             method: 'POST',
             contentType: false, // NEEDED, DON'T OMIT THIS (requires jQuery 1.6+)
@@ -406,7 +406,7 @@
         beforeProcessing: function () { console.log(111111);},
         datatype : "json",
         mtype: "GET",
-        url: '/video',
+        url: '/api/video',
         postData: {
             //'userName': userName,
         },
@@ -473,7 +473,7 @@
 			}, 0);
         },
 
-        editurl: "/video",//nothing is saved
+        editurl: "/api/video",//nothing is saved
         jsonReader: {  
             records:"totalRow"
         },

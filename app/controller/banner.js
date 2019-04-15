@@ -3,7 +3,7 @@ class BannerController extends Controller {
 	async banner() {
 		const body = this.ctx.request.body;
 		let id = body.id;
-		const work_id= this.app.session ? this.app.session.user.id : null;
+		const work_id = this.app.session ? this.app.session.user.id : null;
 		const oper = body.oper;
 		const img_name = body.img_name;
 		const url_name = body.url_name;
@@ -57,13 +57,13 @@ class BannerController extends Controller {
 	}
 
 	async listById() {
-		const banner_id = this.ctx.query.id;
+		const banner_id = this.ctx.request.query.id;
 		const res = await this.service.banner.listById(banner_id);
 		this.ctx.body = { result: res }
 	}
 
 	async remove() {
-		let work_id = 8 //this.session.user.id;
+		const work_id = this.ctx.session && this.ctx.session.user.id ? this.ctx.session.user.id : ''; //this.ctx.session.user.id;
 		let id = this.ctx.request.body.id;
 		id = id.split(',');
 		for (let i = 0, l = id.length; i < l; i++) {

@@ -1,43 +1,46 @@
 'use strict';
 
 const moment = require('moment');
+const Controller = require('egg').Service;
 
 // 新增
+class LogController extends Controller {
+    async log() {
 
-exports.log = function* () {
+        const body = this.ctx.request.body;
+        const video_id = body.video_id;
+        const openid = body.openid;
+        await this.service.videoLog.insert({
+            video_id,
+            user_id: openid
+        });
+        this.ctx.body = 'success';
+    }
 
-    const body = this.request.body;
-    const video_id = body.video_id;
-    const openid = body.openid;
-    yield this.service.videoLog.insert({
-        video_id,
-        user_id: openid
-    });
-    this.body = 'success';
+
+    async listByUser() {
+        const pageNum = +this.ctx.request.querypageNumber || 1;
+        const pageSize = +this.ctx.request.querypageSize || 100;
+        let result;
+        const openid = this.ctx.request.queryopenid;
+
+        result = await this.service.videoLog.listByUser(pageNum, pageSize, openid);
+        this.ctx.body = {
+            rows: result
+        };
+    }
+
+
+    async deleteLog() {
+        let result;
+        const openid = this.ctx.request.queryopenid;
+        const ids = this.ctx.request.body.ids;
+        console.log(ids);
+        result = await this.service.videoLog.deleteFromUser(ids, openid);
+        this.ctx.body = {
+            result
+        };
+    }
 }
 
-
-exports.listByUser = function* () {
-    const pageNum = +this.query.pageNumber || 1;
-    const pageSize = +this.query.pageSize || 100;
-    let result;
-    const openid = this.query.openid;
-    console.log(openid);
-    console.log(99999);
-    result = yield this.service.videoLog.listByUser(pageNum, pageSize, openid);
-    this.body = {
-        rows: result
-    };
-}
-
-
-exports.deleteLog = function *(){
-    let result;
-    const openid = this.query.openid;
-    const ids = this.request.body.ids;
-    console.log(ids);
-    result = yield this.service.videoLog.deleteFromUser(ids, openid);
-    this.body = {
-        result
-    };
-}
+module.exports = LogController;

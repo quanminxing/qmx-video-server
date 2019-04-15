@@ -321,6 +321,7 @@ class VideoController extends Controller {
 		const category_id = query.category_id ? ' and VV.category_id = ' + query.category_id : '';
 		const classify_id = query.classify_id ? ' and VV.classify_id = ' + query.classify_id : '';
 		const platform_id = query.platform_id ? ' and VV.platform_id = ' + query.platform_id : '';
+		const usage_id = query.usage_id ? ' and VV.usage_id = ' + query.usage_id : '';
 		const price = query.price ? query.price.split(',') : '';
 		const pageSize = query.pageSize ? query.pageSize : 20;
 		const pageNum = query.pageNum ? query.pageNum : 1;
@@ -344,7 +345,7 @@ class VideoController extends Controller {
 				}
 			} else {
 				try {
-					let sql = column_id + name + category_id + priceSql + classify_id + platform_id + ' and is_wechat = true'
+					let sql = column_id + name + category_id + priceSql + classify_id + platform_id + usage_id + ' and is_wechat = true'
 					let result = this.service.video.search(pageNum, pageSize, sql, orderby)
 					let count = this.service.video.count(sql)
 					let [data, total] = await Promise.all([result, count]);
@@ -389,6 +390,7 @@ class VideoController extends Controller {
 		const category_id = query.category_id ? ' and VV.category_id = ' + query.category_id : '';
 		const classify_id = query.classify_id ? ' and VV.classify_id = ' + query.classify_id : '';
 		const platform_id = query.platform_id ? ' and VV.platform_id = ' + query.platform_id : '';
+		const usage_id = query.usage_id ? ' and VV.usage_id = ' + query.usage_id : '';
 		const price = query.price ? query.price.split(',') : '';
 		const pageSize = query.pageSize ? query.pageSize : 20;
 		const pageNum = query.pageNum ? query.pageNum : 1;
@@ -407,7 +409,7 @@ class VideoController extends Controller {
 				}
 			} else {
 				try {
-					let sql = column_id + name + category_id + priceSql + classify_id + platform_id
+					let sql = column_id + name + category_id + priceSql + classify_id + platform_id + usage_id
 					let result = this.service.video.search(pageNum, pageSize, sql, orderby)
 					let count = this.service.video.count(sql)
 					let [data, total] = await Promise.all([result, count]);

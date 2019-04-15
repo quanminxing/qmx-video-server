@@ -23,7 +23,7 @@ class ColumnService extends Service {
 
   // 通过 获取id
   async listByPlatformId(pageNum, pageSize, platform_id) {
-    const articles = await this.app.mysql.query('select * from video_column where platform_id = ? order by timestamp desc limit ? offset ?;', [platform_id, pageSize, (pageNum - 1) * pageSize]);
+    const articles = await this.app.mysql.query(`select * from video_column where platform_id = ? order by timestamp desc limit ${pageSize} offset ${(pageNum - 1) * pageSize};`);
     return articles;
   }
 
@@ -38,8 +38,8 @@ class ColumnService extends Service {
   async search(pageNum, pageSize, where) {
     let sql = 'select  id,name, platform_id,  comment, status, timestamp from video_column where'
     sql += ' ' + where;
-    sql += ' order by timestamp desc limit ? offset ?;'
-    const articles = await this.app.mysql.query(sql, [pageSize, (pageNum - 1) * pageSize]);
+    sql += ` order by timestamp desc limit ${pageSize} offset ${(pageNum - 1) * pageSize};`
+    const articles = await this.app.mysql.query(sql);
     return articles;
   }
   // 总数

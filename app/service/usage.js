@@ -31,8 +31,8 @@ class UsageService extends Service {
   async search(pageNum, pageSize, where) {
     let sql = 'select  id,name,  comment, status, timestamp from video_usage where'
     sql += ' ' + where;
-    sql += ' order by timestamp desc limit ? offset ?;'
-    const articles = await this.app.mysql.query(sql, [pageSize, (pageNum - 1) * pageSize]);
+    sql += ` order by timestamp desc limit ${pageSize} offset ${(pageNum - 1) * pageSize};`
+    const articles = await this.app.mysql.query(sql);
     return articles;
   }
   // 总数

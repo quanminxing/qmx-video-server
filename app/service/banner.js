@@ -9,12 +9,12 @@ class BannerService extends Service {
     }
 
     async listAll(pageNum, pageSize) {
-        let results = await this.app.mysql.query('select A.*, date_format(A.timestamp,"%Y-%m-%d %H:%i") as timestamp from video_banner  AS A left join video_banner_type AS B on A.type_id = B.id order by A.id desc limit ? offset ?;', [pageSize, (pageNum - 1) * pageSize])
+        let results = await this.app.mysql.query('select A.*, date_format(A.timestamp,"%Y-%m-%d %H:%i") as timestamp from video_banner  AS A left join video_banner_type AS B on A.type_id = B.id order by A.id desc limit ${pageSize} offset ${(pageNum - 1) * pageSize};')
         return results;
     }
 
     async listById(id) {
-        let results = await this.app.mysql.query('select A.*, date_format(A.timestamp,"%Y-%m-%d %H:%i") as timestamp from video_banner  AS A left join video_banner_type AS B on A.type_id = B.id where A.id = ?', [id])
+        let results = await this.app.mysql.query(`select A.*, date_format(A.timestamp,"%Y-%m-%d %H:%i") as timestamp from video_banner  AS A left join video_banner_type AS B on A.type_id = B.id where A.id = ${id}`)
         return results;
     }
     async insert(obj) {

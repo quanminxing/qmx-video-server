@@ -31,7 +31,7 @@ class VideoService extends Service {
 		return result.affectedRows === 1;
 	}
 
-	
+
 
 	// 获取列表
 	async search(pageNum, pageSize, where, orderby) {
@@ -48,7 +48,7 @@ class VideoService extends Service {
 			+ ` LEFT JOIN video_usage AS VU on usage_id = VU.id`
 			+ ` LEFT JOIN video_classify AS VCL on classify_id = VCL.id`
 			+ ` where VV.is_del = false ${where} ${orderby}`;
-			articles = await this.app.mysql.query(sql + ' limit ? offset ?;', [pageSize, (pageNum - 1) * pageSize]);
+			articles = await this.app.mysql.query(sql + ` limit ${pageSize} offset ${(pageNum-1) * pageSize};`);
 			
 			return articles;
 		} catch (err) {
@@ -85,8 +85,8 @@ class VideoService extends Service {
 
 	// 搜索
 	async searchByKeyword(pageNum, pageSize, keyword) {
-		let sql = `select id,name,url,short_image,price from video_video where name like '%` + keyword + `%' and is_wechat = true order by timestamp asc limit ? offset ?;`;
-		const articles = await this.app.mysql.query(sql, [pageSize, (pageNum - 1) * pageSize]);
+		let sql = `select id,name,url,short_image,price from video_video where name like '%` + keyword + `%' and is_wechat = true order by timestamp asc limit ${pageSize} offset ${(pageNum - 1) * pageSize};`;
+		const articles = await this.app.mysql.query(sql);
 		return articles;
 	}
 

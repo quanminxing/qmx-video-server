@@ -14,7 +14,7 @@ class RecommandService extends Service {
 
   // 获取列表
   async list(pageNum, pageSize) {
-    const articles = await this.app.mysql.query('select video_recommand.id as id, video_video.id as video_id,video_video.name, datetime from video_recommand left join video_video on video_recommand.video_id = video_video.id order by video_recommand.datetime desc limit ? offset ?;', [pageSize, (pageNum - 1) * pageSize]);
+    const articles = await this.app.mysql.query(`select video_recommand.id as id, video_video.id as video_id,video_video.name, datetime from video_recommand left join video_video on video_recommand.video_id = video_video.id order by video_recommand.datetime desc limit ${pageSize} offset ${(pageNum - 1) * pageSize};`);
     return articles;
   }
 
@@ -29,8 +29,8 @@ class RecommandService extends Service {
   async search(pageNum, pageSize, where) {
     let sql = 'select  id,video_id, datetime from video_recommand where'
     sql += ' ' + where;
-    sql += ' order by timestamp desc limit ? offset ?;'
-    const articles = await this.app.mysql.query(sql, [pageSize, (pageNum - 1) * pageSize]);
+    sql += ` order by timestamp desc limit ${pageSize} offset ${(pageNum - 1) * pageSize};`
+    const articles = await this.app.mysql.query(sql);
     return articles;
   }
   // 总数

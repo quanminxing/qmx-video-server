@@ -12,7 +12,7 @@ class PriceRangeController extends Controller {
         const channel_ids = body.channel_ids || 0;
         const weight = body.weight || 0;
         const comment = body.comment || '';
-        const work_id = this.ctx.session && this.ctx.session.user.id ? this.ctx.session.user.id : '';
+        const work_id = this.ctx.session && this.ctx.session.user && this.ctx.session.user.id ? this.ctx.session.user.id : '';
 
         if (oper === 'add') {
             try {
@@ -198,7 +198,7 @@ class PriceRangeController extends Controller {
             const body = this.ctx.request.body;
 
             const ids = body.ids;
-            const work_id = this.ctx.session && this.ctx.session.user.id ? this.ctx.session.user.id : '';
+            const work_id = this.ctx.session && this.ctx.session.user && this.ctx.session.user.id ? this.ctx.session.user.id : '';
 
             let result = this.service.priceRange.remove(ids);
 

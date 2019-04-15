@@ -1,6 +1,6 @@
 {
   "name": "qmx-server",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "description": "",
   "scripts": {
     "start": "egg-scripts start --daemon --env=prod --title=主程序",

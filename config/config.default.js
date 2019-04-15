@@ -93,3 +93,4 @@ exports.view = {
 };
 
 exports.keys = 'qmxpower';
+

@@ -33,7 +33,7 @@ class RecommandController extends Controller {
     if (oper === 'add') {
 
       await this.service.recommand.insert({
-        work_id: work_id,
+        work_id,
         video_id,
       });
 

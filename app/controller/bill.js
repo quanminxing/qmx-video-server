@@ -49,6 +49,7 @@ class BillController extends Controller {
     const column_id = body.column_id;
     const openid = body.openid;
     const email = body.email;
+    const work_id = this.ctx.session && this.ctx.session.user && this.ctx.session.user.id ? this.ctx.session.user.id : '';
 
     let result;
     let newResult;
@@ -56,7 +57,7 @@ class BillController extends Controller {
 
       try {
         result = await this.service.bill.insert({
-          work_id: this.ctx.session.user ? this.ctx.session.user.id : null,
+          work_id,
           name,
           price,
           business,
@@ -116,11 +117,9 @@ class BillController extends Controller {
 
     } else if (oper === 'edit') {
 
-      let work_id = this.ctx.session.user.id;
-
       await this.service.bill.update({
         id,
-        work_id: body.work_id,
+        work_id,
         name,
         price,
         business,
@@ -149,8 +148,6 @@ class BillController extends Controller {
       this.ctx.body = 'success';
 
     } else if (oper === 'del') {
-
-      let work_id = this.ctx.session.user.id;
 
       id = id.split(',');
       for (let i = 0, l = id.length; i < l; i++) {

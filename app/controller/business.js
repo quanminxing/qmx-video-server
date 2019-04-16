@@ -24,7 +24,7 @@ class BusinessController extends Controller {
     const body = this.ctx.request.body;
     const oper = body.oper;
     let id = body.id;
-    const work_id = this.ctx.session.user.id;
+    const work_id = this.ctx.session && this.ctx.session.user && this.ctx.session.user.id ? this.ctx.session.user.id : '';
     const phone = body.phone;
     const name = body.name;
     const status = body.status
@@ -32,7 +32,7 @@ class BusinessController extends Controller {
     if (oper === 'add') {
 
       await this.service.business.insert({
-        work_id: body.work_id,
+        work_id,
         phone,
         name,
         status
@@ -50,7 +50,7 @@ class BusinessController extends Controller {
 
       await this.service.business.update({
         id,
-        work_id: body.work_id,
+        work_id,
         phone,
         name,
         status

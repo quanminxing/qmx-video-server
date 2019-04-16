@@ -35,7 +35,7 @@ class PackageController extends Controller {
     const body = this.ctx.request.body;
     const oper = body.oper;
     let id = body.id;
-    const work_id = this.ctx.session.user.id;
+    const work_id = this.ctx.session && this.ctx.session.user && this.ctx.session.user.id ? this.ctx.session.user.id : '';
     const price = body.price;
     const pic = body.pic;
     const video_ids = body.video_ids;

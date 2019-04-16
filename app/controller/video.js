@@ -411,7 +411,7 @@ class VideoController extends Controller {
 				try {
 					let sql = column_id + name + category_id + priceSql + classify_id + platform_id + usage_id
 					let result = this.service.video.search(pageNum, pageSize, sql, orderby)
-					let count = this.service.video.count(sql.replace('VV.', ''))
+					let count = this.service.video.count(sql)
 					let [data, total] = await Promise.all([result, count]);
 					if (result && count) {
 						this.ctx.body = {

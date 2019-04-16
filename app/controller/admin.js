@@ -109,7 +109,7 @@ class AdminController extends Controller {
     // console.log(this.oss.options.accessKeyId);
     // this.oss.options.accessKeyId = 'LTAI22EYvc2T0NRK'
     // this.oss.options.accessKeySecret = 'tvCWJfWc2x0WXWu0R5VfBHV0P3OAQy'
-    const bucket1_sts = this.oss.createInstance(this.app.config.bucket1_sts)
+    const bucket1_sts = this.app.oss.createInstance(this.app.config.bucket1_sts)
     const policy_video = {
       "Statement": [
         {

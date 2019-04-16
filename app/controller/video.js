@@ -386,7 +386,7 @@ class VideoController extends Controller {
 		const _search = query._search;
 		const id = query.id;
 		const column_id = query.column_id ? ' and VV.column_id = ' + query.column_id : '';
-		const name = query.name ? ' and VV.name like ' + query.name : '';
+		const name = query.name ? ' and VV.name like ' + `"%${query.name}%"` : '';
 		const category_id = query.category_id ? ' and VV.category_id = ' + query.category_id : '';
 		const classify_id = query.classify_id ? ' and VV.classify_id = ' + query.classify_id : '';
 		const platform_id = query.platform_id ? ' and VV.platform_id = ' + query.platform_id : '';
@@ -411,7 +411,7 @@ class VideoController extends Controller {
 				try {
 					let sql = column_id + name + category_id + priceSql + classify_id + platform_id + usage_id
 					let result = this.service.video.search(pageNum, pageSize, sql, orderby)
-					let count = this.service.video.count(sql)
+					let count = this.service.video.count(sql.replace('VV.', ''))
 					let [data, total] = await Promise.all([result, count]);
 					if (result && count) {
 						this.ctx.body = {

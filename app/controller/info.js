@@ -14,13 +14,14 @@ class InfoController extends Controller {
     }
 
     async operateVideo() {
-        let category, platform, column, usage, classify;
+        let category, platform, column, usage, classify, style;
         category = this.service.category.list(1, 100);
         platform = this.service.platform.list(1, 100);
         column = this.service.column.list(1, 100);
         usage = this.service.usage.list(1, 100);
-        classify = this.service.classify.list;
-        [category, platform, column, usage, classify] = await Promise.all([category, platform, column, usage, classify]);
+        classify = this.service.classify.list();
+        style = this.service.style.list(1, 100);
+        [category, platform, column, usage, classify, style] = await Promise.all([category, platform, column, usage, classify, style]);
         this.ctx.body = {
             status:200,
             data:{
@@ -28,7 +29,8 @@ class InfoController extends Controller {
                 platform: platform,
                 column: column,
                 usage: usage,
-                classify: classify
+                classify: classify,
+                style: style
             }
         }
     }

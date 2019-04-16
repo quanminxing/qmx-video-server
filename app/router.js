@@ -72,7 +72,7 @@ module.exports = app => {
   //视频库
   app.get('/manager/video/detail', admin, app.controller.video.detail);
 
-  app.post('/api/video', admin, app.controller.video.main);
+  app.post('/api/video', app.controller.video.main);
   app.get('/api/video', app.controller.video.list);
   app.post('/api/video/del', app.controller.video.remove)
   app.get('/api/video/listAll', app.controller.video.listAll);
@@ -149,7 +149,7 @@ module.exports = app => {
   app.post('/api/banner',  app.controller.banner.banner)
   app.post('/api/banner/del', app.controller.banner.remove)
   app.get('/api/banner', app.controller.banner.list)
-  app.get('/api/banner/all', app.controller.banner.listAll)
+  app.get('/api/banner/listAll', app.controller.banner.listAll)
   app.get('/api/banner/listById', app.controller.banner.listById)
 
   //获取信息

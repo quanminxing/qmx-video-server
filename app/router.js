@@ -74,6 +74,7 @@ module.exports = app => {
 
   app.post('/api/video', admin, app.controller.video.main);
   app.get('/api/video', app.controller.video.list);
+  app.post('/api/video/del', app.controller.video.remove)
   app.get('/api/video/listAll', app.controller.video.listAll);
   app.get('/api/video/listByColumn', app.controller.video.listByColumn);
   app.get('/api/video/listByCategory', app.controller.video.listByCategory);

@@ -51,9 +51,18 @@ class BannerController extends Controller {
 	}
 	async listAll() {
 		const pageNum = this.ctx.request.query.pageNum || 1;
-		const pageSize = this.ctx.request.query.pageSize || 10;
-		const res = await this.service.banner.listAll(pageNum, pageSize);
-		this.ctx.body = { results: res }
+		const pageSize = this.ctx.request.query.pageSize || 100;
+		let result = this.service.banner.listAll(pageNum, pageSize);
+		let count = this.service.banner.count();
+
+		[result, count] = await Promise.all([result, count]);
+
+	
+		this.ctx.body = { 
+			status: 200,
+			data: result,
+			count: count
+		}
 	}
 
 	async listById() {

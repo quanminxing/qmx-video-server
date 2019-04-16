@@ -110,10 +110,10 @@ class VideoService extends Service {
 	}
 
 	// 删除
-	async remove(id) {
+	async remove(ids) {
 		const conn = await this.app.mysql.beginTransaction();
 		try {
-			const result = await this.app.mysql.query(`UPDATE video_channel SET is_del = true WHERE id IN (${ids});`);
+			const result = await this.app.mysql.query(`UPDATE video_video SET is_del = true WHERE id IN (${ids});`);
 			if (result.affectedRows > 0) {
                 await conn.commit();
                 return true;

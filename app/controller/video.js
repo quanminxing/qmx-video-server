@@ -608,7 +608,7 @@ class VideoController extends Controller {
 			if (result) {
 				this.ctx.body = {
 					status: 200,
-					data: result
+					data: '删除成功'+ids
 				}
 			} else {
 				this.ctx.body = {

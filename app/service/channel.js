@@ -41,8 +41,7 @@ class ChannelService extends Service {
     }
 
     async count(params) {
-        let condition = params && params.condition ? params.condition : '';
-        let sql = `select count(*) from video_channel ${condition}`;
+        let sql = `select count(*) from video_channel ${params}`;
         let count;
         try {
             count = await this.app.mysql.query(sql);

@@ -25,7 +25,10 @@ class BannerController extends Controller {
 				type_id,
 			});
 
-			this.ctx.body = 'success';
+			this.ctx.body = {
+				status: 200,
+				data: '添加成功'
+			};
 		} else if (oper === 'edit') {
 			result = await this.service.banner.update({
 				id,
@@ -38,7 +41,10 @@ class BannerController extends Controller {
 				type_id,
 			});
 
-			this.ctx.body = 'success';
+			this.ctx.body = {
+				status: 200,
+				data: '修改成功'
+			};
 		}
 
 	}
@@ -47,7 +53,10 @@ class BannerController extends Controller {
 		const platform = query.platform;
 		const res = await this.service.banner.list(platform);
 		// 设置响应内容和响应状态码
-		ctx.body = { results: res };
+		ctx.body = { 
+			status:200,
+			data:res
+		};
 	}
 	async listAll() {
 		const pageNum = this.ctx.request.query.pageNum || 1;
@@ -68,13 +77,19 @@ class BannerController extends Controller {
 	async listById() {
 		const banner_id = this.ctx.request.query.id;
 		const res = await this.service.banner.listById(banner_id);
-		this.ctx.body = { result: res }
+		this.ctx.body = { 
+			status: 200,
+			data: res 
+		}
 	}
 
 	async remove() {
 		const work_id = this.ctx.session && this.ctx.session.user && this.ctx.session.user.id ? this.ctx.session.user.id : ''; //this.ctx.session.user.id;
 		let id = this.ctx.request.body.id;
-		id = id.split(',');
+		if(typeof(id) == 'string') {
+			id = id.split(',');
+
+		}
 		for (let i = 0, l = id.length; i < l; i++) {
 			let removebanner = await this.service.banner.remove(id[i]);
 
@@ -86,7 +101,10 @@ class BannerController extends Controller {
 			//await Promise.all([removebanner, writelog]);
 		}
 
-		this.ctx.body = 'success';
+		this.ctx.body = {
+			status: 200,
+			data:'删除成功' + id
+		};
 	}
 
 }

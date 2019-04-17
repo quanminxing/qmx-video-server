@@ -26,7 +26,8 @@ class VideoService extends Service {
 			usage_id: obj.usage_id,
 			is_top: obj.is_top,
 			brand: obj.brand,
-			classify_id: obj.classify_id
+			classify_id: obj.classify_id,
+			scale_id: obj.scale_id
 		});
 		return result.affectedRows === 1;
 	}
@@ -38,7 +39,7 @@ class VideoService extends Service {
 		let articles, sql;
 
 		try {
-			sql = `select VV.id, VV.work_id, VV.name, VV.description, VV.demo_description, VV.demo_pic, VV.category_id, VV.price, VV.business, VV.time, VV.format, VV.url, VV.is_show, VV.platform_id, VV.column_id, VV.keystring, VV.short_image, VV.timestamp, VV.style_id, VV.usage_id, VV.is_top, VV.brand, VV.classify_id,`
+			sql = `select VV.id, VV.work_id, VV.name, VV.description, VV.demo_description, VV.demo_pic, VV.category_id, VV.price, VV.business, VV.time, VV.format, VV.scale_id, VV.url, VV.is_show, VV.platform_id, VV.column_id, VV.keystring, VV.short_image, VV.timestamp, VV.style_id, VV.usage_id, VV.is_top, VV.brand, VV.classify_id,`
 			+ ` VC.name AS categroy_name, VCOL.name AS column_name, VPF.name AS platform_name, VS.name AS style_name, VU.name AS usage_name, VCL.name AS classify_name`
 			+ ` from video_video AS VV`
 			+ ` LEFT JOIN video_category AS VC on category_id = VC.id`
@@ -61,7 +62,7 @@ class VideoService extends Service {
 
 	// 获取某条信息
 	async find(id) {
-		const article = await this.app.mysql.query('select VS.name as style_name, VU.name as usage_name, VV.id as video_id ,VV.name as video_name, VV.price, VV.business, VV.time,VV.platform_id,VV.column_id,VV.keystring, VV.format,VV.work_id, VV.url, VV.is_show, VV.is_top, VV.short_image,VV.waterfall_image, VV.demo_description,VV.demo_pic, VCG.name as category_name, VPF.name as platform_name, VCO.name as column_name, VV.timestamp,VV.category_id, VV.description from video_video AS VV LEFT JOIN video_category AS VCG on VV.category_id = VCG.id LEFT JOIN video_platform AS VPF on VV.platform_id = VPF.id LEFT JOIN video_column AS VCO on VV.column_id = VCO.id LEFT JOIN video_usage AS VU on VV.usage_id = VU.id LEFT JOIN video_style AS VS on VV.style_id = VS.id where VV.id = ? and VV.is_wechat = true;', [id]);
+		const article = await this.app.mysql.query('select VS.name as style_name, VU.name as usage_name, VV.id as video_id ,VV.name as video_name, VV.price, VV.business, VV.time,VV.platform_id,VV.column_id,VV.keystring, VV.format, VV.scale_id, VV.work_id, VV.url, VV.is_show, VV.is_top, VV.short_image,VV.waterfall_image, VV.demo_description,VV.demo_pic, VCG.name as category_name, VPF.name as platform_name, VCO.name as column_name, VV.timestamp,VV.category_id, VV.description from video_video AS VV LEFT JOIN video_category AS VCG on VV.category_id = VCG.id LEFT JOIN video_platform AS VPF on VV.platform_id = VPF.id LEFT JOIN video_column AS VCO on VV.column_id = VCO.id LEFT JOIN video_usage AS VU on VV.usage_id = VU.id LEFT JOIN video_style AS VS on VV.style_id = VS.id where VV.id = ? and VV.is_wechat = true;', [id]);
 
 		return article;
 	}

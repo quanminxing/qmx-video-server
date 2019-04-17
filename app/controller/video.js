@@ -200,7 +200,7 @@ class VideoController extends Controller {
 					place: '视频库',
 					work_id
 				});
-				let [result, log] = await Promise.all([result, log]);
+				[result, log] = await Promise.all([result, log]);
 				if(result) {
 					this.ctx.body = {
 					  status: 200,

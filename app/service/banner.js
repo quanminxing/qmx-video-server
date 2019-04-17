@@ -50,14 +50,12 @@ class BannerService extends Service {
 
         return result.affectedRows === 1;
     }
-    async remove(id) {
+    async remove(ids) {
         try {
-            const result = await this.app.mysql.delete('video_banner', {
-                id: id
-            });
-            return result.affectedRows === 1;
+            const result = await this.app.mysql.query(`DELETE FROM video_banner WHERE id IN (${ids});`)
+            return result.affectedRows > 0;
         } catch (err) {
-            console.log(err)
+            throw err;
         }
     }
 }

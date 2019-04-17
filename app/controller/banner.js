@@ -53,9 +53,9 @@ class BannerController extends Controller {
 		const platform = query.platform;
 		const res = await this.service.banner.list(platform);
 		// 设置响应内容和响应状态码
-		ctx.body = { 
-			status:200,
-			data:res
+		ctx.body = {
+			status: 200,
+			data: res
 		};
 	}
 	async listAll() {
@@ -66,8 +66,8 @@ class BannerController extends Controller {
 
 		[result, count] = await Promise.all([result, count]);
 
-	
-		this.ctx.body = { 
+
+		this.ctx.body = {
 			status: 200,
 			data: result,
 			count: count
@@ -77,34 +77,42 @@ class BannerController extends Controller {
 	async listById() {
 		const banner_id = this.ctx.request.query.id;
 		const res = await this.service.banner.listById(banner_id);
-		this.ctx.body = { 
+		this.ctx.body = {
 			status: 200,
-			data: res 
+			data: res
 		}
 	}
 
 	async remove() {
 		const work_id = this.ctx.session && this.ctx.session.user && this.ctx.session.user.id ? this.ctx.session.user.id : ''; //this.ctx.session.user.id;
 		let ids = this.ctx.request.body.ids;
-		if(typeof(ids) == 'string') {
-			id = id.split(',');
+		try {
+			if (typeof (ids) == 'string') {
+				id = id.split(',');
 
-		}
-		for (let i = 0, l = ids.length; i < l; i++) {
-			let removebanner = await this.service.banner.remove(ids[i]);
-
-			let writelog = await this.service.workerLog.insert({
-				event: '删除banner' + ids[i],
+			}
+			let removebanner = this.service.banner.remove(ids);
+			let writelog = this.service.workerLog.insert({
+				event: '删除banner' + ids,
 				place: 'banner',
 				work_id
 			});
-			//await Promise.all([removebanner, writelog]);
-		}
 
-		this.ctx.body = {
-			status: 200,
-			data:'删除成功' + ids
-		};
+			[removebanner, writelog] = await Promise.all([removebanner, writelog]);
+			
+			if (removebanner) {
+				this.ctx.body = {
+					status: 200,
+					data: '删除成功' + ids
+				};
+			}
+		} catch (err) {
+			this.ctx.body = {
+				status: 200,
+				err_message: err.message
+			}
+			throw err;
+		}
 	}
 }
 

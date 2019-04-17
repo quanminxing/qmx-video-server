@@ -106,7 +106,6 @@ class BannerController extends Controller {
 			data:'删除成功' + id
 		};
 	}
-
 }
 
 module.exports = BannerController;

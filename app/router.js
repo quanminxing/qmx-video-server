@@ -51,7 +51,7 @@ module.exports = app => {
   //频道管理
   app.post('/api/channel', app.controller.channel.channel);
   app.get('/api/channel', app.controller.channel.list);
-  app.get('/api/channel/listall', app.controller.channel.listAll);
+  app.get('/api/channel/listAll', app.controller.channel.listAll);
   app.get('/api/channel/findById', app.controller.channel.findById);
   app.post('/api/channel/del', app.controller.channel.remove);
 

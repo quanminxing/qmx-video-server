@@ -94,8 +94,9 @@ class ChannelController extends Controller {
         const pageNum = query.pageNum ? query.pageNum : 1;
         const sidx = query.sidx ? query.sidx : 'id'
         const sord = query.sord ? query.sord : 'asc'
-        let data = this.service.channel.list({ pageNum, pageSize, sidx, sord });
-        let total = this.service.channel.count();
+        const condition = 'where is_del = false'
+        let data = this.service.channel.list({ pageNum, pageSize, sidx, sord, condition});
+        let total = this.service.channel.count(condition);
         try {
             [data, total] = await Promise.all([data, total]);
             this.ctx.body = {

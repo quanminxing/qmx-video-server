@@ -23,7 +23,7 @@ class ColumnService extends Service {
 
   // 通过 获取id
   async listByPlatformId(pageNum, pageSize, platform_id) {
-    const articles = await this.app.mysql.query(`select * from video_column where platform_id = ? order by timestamp desc limit ${pageSize} offset ${(pageNum - 1) * pageSize};`);
+    const articles = await this.app.mysql.query(`select * from video_column where platform_id = ${platform_id} order by timestamp desc limit ${pageSize} offset ${(pageNum - 1) * pageSize};`);
     return articles;
   }
 

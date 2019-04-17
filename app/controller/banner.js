@@ -85,16 +85,16 @@ class BannerController extends Controller {
 
 	async remove() {
 		const work_id = this.ctx.session && this.ctx.session.user && this.ctx.session.user.id ? this.ctx.session.user.id : ''; //this.ctx.session.user.id;
-		let id = this.ctx.request.body.id;
-		if(typeof(id) == 'string') {
+		let ids = this.ctx.request.body.ids;
+		if(typeof(ids) == 'string') {
 			id = id.split(',');
 
 		}
-		for (let i = 0, l = id.length; i < l; i++) {
-			let removebanner = await this.service.banner.remove(id[i]);
+		for (let i = 0, l = ids.length; i < l; i++) {
+			let removebanner = await this.service.banner.remove(ids[i]);
 
 			let writelog = await this.service.workerLog.insert({
-				event: '删除banner' + id[i],
+				event: '删除banner' + ids[i],
 				place: 'banner',
 				work_id
 			});
@@ -103,7 +103,7 @@ class BannerController extends Controller {
 
 		this.ctx.body = {
 			status: 200,
-			data:'删除成功' + id
+			data:'删除成功' + ids
 		};
 	}
 }

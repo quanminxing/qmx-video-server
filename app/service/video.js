@@ -27,7 +27,8 @@ class VideoService extends Service {
 			is_top: obj.is_top,
 			brand: obj.brand,
 			classify_id: obj.classify_id,
-			scale_id: obj.scale_id
+			scale_id: obj.scale_id,
+			waterfall_image
 		});
 		return result.affectedRows === 1;
 	}
@@ -39,7 +40,7 @@ class VideoService extends Service {
 		let articles, sql;
 
 		try {
-			sql = `select VV.id, VV.work_id, VV.name, VV.description, VV.demo_description, VV.demo_pic, VV.category_id, VV.price, VV.business, VV.time, VV.format, VV.scale_id, VV.url, VV.is_show, VV.platform_id, VV.column_id, VV.keystring, VV.short_image, VV.timestamp, VV.style_id, VV.usage_id, VV.is_top, VV.brand, VV.classify_id,`
+			sql = `select VV.id, VV.work_id, VV.name, VV.description, VV.demo_description, VV.demo_pic, VV.category_id, VV.price, VV.business, VV.time, VV.format, VV.scale_id, VV.url, VV.is_show, VV.platform_id, VV.column_id, VV.keystring, VV.short_image, VV.timestamp, VV.style_id, VV.usage_id, VV.is_top, VV.brand, VV.classify_id, VV.waterfall_image`
 			+ ` VC.name AS categroy_name, VCOL.name AS column_name, VPF.name AS platform_name, VS.name AS style_name, VU.name AS usage_name, VCL.name AS classify_name`
 			+ ` from video_video AS VV`
 			+ ` LEFT JOIN video_category AS VC on category_id = VC.id`

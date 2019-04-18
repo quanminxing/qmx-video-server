@@ -167,6 +167,7 @@ class VideoController extends Controller {
 		const brand = body.brand;
 		const classify_id = body.classify_id;
 		const scale_id = body.scale_id;
+		const waterfall_image = body.waterfall_image;
 
 		if (oper === 'add') {
 
@@ -194,7 +195,8 @@ class VideoController extends Controller {
 					usage_id,
 					brand,
 					classify_id,
-					scale_id
+					scale_id,
+					waterfall_image
 				});
 
 				let log = this.service.workerLog.insert({
@@ -247,7 +249,8 @@ class VideoController extends Controller {
 					usage_id,
 					brand,
 					classify_id,
-					scale_id
+					scale_id,
+					waterfall_image
 				});
 	
 				let log = this.service.workerLog.insert({

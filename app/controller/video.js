@@ -345,7 +345,8 @@ class VideoController extends Controller {
 
 		if (_search === 'true') {
 			if (id) {
-				let result = await this.service.video.find(id);
+				let sql = ' and VV.id = ' + id ;
+				let result = await this.service.video.search(pageNum, pageSize, sql, orderby);
 				this.ctx.body = {
 					status: 200,
 					data: result
@@ -409,7 +410,8 @@ class VideoController extends Controller {
 		let priceSql = price[0] ? ` and price >= ${price[0]}` : '' + price[1] ? ` and price <= ${price[1]}` : '';
 		if (_search === 'true') {
 			if (id) {
-				let result = await this.service.video.find(id);
+				let sql = ' and VV.id = ' + id ;
+				let result = await this.service.video.search(pageNum, pageSize, sql, orderby);
 				this.ctx.body = {
 					status: 200,
 					data: result

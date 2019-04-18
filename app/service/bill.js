@@ -33,8 +33,12 @@ class BillService extends Service {
 
   // 获取列表byren
   async listByUser(openid, pageNum, pageSize) {
-    const articles = await this.app.mysql.query(`select video_bill.id,video_platform.name as platform_name,video_column.name as column_name,video_video.name as video_name, video_bill.name, video_bill.work_id,video_bill.price,video_bill.status,video_bill.business,video_bill.time,scale,channel,date_format(video_bill.timestamp,'%Y-%m-%d %H:%i') as timestamp, video_bill.phone,video_bill.category_id,video_category.name AS category_name, video_bill.platform_id,video_bill.column_id,video_bill.video_id,video_bill.comment, video_bill.email from video_bill LEFT JOIN video_category on video_bill.category_id=video_category.id LEFT JOIN video_platform on video_bill.platform_id=video_platform.id  LEFT JOIN video_column on video_bill.column_id=video_column.id LEFT JOIN video_video on video_bill.video_id=video_video.id where openid = ? and video_bill.status != 3 order by timestamp desc limit ${pageSize} offset ${(pageNum - 1) * pageSize};`);
-    return articles;
+    try{
+      const articles = await this.app.mysql.query(`select video_bill.id,video_platform.name as platform_name,video_column.name as column_name,video_video.name as video_name, video_bill.name, video_bill.work_id,video_bill.price,video_bill.status,video_bill.business,video_bill.time,scale,channel,date_format(video_bill.timestamp,'%Y-%m-%d %H:%i') as timestamp, video_bill.phone,video_bill.category_id,video_category.name AS category_name, video_bill.platform_id,video_bill.column_id,video_bill.video_id,video_bill.comment, video_bill.email from video_bill LEFT JOIN video_category on video_bill.category_id=video_category.id LEFT JOIN video_platform on video_bill.platform_id=video_platform.id  LEFT JOIN video_column on video_bill.column_id=video_column.id LEFT JOIN video_video on video_bill.video_id=video_video.id where openid = '${openid}' and video_bill.status != 3 order by timestamp desc limit ${pageSize} offset ${(pageNum - 1) * pageSize};`);
+      return articles;
+    } catch (err) {
+      throw err;
+    }
   }
 
   // 获取某条信息

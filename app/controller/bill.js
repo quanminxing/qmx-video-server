@@ -81,7 +81,6 @@ class BillController extends Controller {
         });
 
 
-
         newResult = await this.service.bill.list(1, 1, 'where V.id = ' + video_id);
         let video_name, video_time;
         if (newResult.length > 0) {
@@ -197,14 +196,22 @@ class BillController extends Controller {
     const openid = query.openid;
     const pageNum = parseInt(query.pageNum || 1);
     const pageSize = parseInt(query.pageSize || 10)
-    result = await this.service.bill.listByUser(openid, pageNum, pageSize);
+    
     // result = result.map((d)=>{
     //   d.timestamp = moment(d.timestamp).format('YYYY-MM-DD hh:mm:ss');
     //   return d;
     // });
-    this.ctx.body = {
-      rows: result
-    };
+    if(openid) {
+      result = await this.service.bill.listByUser(openid, pageNum, pageSize);
+      this.ctx.body = {
+        rows: result
+      };
+    } else {
+      this.ctx.body = {
+        err_message:'openid null'
+      }
+    }
+
   }
 }
 module.exports = BillController;

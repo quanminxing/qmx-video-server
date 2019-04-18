@@ -8,7 +8,7 @@ module.exports = app => {
 
   app.get('/adminlogin', app.controller.admin.adminLogin);
   app.get('/adminlogout', app.controller.admin.adminLogout);
-  app.get('/manager/index', app.controller.admin.index);
+  app.get('/manager/index', admin, app.controller.admin.index);
   app.get('/manager/list', app.controller.admin.list)
   app.post('/login', app.controller.admin.login);
 

@@ -26,9 +26,9 @@ class AdminController extends Controller {
     const work_id = this.ctx.session && this.ctx.session.user && this.ctx.session.user.id ? this.ctx.session.user.id : '';
     let user = await this.service.people.find(work_id);
 
-    if (this.ctx.session.user.auth === 0) {
-      //非管理员不能查看
-    }
+    // if (this.ctx.session.user.auth === 0) {
+    //   //非管理员不能查看
+    // }
     await this.ctx.render('index.html', {
       current: "people",
       key: await this.service.keyUnit.count(

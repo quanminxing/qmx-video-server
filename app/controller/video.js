@@ -337,7 +337,7 @@ class VideoController extends Controller {
 
 		let orderby;
 
-		let classifySql = (classify_id[0] ? ` and VV.classify_id = ${classify_id[0]}` : '' ) + (classify_id[1] ? ` and VV.classify_id = ${classify_id[1]}` : '');
+		let classifySql = classify_id[0] ? ` and VV.classify_id IN (${classify_id})` : ''
 		let priceSql = (price[0] ? ` and price >= ${price[0]}` : '') + (price[1] ? ` and price <= ${price[1]}` : '');
 
 		if (sidx) {
@@ -408,7 +408,7 @@ class VideoController extends Controller {
 
 		let orderby = ` order by ${sidx} ${sord}`
 
-		let classifySql = (classify_id[0] ? ` and VV.classify_id = ${classify_id[0]}` : '' ) + (classify_id[1] ? ` and VV.classify_id = ${classify_id[1]}` : '');
+		let classifySql = classify_id[0] ? ` and VV.classify_id IN (${classify_id})` : ''
 		let priceSql = (price[0] ? ` and price >= ${price[0]}` : '') + (price[1] ? ` and price <= ${price[1]}` : '');
 		if (_search === 'true') {
 			if (id) {

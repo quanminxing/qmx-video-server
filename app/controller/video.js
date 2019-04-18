@@ -326,7 +326,7 @@ class VideoController extends Controller {
 		const column_id = query.column_id ? ' and VV.column_id = ' + query.column_id : '';
 		const name = query.name ? ' and VV.name like ' + query.name : '';
 		const category_id = query.category_id ? ' and VV.category_id = ' + query.category_id : '';
-		const classify_id = query.classify_id ? query.price.split(',') : '';
+		const classify_id = query.classify_id ? query.classify_id.split(',') : '';
 		const platform_id = query.platform_id ? ' and VV.platform_id = ' + query.platform_id : '';
 		const usage_id = query.usage_id ? ' and VV.usage_id = ' + query.usage_id : '';
 		const price = query.price ? query.price.split(',') : '';
@@ -397,7 +397,7 @@ class VideoController extends Controller {
 		const column_id = query.column_id ? ' and VV.column_id = ' + query.column_id : '';
 		const name = query.name ? ' and VV.name like ' + `"%${query.name}%"` : '';
 		const category_id = query.category_id ? ' and VV.category_id = ' + query.category_id : '';
-		const classify_id = query.classify_id ? query.price.split(',') : '';
+		const classify_id = query.classify_id ? query.classify_id.split(',') : '';
 		const platform_id = query.platform_id ? ' and VV.platform_id = ' + query.platform_id : '';
 		const usage_id = query.usage_id ? ' and VV.usage_id = ' + query.usage_id : '';
 		const price = query.price ? query.price.split(',') : '';

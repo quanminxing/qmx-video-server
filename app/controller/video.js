@@ -326,7 +326,7 @@ class VideoController extends Controller {
 		const column_id = query.column_id ? ' and VV.column_id = ' + query.column_id : '';
 		const name = query.name ? ' and VV.name like ' + query.name : '';
 		const category_id = query.category_id ? ' and VV.category_id = ' + query.category_id : '';
-		const classify_id = query.classify_id ? ' and VV.classify_id = ' + query.classify_id : '';
+		const classify_id = query.classify_id ? query.price.split(',') : '';
 		const platform_id = query.platform_id ? ' and VV.platform_id = ' + query.platform_id : '';
 		const usage_id = query.usage_id ? ' and VV.usage_id = ' + query.usage_id : '';
 		const price = query.price ? query.price.split(',') : '';
@@ -337,7 +337,8 @@ class VideoController extends Controller {
 
 		let orderby;
 
-		let priceSql = price ? ` and VV.price >= ${price[0]} and VV.price <= ${price[1]}` : '';
+		let classifySql = (classify_id[0] ? ` and VV.classify_id = ${classify_id[0]}` : '' ) + (classify_id[1] ? ` and VV.classify_id = ${classify_id[1]}` : '');
+		let priceSql = (price[0] ? ` and price >= ${price[0]}` : '') + (price[1] ? ` and price <= ${price[1]}` : '');
 
 		if (sidx) {
 			orderby = `order by ${sidx} ${sord}`;
@@ -353,7 +354,7 @@ class VideoController extends Controller {
 				}
 			} else {
 				try {
-					let sql = column_id + name + category_id + priceSql + classify_id + platform_id + usage_id + ' and is_wechat = true'
+					let sql = column_id + name + category_id + priceSql + classifySql + platform_id + usage_id + ' and is_wechat = true'
 					let result = this.service.video.search(pageNum, pageSize, sql, orderby)
 					let count = this.service.video.count(sql)
 					let [data, total] = await Promise.all([result, count]);
@@ -396,7 +397,7 @@ class VideoController extends Controller {
 		const column_id = query.column_id ? ' and VV.column_id = ' + query.column_id : '';
 		const name = query.name ? ' and VV.name like ' + `"%${query.name}%"` : '';
 		const category_id = query.category_id ? ' and VV.category_id = ' + query.category_id : '';
-		const classify_id = query.classify_id ? ' and VV.classify_id = ' + query.classify_id : '';
+		const classify_id = query.classify_id ? query.price.split(',') : '';
 		const platform_id = query.platform_id ? ' and VV.platform_id = ' + query.platform_id : '';
 		const usage_id = query.usage_id ? ' and VV.usage_id = ' + query.usage_id : '';
 		const price = query.price ? query.price.split(',') : '';
@@ -407,6 +408,7 @@ class VideoController extends Controller {
 
 		let orderby = ` order by ${sidx} ${sord}`
 
+		let classifySql = (classify_id[0] ? ` and VV.classify_id = ${classify_id[0]}` : '' ) + (classify_id[1] ? ` and VV.classify_id = ${classify_id[1]}` : '');
 		let priceSql = (price[0] ? ` and price >= ${price[0]}` : '') + (price[1] ? ` and price <= ${price[1]}` : '');
 		if (_search === 'true') {
 			if (id) {
@@ -418,7 +420,7 @@ class VideoController extends Controller {
 				}
 			} else {
 				try {
-					let sql = column_id + name + category_id + priceSql + classify_id + platform_id + usage_id
+					let sql = column_id + name + category_id + priceSql + classifySql + platform_id + usage_id
 					let result = this.service.video.search(pageNum, pageSize, sql, orderby)
 					let count = this.service.video.count(sql)
 					let [data, total] = await Promise.all([result, count]);

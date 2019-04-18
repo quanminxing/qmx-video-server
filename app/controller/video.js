@@ -407,7 +407,7 @@ class VideoController extends Controller {
 
 		let orderby = ` order by ${sidx} ${sord}`
 
-		let priceSql = price[0] ? ` and price >= ${price[0]}` : '' + price[1] ? ` and price <= ${price[1]}` : '';
+		let priceSql = (price[0] ? ` and price >= ${price[0]}` : '') + (price[1] ? ` and price <= ${price[1]}` : '');
 		if (_search === 'true') {
 			if (id) {
 				let sql = ' and VV.id = ' + id ;

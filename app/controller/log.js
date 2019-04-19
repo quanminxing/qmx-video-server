@@ -22,7 +22,7 @@ class LogController extends Controller {
         const pageNum = +this.ctx.request.querypageNumber || 1;
         const pageSize = +this.ctx.request.querypageSize || 100;
         let result;
-        const openid = this.ctx.request.queryopenid;
+        const openid = this.ctx.request.query.openid;
 
         result = await this.service.videoLog.listByUser(pageNum, pageSize, openid);
         this.ctx.body = {

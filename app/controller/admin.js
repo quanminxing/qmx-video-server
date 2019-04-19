@@ -10,7 +10,8 @@ class AdminController extends Controller {
       let { js_code } = this.ctx.request.body;
       console.log(js_code)
       let url = `https://api.weixin.qq.com/sns/jscode2session?appid=${appId}&secret=${secret}&js_code=${js_code}&grant_type=authorization_code`;
-      let result = await this.curl(url);
+      let result = await this.app.curl(url);
+      console.log(result)
       this.ctx.body = JSON.parse(result.data);
     }
     catch (e) {

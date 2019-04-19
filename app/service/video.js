@@ -28,7 +28,8 @@ class VideoService extends Service {
 			brand: obj.brand,
 			classify_id: obj.classify_id,
 			scale_id: obj.scale_id,
-			waterfall_image: obj.waterfall_image
+			waterfall_image: obj.waterfall_image,
+			is_wechat:obj.is_wechat
 		});
 		return result.affectedRows === 1;
 	}

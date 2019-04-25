@@ -195,21 +195,20 @@
         return ['未沟通', '进行中', '已结算', '作废'][cellValue]
     };
     function formatUser(cellValue, options, rowObject) {
-        console.log(cellValue, users.filter((d) => (d.id === cellValue)));
         return users.filter((d) => (d.id === cellValue))[0].name || '';
     };
 
     function formatCategory(cellValue, options, rowObject) {
-        console.log(cellValue, categorys.filter((d) => (d.id === cellValue)));
-        return cellValue != 0 && cellValue != null ? categorys.filter((d) => (d.id === cellValue))[0].name : '';
+        var category = categorys.filter((d) => (d.id === cellValue))
+        return cellValue != 0 && cellValue != null ? ( category.length > 0 ? category[0].name : '') : '';
     };
     function formatPlatform(cellValue, options, rowObject) {
-        console.log(cellValue, platforms.filter((d) => (d.id === cellValue)));
-        return cellValue != 0 && cellValue != null ? platforms.filter((d) => (d.id === cellValue))[0].name : '';
+        var platform = platforms.filter((d) => (d.id === cellValue))
+        return cellValue != 0 && cellValue != null ? (platform.length > 0 ? platform[0].name : '') : '';
     };
     function formatColumn(cellValue, options, rowObject) {
-        console.log(cellValue, columns.filter((d) => (d.id === cellValue)));
-        return cellValue != 0 && cellValue != null ? columns.filter((d) => (d.id === cellValue))[0].name : '';
+        var column = columns.filter((d) => (d.id === cellValue))
+        return cellValue != 0 && cellValue != null ? (column.length > 0 ? column[0].name :'') : '';
     };
 
 

@@ -75,7 +75,7 @@ class PriceRangeService extends Service {
 
     async list(params) {
         let condition = params.condition ? params.condition : '';
-        let sql = `select id, name, maxprice, minprice, is_show, channel_id, weight, comment from video_price_range ${condition} order by ${params.sidx} ${params.sord} limit ${params.pageSize} offset ${(params.pageNum - 1) * params.pageSize};`
+        let sql = `select id, name, maxprice, minprice, is_show, weight, comment from video_price_range ${condition} order by ${params.sidx} ${params.sord} limit ${params.pageSize} offset ${(params.pageNum - 1) * params.pageSize};`
         try {
             let result = await this.app.mysql.query(sql);
             return result;
@@ -99,7 +99,7 @@ class PriceRangeService extends Service {
 
     async findById(id) {
         try {
-            let sql = `select id, name, maxprice, minprice, is_show, channel_id, weight, comment from video_price_range where is_show = true;`
+            let sql = `select id, name, maxprice, minprice, is_show, weight, comment from video_price_range where is_show = true;`
             let result = await this.app.mysql.query(sql);
 
             return result

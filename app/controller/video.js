@@ -360,7 +360,7 @@ class VideoController extends Controller {
 		const sord = query.sord || 'desc';
 
 		let classifySql = classify_id[0] ? ` and VV.classify_id IN (${classify_id})` : ''
-		let priceSql = (price[0] ? ` and price >= ${price[0]}` : '') + (price[1] ? ` and price <= ${price[1]}` : '');
+		let priceSql = (price[0] ? ` and VV.price >= ${price[0]}` : '') + (price[1] ? ` and VV.price <= ${price[1]}` : '');
 
 		let orderby = '';
 
@@ -434,7 +434,7 @@ class VideoController extends Controller {
 		let orderby = '';
 
 		let classifySql = classify_id[0] ? ` and VV.classify_id IN (${classify_id})` : ''
-		let priceSql = (price[0] ? ` and price >= ${price[0]}` : '') + (price[1] ? ` and price <= ${price[1]}` : '');
+		let priceSql = (price[0] ? ` and VV.price >= ${price[0]}` : '') + (price[1] ? ` and VV.price <= ${price[1]}` : '');
 		if (_search === 'true') {
 			orderby = ` order by ${sidx} ${sord}`
 			if (id) {

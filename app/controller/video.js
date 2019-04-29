@@ -612,10 +612,18 @@ class VideoController extends Controller {
 				is_top,
 			});
 			if (result) {
-				this.ctx.body = {
-					status: 200,
-					data: `${id}置顶成功`
+				if(is_top) {
+					this.ctx.body = {
+						status: 200,
+						data: `${id}置顶成功`
+					}
+				} else {
+					this.ctx.body = {
+						status: 200,
+						data: `${id}取消置顶成功`
+					}
 				}
+
 			} else {
 				this.ctx.body = {
 					status: 503,

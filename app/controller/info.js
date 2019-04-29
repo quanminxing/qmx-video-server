@@ -34,6 +34,13 @@ class InfoController extends Controller {
             }
         }
     }
+    async regard() {
+        let result = await this.service.info.regard();
+        this.ctx.body = {
+            status: 200,
+            data: result
+        }
+    }
 }
 
 module.exports = InfoController;

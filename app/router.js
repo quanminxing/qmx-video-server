@@ -155,6 +155,7 @@ module.exports = app => {
   //获取信息
   app.get('/api/info/banner', app.controller.info.banner);
   app.get('/api/info/operateVideo', app.controller.info.operateVideo)
+  app.get('/api/info/regard', app.controller.info.regard)
 
 
 

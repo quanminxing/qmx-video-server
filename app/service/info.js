@@ -6,6 +6,11 @@ class InfoService extends Service {
         // select COLUMN_NAME from information_schema.COLUMNS where table_name = ?;
         return results;
     }
+
+    async regard() {
+        let result = await this.app.mysql.get('video_regard', { id:1 })
+        return result;
+    }
 }
 
 module.exports = InfoService

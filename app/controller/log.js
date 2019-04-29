@@ -8,13 +8,19 @@ class LogController extends Controller {
     async log() {
 
         const body = this.ctx.request.body;
+        const kind = body.kind;
         const video_id = body.video_id;
-        const openid = body.openid;
-        await this.service.videoLog.insert({
-            video_id,
-            user_id: openid
-        });
+        const openid = body.user_id;
         this.ctx.body = 'success';
+        
+        if(kind == 'play') {
+            await this.service.videoLog.updateHot(video_id)
+        } else if(kind == 'browse') {
+            await this.service.videoLog.insert({
+                video_id,
+                user_id: openid
+            });
+        }
     }
 
 

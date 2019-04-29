@@ -21,7 +21,6 @@ class AdminController extends Controller {
   }
 
 
-
   async index() {
     const query = this.ctx.request.query;
     const work_id = this.ctx.session && this.ctx.session.user && this.ctx.session.user.id ? this.ctx.session.user.id : '';

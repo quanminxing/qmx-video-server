@@ -29,20 +29,26 @@ class VideoService extends Service {
 			classify_id: obj.classify_id,
 			scale_id: obj.scale_id,
 			waterfall_image: obj.waterfall_image,
-			is_wechat:obj.is_wechat
+			is_wechat:obj.is_wechat,
+			is_model: obj.is_model,
+			sence: obj.sence,
+			platform: obj.platform,
+			category: obj.category,
+			script_url: obj.script_url
 		});
 		return result.affectedRows === 1;
 	}
-
-
 
 	// 获取列表
 	async search(pageNum, pageSize, where, orderby) {
 		let articles, sql;
 
 		try {
-			sql = `select VV.id, VV.work_id, VV.name, VV.description, VV.demo_description, VV.demo_pic, VV.category_id, VV.price, VV.business, VV.time, VV.format, VV.scale_id, VV.url, VV.is_show, VV.platform_id, VV.column_id, VV.keystring, VV.short_image, VV.timestamp, VV.style_id, VV.usage_id, VV.is_top, VV.brand, VV.classify_id, VV.waterfall_image, VV.is_wechat,`
-			+ ` VC.name AS categroy_name, VCOL.name AS column_name, VPF.name AS platform_name, VS.name AS style_name, VU.name AS usage_name, VCL.name AS classify_name`
+			sql = `select VV.id, VV.work_id, VV.name, VV.description, VV.demo_description, VV.demo_pic, VV.category_id, VV.price, VV.business, VV.time, VV.format, VV.scale_id, VV.url, VV.is_show, VV.platform_id, VV.column_id, VV.keystring, VV.short_image, VV.timestamp,`
+			+ ` VV.style_id, VV.usage_id, VV.is_top, VV.brand, VV.classify_id, VV.waterfall_image, VV.is_wechat, VV.is_model, VV.sence, VV.related_id, VV2.name AS related_name, VV.script_url,`
+			+ ` VC.name AS categroy_name, VCOL.name AS column_name, VPF.name AS platform_name, VS.name AS style_name, VU.name AS usage_name, VCL.name AS classify_name, VHOT.uv AS uv,`
+			+ ` (select group_concat(name separator',') from video_category where FIND_IN_SET(id, VV.category)) AS category,`
+			+ ` (select group_concat(name separator',') from video_platform where FIND_IN_SET(id, VV.platform)) AS platform`
 			+ ` from video_video AS VV`
 			+ ` LEFT JOIN video_category AS VC on category_id = VC.id`
 			+ ` LEFT JOIN video_column AS VCOL on column_id = VCOL.id`
@@ -50,6 +56,8 @@ class VideoService extends Service {
 			+ ` LEFT JOIN video_style AS VS on style_id = VS.id`
 			+ ` LEFT JOIN video_usage AS VU on usage_id = VU.id`
 			+ ` LEFT JOIN video_classify AS VCL on classify_id = VCL.id`
+			+ ` LEFT JOIN video_hot AS VHOT on VV.id = VHOT.video_id`
+			+ ` LEFT JOIN video_video AS VV2 on VV.related_id = VV2.id`
 			+ ` where VV.is_del = false ${where} ${orderby}`;
 			articles = await this.app.mysql.query(sql + ` limit ${pageSize} offset ${(pageNum-1) * pageSize};`);
 			
@@ -64,7 +72,19 @@ class VideoService extends Service {
 
 	// 获取某条信息
 	async find(id) {
-		const article = await this.app.mysql.query('select VS.name as style_name, VU.name as usage_name, VV.id as video_id ,VV.name as video_name, VV.price, VV.business, VV.time,VV.platform_id,VV.column_id,VV.keystring, VV.format, VV.scale_id, VV.work_id, VV.url, VV.is_show, VV.is_top, VV.short_image,VV.waterfall_image, VV.demo_description,VV.demo_pic, VCG.name as category_name, VPF.name as platform_name, VCO.name as column_name, VV.timestamp,VV.category_id, VV.description from video_video AS VV LEFT JOIN video_category AS VCG on VV.category_id = VCG.id LEFT JOIN video_platform AS VPF on VV.platform_id = VPF.id LEFT JOIN video_column AS VCO on VV.column_id = VCO.id LEFT JOIN video_usage AS VU on VV.usage_id = VU.id LEFT JOIN video_style AS VS on VV.style_id = VS.id where VV.id = ? and VV.is_wechat = true;', [id]);
+		const article = await this.app.mysql.query('select VS.name as style_name, VU.name as usage_name, VV.id as video_id ,VV.name as video_name, VV.price, VV.business, VV.time,VV.platform_id,VV.column_id,VV.keystring, VV.format, VV.scale_id, VV.work_id, VV.url, VV.is_show, VV.is_top, VV.short_image,VV.waterfall_image, VV.demo_description,VV.demo_pic,'
+		+ 'VCG.name as category_name, VPF.name as platform_name, VCO.name as column_name,' 
+		+ ' VV.timestamp,VV.category_id, VV.description, IFNULL(VHOT.uv, 0) AS uv,' 
+		+ ` (select group_concat(name separator',') from video_category where FIND_IN_SET(id, VV.category)) AS category,`
+		+ ` (select group_concat(name separator',') from video_platform where FIND_IN_SET(id, VV.platform)) AS platform`
+		+ ' from video_video AS VV' 
+		+ ' LEFT JOIN video_category AS VCG on VV.category_id = VCG.id' 
+		+ ' LEFT JOIN video_platform AS VPF on VV.platform_id = VPF.id' 
+		+ ' LEFT JOIN video_column AS VCO on VV.column_id = VCO.id' 
+		+ ' LEFT JOIN video_usage AS VU on VV.usage_id = VU.id' 
+		+ ' LEFT JOIN video_style AS VS on VV.style_id = VS.id' 
+		+ ' LEFT JOIN video_hot AS VHOT on VV.id = VHOT.video_id' 
+		+ ' where VV.id = ? and VV.is_wechat = true;', [id]);
 
 		return article;
 	}
@@ -106,8 +126,40 @@ class VideoService extends Service {
 	}
 
 	// 更新
-	async update(data) {
-		const result = await this.app.mysql.update('video_video', data);
+	async update(obj) {
+		const result = await this.app.mysql.update('video_video', {
+			id: obj.id,
+			work_id: obj.work_id,
+			name: obj.name,
+			description: obj.description,
+			demo_description: obj.demo_description,
+			demo_pic: obj.demo_pic,
+			category_id: obj.category_id,
+			price: obj.price,
+			business: obj.business,
+			time: obj.time,
+			format: obj.format,
+			url: obj.url,
+			is_show: obj.is_show,
+			platform_id: obj.platform_id,
+			column_id: obj.column_id,
+			keystring: obj.keystring,
+			short_image: obj.short_image,
+			timestamp: this.app.mysql.literals.now,
+			style_id: obj.style_id,
+			usage_id: obj.usage_id,
+			is_top: obj.is_top,
+			brand: obj.brand,
+			classify_id: obj.classify_id,
+			scale_id: obj.scale_id,
+			waterfall_image: obj.waterfall_image,
+			is_wechat:obj.is_wechat,
+			is_model: obj.is_model,
+			sence: obj.sence,
+			platform: obj.platform,
+			category: obj.category,
+			script_url: obj.script_url
+		});
 
 		return result.affectedRows === 1;
 	}
@@ -134,7 +186,8 @@ class VideoService extends Service {
 		try {
 			const result = await this.app.mysql.update('video_video', {
 				id: data.id,
-				is_top: data.is_top
+				is_top: data.is_top,
+				timestamp: this.app.mysql.literals.now
 			})
 			return result.affectedRows === 1 ? true : false;
 		} catch (err) {

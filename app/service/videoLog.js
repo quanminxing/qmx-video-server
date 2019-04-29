@@ -28,6 +28,24 @@ class VideoLogService extends Service {
         return result;
     }
 
+    async updateHot(video_id) {
+        let result;
+        let exist  = await this.app.mysql.get('video_hot', {
+            video_id
+        });
+        if(exist) {
+            result = await this.app.mysql.query(`UPDATE video_hot SET pv = pv + 1, stat_time = ${this.app.mysql.literals.now} WHERE id=${exist.id};`)
+        } else {
+            result = await this.app.mysql.insert('video_hot', {
+                video_id,
+                pv: 1,
+                uv:1,
+                stat_time: this.app.mysql.literals.now
+            })
+        }
+        return result;
+    }
+
     // 获取列表
     async list(pageNum, pageSize) {
         const articles = await this.app.mysql.query('select * from video_log;', [pageSize, (pageNum - 1) * pageSize]);

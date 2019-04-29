@@ -169,6 +169,12 @@ class VideoController extends Controller {
 		const scale_id = body.scale_id;
 		const waterfall_image = body.waterfall_image;
 		const is_wechat = body.is_wechat;
+		const is_model = body.is_model;
+		const sence = body.sence;
+		const platform = body.platform;
+		const category = body.category;
+		const related_id = body.related_id;
+		const script_url = body.script_url;
 
 		if (oper === 'add') {
 
@@ -198,7 +204,13 @@ class VideoController extends Controller {
 					classify_id,
 					scale_id,
 					waterfall_image,
-					is_wechat
+					is_wechat,
+					is_model,
+					sence,
+					platform,
+					category,
+					related_id,
+					script_url
 				});
 
 				let log = this.service.workerLog.insert({
@@ -253,7 +265,13 @@ class VideoController extends Controller {
 					classify_id,
 					scale_id,
 					waterfall_image,
-					is_wechat
+					is_wechat,
+					is_model,
+					sence,
+					platform,
+					category,
+					related_id,
+					script_url
 				});
 	
 				let log = this.service.workerLog.insert({
@@ -333,21 +351,21 @@ class VideoController extends Controller {
 		const platform_id = query.platform_id ? ' and VV.platform_id = ' + query.platform_id : '';
 		const usage_id = query.usage_id ? ' and VV.usage_id = ' + query.usage_id : '';
 		const price = query.price ? query.price.split(',') : '';
+		const model = query.model ? ' and VV.is_model = ' + query.model : '';
+		const sence = query.sence ? ' and VV.sence = ' + query.sence : '';
+		const related_id = query.related_id ? ' and VV.related_id = ' + query.related_id : '';
 		const pageSize = query.pageSize ? query.pageSize : 20;
 		const pageNum = query.pageNum ? query.pageNum : 1;
 		const sidx = query.sidx ? 'VV.' + query.sidx : 'VV.timestamp';
 		const sord = query.sord || 'desc';
 
-		let orderby;
-
 		let classifySql = classify_id[0] ? ` and VV.classify_id IN (${classify_id})` : ''
 		let priceSql = (price[0] ? ` and price >= ${price[0]}` : '') + (price[1] ? ` and price <= ${price[1]}` : '');
 
-		if (sidx) {
-			orderby = `order by ${sidx} ${sord}`;
-		}
+		let orderby = '';
 
 		if (_search === 'true') {
+			orderby = `order by ${sidx} ${sord}`;
 			if (id) {
 				let sql = ' and VV.id = ' + id ;
 				let result = await this.service.video.search(pageNum, pageSize, sql, orderby);
@@ -357,7 +375,7 @@ class VideoController extends Controller {
 				}
 			} else {
 				try {
-					let sql = column_id + name + category_id + priceSql + classifySql + platform_id + usage_id + ' and is_wechat = true'
+					let sql = column_id + name + category_id + priceSql + classifySql + platform_id + usage_id + model + sence + related_id + ' and is_wechat = true'
 					let result = this.service.video.search(pageNum, pageSize, sql, orderby)
 					let count = this.service.video.count(sql)
 					let [data, total] = await Promise.all([result, count]);
@@ -382,6 +400,7 @@ class VideoController extends Controller {
 				}
 			}
 		} else {
+			orderby += `order by VV.is_top desc, ${sidx} ${sord}`
 			let result = this.service.video.search(pageNum, pageSize, '', orderby)
 			let count = this.service.video.count()
 			let [data, total] = await Promise.all([result, count])
@@ -404,16 +423,20 @@ class VideoController extends Controller {
 		const platform_id = query.platform_id ? ' and VV.platform_id = ' + query.platform_id : '';
 		const usage_id = query.usage_id ? ' and VV.usage_id = ' + query.usage_id : '';
 		const price = query.price ? query.price.split(',') : '';
+		const model = query.model ? ' and VV.is_model = ' + query.model : '';
+		const sence = query.sence ? ' and VV.sence = ' + query.sence : '';
+		const related_id = query.related_id ? ' and VV.related_id = ' + query.related_id : '';
 		const pageSize = query.pageSize ? query.pageSize : 20;
 		const pageNum = query.pageNum ? query.pageNum : 1;
 		const sidx = query.sidx? 'VV.' + query.sidx : 'VV.timestamp';
 		const sord = query.sord || 'desc';
 
-		let orderby = ` order by ${sidx} ${sord}`
+		let orderby = '';
 
 		let classifySql = classify_id[0] ? ` and VV.classify_id IN (${classify_id})` : ''
 		let priceSql = (price[0] ? ` and price >= ${price[0]}` : '') + (price[1] ? ` and price <= ${price[1]}` : '');
 		if (_search === 'true') {
+			orderby = ` order by ${sidx} ${sord}`
 			if (id) {
 				let sql = ' and VV.id = ' + id ;
 				let result = await this.service.video.search(pageNum, pageSize, sql, orderby);
@@ -423,7 +446,7 @@ class VideoController extends Controller {
 				}
 			} else {
 				try {
-					let sql = column_id + name + category_id + priceSql + classifySql + platform_id + usage_id
+					let sql = column_id + name + category_id + priceSql + classifySql + platform_id + usage_id + model + sence + related_id
 					let result = this.service.video.search(pageNum, pageSize, sql, orderby)
 					let count = this.service.video.count(sql)
 					let [data, total] = await Promise.all([result, count]);
@@ -448,6 +471,7 @@ class VideoController extends Controller {
 				}
 			}
 		} else {
+			orderby = `order by VV.is_top desc, ${sidx} ${sord}`
 			let result = this.service.video.search(pageNum, pageSize, '', orderby);
 			let count = this.service.video.count();
 			let [data, total] = await Promise.all([result, count]);
@@ -585,7 +609,7 @@ class VideoController extends Controller {
 		try {
 			let result = await this.service.video.top({
 				id,
-				is_top
+				is_top,
 			});
 			if (result) {
 				this.ctx.body = {

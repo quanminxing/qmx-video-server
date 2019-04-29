@@ -375,7 +375,7 @@ class VideoController extends Controller {
 				}
 			} else {
 				try {
-					let sql = column_id + name + category_id + priceSql + classifySql + platform_id + usage_id + model + sence + related_id + ' and is_wechat = true'
+					let sql = column_id + name + category_id + priceSql + classifySql + platform_id + usage_id + model + sence + related_id + ' and VV.is_wechat = true'
 					let result = this.service.video.search(pageNum, pageSize, sql, orderby)
 					let count = this.service.video.count(sql)
 					let [data, total] = await Promise.all([result, count]);

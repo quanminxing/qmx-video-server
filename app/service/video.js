@@ -117,9 +117,9 @@ class VideoService extends Service {
 	async count(where) {
 		let count;
 		if(where) {
-			count = await this.app.mysql.query(`select count(*) from video_video AS VV where ${where};`);
+			count = await this.app.mysql.query(`select count(*) from video_video AS VV where 1=1 ${where};`);
 		} else {
-			count = await this.app.mysql.query(`select count(*) from video_video AS VV where ;`);
+			count = await this.app.mysql.query(`select count(*) from video_video AS VV where 1=1 ;`);
 		}
 
 		return count[0]['count(*)'];

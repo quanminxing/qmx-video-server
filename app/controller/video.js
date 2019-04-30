@@ -364,8 +364,8 @@ class VideoController extends Controller {
 
 		let orderby = '';
 
+		orderby += `order by VV.is_top desc, ${sidx} ${sord}`
 		if (_search === 'true') {
-			orderby = `order by ${sidx} ${sord}`;
 			if (id) {
 				let sql = ' and VV.id = ' + id ;
 				let result = await this.service.video.search(pageNum, pageSize, sql, orderby);
@@ -400,7 +400,7 @@ class VideoController extends Controller {
 				}
 			}
 		} else {
-			orderby += `order by VV.is_top desc, ${sidx} ${sord}`
+			
 			let result = this.service.video.search(pageNum, pageSize, '', orderby)
 			let count = this.service.video.count()
 			let [data, total] = await Promise.all([result, count])

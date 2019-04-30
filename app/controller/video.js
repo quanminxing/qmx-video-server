@@ -359,6 +359,8 @@ class VideoController extends Controller {
 		const sidx = query.sidx ? 'VV.' + query.sidx : 'uv';
 		const sord = query.sord || 'desc';
 
+		console.log(this.ctx.request.url + '\n' + this.ctx.request.querystring)
+
 		let classifySql = classify_id[0] ? ` and VV.classify_id IN (${classify_id})` : ''
 		let priceSql = (price[0] ? ` and VV.price >= ${price[0]}` : '') + (price[1] ? ` and VV.price <= ${price[1]}` : '');
 

@@ -345,7 +345,7 @@ class VideoController extends Controller {
 		const _search = query._search;
 		const id = query.id;
 		const column_id = query.column_id ? ' and VV.column_id = ' + query.column_id : '';
-		const name = query.name ? ' and VV.name like ' + query.name : '';
+		const name = query.name ? ' and VV.name like ' + `"%${query.name}%"` : '';
 		const category_id = query.category_id ? ' and VV.category_id = ' + query.category_id : '';
 		const classify_id = query.classify_id ? query.classify_id.split(',') : '';
 		const platform_id = query.platform_id ? ' and VV.platform_id = ' + query.platform_id : '';

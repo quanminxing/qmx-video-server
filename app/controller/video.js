@@ -343,7 +343,7 @@ class VideoController extends Controller {
 
 		const query = this.ctx.request.query;
 		const _search = query._search;
-		const id = query.id ? query.id : (query.video_id ? query.video_id: ''); // 容错前端
+		const id = query.id //? query.id : (query.video_id ? query.video_id: ''); // 容错前端
 		const column_id = query.column_id ? ' and VV.column_id = ' + query.column_id : '';
 		const name = query.name ? ' and VV.name like ' + `"%${query.name}%"` : '';
 		const category_id = query.category_id ? ' and VV.category_id = ' + query.category_id : '';

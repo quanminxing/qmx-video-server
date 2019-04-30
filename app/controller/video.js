@@ -356,7 +356,7 @@ class VideoController extends Controller {
 		const related_id = query.related_id ? ' and VV.related_id = ' + query.related_id : '';
 		const pageSize = query.pageSize ? query.pageSize : 20;
 		const pageNum = query.pageNum ? query.pageNum : 1;
-		const sidx = query.sidx ? 'VV.' + query.sidx : 'VV.timestamp';
+		const sidx = query.sidx ? 'VV.' + query.sidx : 'uv';
 		const sord = query.sord || 'desc';
 
 		let classifySql = classify_id[0] ? ` and VV.classify_id IN (${classify_id})` : ''
@@ -364,7 +364,11 @@ class VideoController extends Controller {
 
 		let orderby = '';
 
-		orderby += `order by VV.is_top desc, ${sidx} ${sord}`
+		if(query.sidx) {
+			orderby += `order by ${sidx} ${sord}`
+		} else {
+			orderby += `order by VV.is_top desc, ${sidx} ${sord}`
+		}
 		if (_search === 'true') {
 			if (id) {
 				let sql = ' and VV.id = ' + id ;

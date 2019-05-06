@@ -13,7 +13,10 @@ class KeywordService extends Service {
         });
 
         if (exist && exist.length !== 0) {
-
+            result = await this.app.mysql.update('video_search', {
+                id: exist[0].id,
+                datetime: this.app.mysql.literals.now,
+            });
         } else {
             result = await this.app.mysql.insert('video_search', {
                 user_id: obj.user_id,

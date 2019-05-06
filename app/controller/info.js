@@ -41,6 +41,14 @@ class InfoController extends Controller {
             data: result
         }
     }
+
+    async worker() {
+        let result = await this.service.info.worker()
+        this.ctx.body = {
+            status: 200,
+            data: result
+        }
+    }
 }
 
 module.exports = InfoController;

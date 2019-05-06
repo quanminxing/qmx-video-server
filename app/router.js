@@ -156,8 +156,7 @@ module.exports = app => {
   app.get('/api/info/banner', app.controller.info.banner);
   app.get('/api/info/operateVideo', app.controller.info.operateVideo)
   app.get('/api/info/regard', app.controller.info.regard)
-
-
+  app.get('/api/info/worker', app.controller.info.worker)
 
   //app.get('/manager', admin, app.controller.admin.manager);
 

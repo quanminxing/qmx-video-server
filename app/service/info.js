@@ -11,6 +11,11 @@ class InfoService extends Service {
         let result = await this.app.mysql.get('video_regard', { id:1 })
         return result;
     }
+
+    async worker() {
+        let result = await this.app.mysql.query(`select id, cname from video_worker where cname != 'admin111'`);
+        return result;
+    }
 }
 
 module.exports = InfoService

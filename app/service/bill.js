@@ -27,14 +27,35 @@ class BillService extends Service {
   // 获取列表
   async list(pageNum, pageSize, param) {
     const cond = param ? param : ''
-    const articles = await this.app.mysql.query(`select B.id,B.name,B.work_id,B.price,B.status,B.business,B.scale,B.channel,date_format(B.timestamp,'%Y-%m-%d %H:%i') as timestamp,B.phone,B.category_id, B.platform_id,B.column_id,B.video_id, B.comment, B.email, V.name AS video_name, V.url AS video_url, V.short_image AS video_short_image, V.time AS video_time from video_bill AS B LEFT JOIN video_video AS V on B.video_id = V.id ${cond} order by timestamp desc limit ${pageSize} offset ${(pageNum - 1) * pageSize};`);
+    const articles = await this.app.mysql.query(
+      `select VB.id, VB.name, VB.work_id, VB.price, VB.status, VB.business, VB.scale, VB.channel, date_format(VB.timestamp, '%Y-%m-%d %H:%i') as timestamp,`
+    + ` VB.phone, VB.category_id, VB.platform_id, VB.column_id, VB.video_id, VB.comment, VB.email,` 
+    + ` VV.name AS video_name, VV.url AS video_url, VV.short_image AS video_short_image, VV.time AS video_time,`
+    + ` VWOK.cname AS worker_name`
+    + ` from video_bill AS VB`
+    + ` LEFT JOIN video_video AS VV on VB.video_id = V.id`
+    + ` LEFT JOIN video_worker AS VWOK on VB.work_id = VWOK.id`
+    + ` ${cond} order by timestamp desc limit ${pageSize} offset ${(pageNum - 1) * pageSize};`);
     return articles;
   }
 
   // 获取列表byren
   async listByUser(openid, pageNum, pageSize) {
     try{
-      const articles = await this.app.mysql.query(`select video_bill.id,video_platform.name as platform_name,video_column.name as column_name,video_video.name as video_name, video_bill.name, video_bill.work_id,video_bill.price,video_bill.status,video_bill.business,video_bill.time,scale,channel,date_format(video_bill.timestamp,'%Y-%m-%d %H:%i') as timestamp, video_bill.phone,video_bill.category_id,video_category.name AS category_name, video_bill.platform_id,video_bill.column_id,video_bill.video_id,video_bill.comment, video_bill.email from video_bill LEFT JOIN video_category on video_bill.category_id=video_category.id LEFT JOIN video_platform on video_bill.platform_id=video_platform.id  LEFT JOIN video_column on video_bill.column_id=video_column.id LEFT JOIN video_video on video_bill.video_id=video_video.id where openid = '${openid}' and video_bill.status != 3 order by timestamp desc limit ${pageSize} offset ${(pageNum - 1) * pageSize};`);
+      const articles = await this.app.mysql.query(
+        `select VB.id, VPF.name as platform_name, VCOL.name as column_name, VV.name as video_name,`
+        + ` VB.name, VB.work_id, VB.price, VB.status, VB.business, VB.time,`
+        + ` scale, channel, date_format(VB.timestamp,'%Y-%m-%d %H:%i') as timestamp,`
+        + ` VB.phone, VB.category_id, VC.name AS category_name, VB.platform_id, VB.column_id,`
+        + ` VB.video_id, VB.comment, VB.email,`
+        + ` VWOK.cname AS worker_name`
+        + ` from video_bill AS VB`
+        + ` LEFT JOIN video_category AS VC on VB.category_id = VC.id `
+        + ` LEFT JOIN video_platform AS VPF on VB.platform_id = VPF.id`
+        + ` LEFT JOIN video_column AS VCOL on VB.column_id = VCOL.id`
+        + ` LEFT JOIN video_video AS VV on VB.video_id = VV.id`
+        + ` LEFT JOIN video_worker AS VWOK on VB.work_id = VWOK.id`
+        + ` where openid = '${openid}' and VB.status != 3 order by timestamp desc limit ${pageSize} offset ${(pageNum - 1) * pageSize};`);
       return articles;
     } catch (err) {
       throw err;

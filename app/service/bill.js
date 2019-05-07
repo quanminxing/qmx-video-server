@@ -31,9 +31,9 @@ class BillService extends Service {
       `select VB.id, VB.name, VB.work_id, VB.price, VB.status, VB.business, VB.scale, VB.channel, date_format(VB.timestamp, '%Y-%m-%d %H:%i') as timestamp,`
     + ` VB.phone, VB.category_id, VB.platform_id, VB.column_id, VB.video_id, VB.comment, VB.email,` 
     + ` VV.name AS video_name, VV.url AS video_url, VV.short_image AS video_short_image, VV.time AS video_time,`
-    + ` VWOK.cname AS worker_name`
+    + ` VWOK.cname AS worker_name, VWOK.id AS worker_id`
     + ` from video_bill AS VB`
-    + ` LEFT JOIN video_video AS VV on VB.video_id = V.id`
+    + ` LEFT JOIN video_video AS VV on VB.video_id = VV.id`
     + ` LEFT JOIN video_worker AS VWOK on VB.work_id = VWOK.id`
     + ` ${cond} order by timestamp desc limit ${pageSize} offset ${(pageNum - 1) * pageSize};`);
     return articles;

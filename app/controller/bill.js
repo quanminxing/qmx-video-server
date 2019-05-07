@@ -49,7 +49,7 @@ class BillController extends Controller {
     const column_id = body.column_id;
     const openid = body.openid;
     const email = body.email;
-    const work_id = this.ctx.session && this.ctx.session.user && this.ctx.session.user.id ? this.ctx.session.user.id : '';
+    const work_id = body.work_id || '';
 
     let result;
     let newResult;
@@ -80,20 +80,25 @@ class BillController extends Controller {
           email
         });
 
-
-        newResult = await this.service.bill.list(1, 1, 'where V.id = ' + video_id);
-        let video_name, video_time;
+        newResult = await this.service.bill.list(1, 1, 'where VB.id = ' + result.insertId);
+        let video_name, video_time, worker_name, worker_id;
         if (newResult.length > 0) {
           video_name = newResult[0].video_name ? newResult[0].video_name : '无'
           video_time = newResult[0].video_time ? newResult[0].video_time.split(':').join('分') + '秒' : '无'
+          worker_name = newResult[0].worker_name ? newResult[0].worker_name : '无'
+          worker_id = newResult[0].worker_id ? newResult[0].worker_id : '无'
         } else {
           video_name = '无'
           video_time = '无'
+          worker_name = '无'
+          worker_id = ''
         }
         if (!this.ctx.session.user) {
           let mailHtmlText = `订单ID为${result.insertId},订单内容如下：</br>` +
             `样片视频：${video_name}</br>` +
             `样片时长：${video_time}</br>` +
+            `订单价格：${price}</br>` +
+            `推荐人：${worker_id} -- ${worker_name}</br>` +
             //`样片功能：室内场景</br>` +
             `公司名称：${business}</br>` +
             `联系人：${name}</br>` +

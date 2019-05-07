@@ -89,11 +89,9 @@ class VideoLogService extends Service {
 
 
     async deleteFromUser(ids, openid) {
-        const result = await this.app.mysql.query('delete from video_log where video_id in(' + ids + ') and user_id = ?', [openid]);
-
+        const result = await this.app.mysql.query('delete from video_log where id in(' + ids + ') and user_id = ?', [openid]);
         return result
     }
-
 }
 
 module.exports = VideoLogService

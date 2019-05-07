@@ -41,11 +41,19 @@ class LogController extends Controller {
         let result;
         const openid = this.ctx.request.queryopenid;
         const ids = this.ctx.request.body.ids;
-        console.log(ids);
+        
         result = await this.service.videoLog.deleteFromUser(ids, openid);
-        this.ctx.body = {
-            result
-        };
+        if(result.affectedRows > 0 ) {
+            this.ctx.body = {
+                status: 200,
+                data: "删除成功" + ids
+            }
+        } else {
+            this.ctx.body = {
+                status: 500,
+                err_message: "删除失败"
+            }
+        }
     }
 }
 

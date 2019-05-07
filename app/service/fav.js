@@ -29,8 +29,8 @@ class FavService extends Service {
     }
 
     // 获取某人列表
-    async listByUser(pageNum, pageSize, work_id) {
-        const articles = await this.app.mysql.query('select video_id, datetime ,video_video.name,video_video.price,video_video.url,video_video.short_image from video_user_fav LEFT JOIN video_video on video_video.id = video_user_fav.video_id where user_id = ? order by datetime desc limit ? offset ?;', [work_id, pageSize, (pageNum - 1) * pageSize]);
+    async listByUser(pageNum, pageSize, openid) {
+        const articles = await this.app.mysql.query('select VUF.video_id, VUF.datetime ,VV.name,VV.price,VV.url,VV.short_image, VV.waterfall_image, VV.short_image, VV.classify_id, VV.category_id from video_user_fav AS VUF LEFT JOIN video_video AS VV on VV.id = VUF.video_id where VUF.user_id = ? order by VUF.datetime desc limit ? offset ?;', [openid, pageSize, (pageNum - 1) * pageSize]);
         return articles;
     }
     // 获取某条信息

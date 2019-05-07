@@ -53,7 +53,7 @@ class VideoLogService extends Service {
     }
     // 获取某人列表
     async listByUser(pageNum, pageSize, work_id) {
-        const articles = await this.app.mysql.query('select VLOG.video_id, VLOG.datetime ,VV.name,VV.price,VV.url,VV.short_image, VV.waterfall_image, VV.classify_id, VV.category_id from video_log AS VLOG LEFT JOIN video_video AS VV on VV.id = VLOG.video_id where VLOG.user_id = ? order by VLOG.datetime desc limit ? offset ?;', [work_id, pageSize, (pageNum - 1) * pageSize]);
+        const articles = await this.app.mysql.query('select VLOG.id, VLOG.video_id, VLOG.datetime ,VV.name,VV.price,VV.url,VV.short_image, VV.waterfall_image, VV.classify_id, VV.category_id from video_log AS VLOG LEFT JOIN video_video AS VV on VV.id = VLOG.video_id where VLOG.user_id = ? order by VLOG.datetime desc limit ? offset ?;', [work_id, pageSize, (pageNum - 1) * pageSize]);
         return articles;
     }
 

@@ -358,7 +358,7 @@ class BillController extends Controller {
     } else {
       this.ctx.body = {
         status: 500,
-        err_message: '修改失败,订单付款状态非未付款'
+        err_message: '修改失败,未查询到订单或订单付款状态非未付款'
       }
     }
   }

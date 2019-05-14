@@ -59,7 +59,7 @@ typings/
 .DS_Store
 npm-debug.log
 node_modules
-
+package-lock.json
 # next.js build output
 .next
 docs/

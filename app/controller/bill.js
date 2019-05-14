@@ -149,17 +149,31 @@ class BillController extends Controller {
   //后台列表
   async list() {
     const query = this.ctx.request.query;
-    const pageNum = +query.page || 1;
-    const pageSize = +query.rows || 100;
+    const pageNum = query.pageNum || 1;
+    const pageSize = query.pageSize || 100;
     const _search = query._search;
-    const sql = query.sql;
+
     let result, total;
 
-    if (_search !== 'true') {
-      result = await this.service.bill.list(pageNum, pageSize);
-      total = await this.service.bill.count('1=1');
+    if (_search != 'true') {
+      result = await this.service.bill.list(pageNum, pageSize, '');
+      total = await this.service.bill.count('');
     } else {
-      result = await this.service.bill.search(pageNum, pageSize, sql);
+      let sql = 'where VB.is_del=false'
+      
+      const id = query.id ? ' and VB.id=' + query.id : '';
+      const user_id = query.user_id ? '' : '';
+      const phone = query.phone ? ' and VB.phone=' + query.phone : '';
+      const name = query.name ? 'and VB.name=' + query.name : '';
+      const business = query.business ? ' and VB.business=' + query.business : '';
+      const trade_status = query.trade_status ? ' and VB.trade_status=' + query.trade_status : '';
+      const pay_status = query.pay_status ? ' and VB.pay_status=' + query.pay_status : '';
+      const order_time = query.order_time ? ' and VB.order_time=' + query.order_time : '';
+      const work_id = query.work_id ? ' and VB.work_id=' + query.work_id : '';
+
+      sql += id + user_id + phone + name + business + trade_status + pay_status + order_time + work_id;
+      console.log(phone)
+      result = await this.service.bill.list(pageNum, pageSize, sql);
       total = await this.service.bill.count(sql);
     }
     this.ctx.body = {

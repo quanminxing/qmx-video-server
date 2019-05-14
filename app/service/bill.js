@@ -31,6 +31,7 @@ class BillService extends Service {
   // 获取列表
   async list(pageNum, pageSize, param) {
     const cond = param ? param : ''
+    console.log(cond)
     const articles = await this.app.mysql.query(
       `select VB.id, VB.name, VB.work_id, VB.price, VB.status, VB.business, date_format(VB.timestamp, '%Y-%m-%d %H:%i') as timestamp,`
       + ` VB.phone, VB.video_id, VB.comment, VB.email, VB.order_id, VB.pay_status, VB.refund_price, VB.refund_time, VB.trade_status,`
@@ -98,8 +99,9 @@ class BillService extends Service {
     return articles;
   }
   // 总数
-  async count(where) {
-    const count = await this.app.mysql.query('select count(*) from video_bill where ?', [where]);
+  async count(cond) {
+    console.log(cond)
+    const count = await this.app.mysql.query(`select count(*) from video_bill AS VB ${cond}`);
 
     return count[0]['count(*)'];
   }

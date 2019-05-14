@@ -97,7 +97,7 @@ module.exports = app => {
   app.post('/api/bill', app.controller.bill.main);
   app.get('/api/bill', app.controller.bill.list);
   app.get('/manager/bill', app.controller.bill.index);
-  app.get('/api/bill/listByUser', admin, app.controller.bill.listByUser);
+  app.get('/api/bill/listByUser', app.controller.bill.listByUser);
   app.get('/api/bill/count', app.controller.bill.tradeCount);
   app.post('/api/bill/tradeStatus', staff, app.controller.bill.tradeStatus);
   app.post('/api/bill/price', staff, app.controller.bill.price);

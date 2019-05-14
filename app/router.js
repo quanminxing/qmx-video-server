@@ -100,11 +100,13 @@ module.exports = app => {
   app.get('/api/bill/listByUser', app.controller.bill.listByUser);
   app.get('/api/bill/count', app.controller.bill.tradeCount);
   app.post('/api/bill/tradeStatus', staff, app.controller.bill.tradeStatus);
-  app.post('/api/bill/price', staff, app.controller.bill.price);
+  app.post('/api/bill/price',  app.controller.bill.price);
   app.post('/api/bill/work', admin, app.controller.bill.worker);
   app.post('/api/bill/workComment', staff, app.controller.bill.workerComment);
 
-
+  //支付
+  app.post('/api/payPrepare', app.controller.pay.payPrepare);
+  app.post('/api/pay/callback', app.controller.pay.callback);
 
   //颗粒度管理
   app.post('/key', admin, app.controller.key.main);

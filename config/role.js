@@ -13,8 +13,6 @@ module.exports = app => {
   });
 
   app.role.use('staff', ctx => {
-    console.log('staff')
-    console.log(ctx)
 
     const login = ctx.session && ctx.session.adminLogin ? ctx.session.adminLogin : false;
     const role = ctx.session && ctx.session.user ? ctx.session.user.position : '';

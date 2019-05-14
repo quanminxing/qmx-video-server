@@ -5,10 +5,10 @@ const Controller = require('egg').Controller;
 class AdminController extends Controller {
   async loginByWechat() {
     try {
-      let appId = 'wx52c4f518bbba52b5';
-      let secret = 'a03859eb4bcb57f3cc09995a01077c56';
+      let appId = this.app.config.wechat.appid;
+      let secret = this.app.config.wechat.secretKey;
       let { js_code } = this.ctx.request.body;
-      console.log(js_code)
+
       let url = `https://api.weixin.qq.com/sns/jscode2session?appid=${appId}&secret=${secret}&js_code=${js_code}&grant_type=authorization_code`;
       let result = await this.app.curl(url);
       console.log(result)

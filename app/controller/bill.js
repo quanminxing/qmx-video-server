@@ -33,11 +33,6 @@ class BillController extends Controller {
     const price = body.price != 'null' ? body.price : '';
     const business = body.business;
     const status = body.status;
-    const is_scene = body.is_scene;
-    const is_audio = body.is_audio;
-    const is_show = body.is_show;
-    const is_model = body.is_model;
-    const is_text = body.is_text;
     const time = body.time;
     const scale = body.scale;
     const channel = body.channel;
@@ -62,18 +57,8 @@ class BillController extends Controller {
           price,
           business,
           status,
-          is_scene,
-          is_audio,
-          is_model,
-          is_text,
-          is_show,
           time,
-          scale,
-          channel,
           phone,
-          category_id,
-          platform_id,
-          column_id,
           video_id,
           openid,
           comment,
@@ -129,19 +114,9 @@ class BillController extends Controller {
         price,
         business,
         status,
-        is_scene,
-        is_audio,
-        is_model,
-        is_text,
-        is_show,
         time,
-        scale,
-        channel,
         phone,
-        platform_id,
-        column_id,
         video_id,
-        category_id,
         comment,
         email
       });
@@ -171,6 +146,7 @@ class BillController extends Controller {
 
   }
 
+  //后台列表
   async list() {
     const query = this.ctx.request.query;
     const pageNum = +query.page || 1;
@@ -186,38 +162,251 @@ class BillController extends Controller {
       result = await this.service.bill.search(pageNum, pageSize, sql);
       total = await this.service.bill.count(sql);
     }
-    function sleep(ms) {
-      return new Promise(resolve => setTimeout(resolve, ms))
-    }
     this.ctx.body = {
-      total: total > pageSize ? (parseInt(total / pageSize) + 1) : 1,
-      rows: result,
-      totalRow: total,
+      status: 200,
+      data: result,
+      total: total,
     };
   }
 
+  //前台列表
   async listByUser() {
     let result;
     const query = this.ctx.request.query;
     const openid = query.openid;
     const pageNum = parseInt(query.pageNum || 1);
     const pageSize = parseInt(query.pageSize || 10)
-    
+
     // result = result.map((d)=>{
     //   d.timestamp = moment(d.timestamp).format('YYYY-MM-DD hh:mm:ss');
     //   return d;
     // });
-    if(openid) {
+    if (openid) {
       result = await this.service.bill.listByUser(openid, pageNum, pageSize);
       this.ctx.body = {
-        rows: result
+        status: 200,
+        data: result
       };
     } else {
       this.ctx.body = {
-        err_message:'openid null'
+        status: 500,
+        err_message: 'openid null'
       }
     }
 
+  }
+
+  //各交易状态数量
+  async tradeCount() {
+    const query = this.ctx.request.query;
+    const openid = query.user_id;
+    if (!openid) {
+      this.ctx.body = {
+        status: 500,
+        err_message: 'openid null'
+      }
+    } else {
+      let result = await this.service.bill.tradeCount(openid);
+      this.ctx.body = {
+        status: 200,
+        data: result
+      }
+    }
+  }
+
+  //修改交易状态
+  async tradeStatus() {
+    const body = this.ctx.request.body;
+    const id = body.id;
+    const trade_status = body.trade_status;
+    const refund_price = body.refund_price;
+
+    const status = ['进行中', '待付款', '待确认', '待寄送', '交易成功', '退款中', '退款完成', '交易关闭'];
+
+    let check = status.filter((d) => {
+      if (d == trade_status)
+        return d
+    })
+
+    let record = await this.service.bill.find(id);
+    if (check.length === 1) {
+      switch (check[0]) {
+        case '待付款':
+          if (record && record.pay_status === '未付款' && record.trade_status != '退款完成') {
+            let result = await this.service.bill.update({
+              id,
+              trade_status
+            });
+            if (result) {
+              this.ctx.body = {
+                status: 200,
+                data: '修改成功'
+              }
+            } else {
+              this.ctx.body = {
+                status: 500,
+                err_message: '修改失败'
+              }
+            }
+          } else {
+            this.ctx.body = {
+              status: 500,
+              err_message: '修改失败,没有此订单或订单状态不允许修改'
+            }
+          }
+          break;
+        case '退款完成':
+          if (refund_price < 0 || refund_price > record.price) {
+            this.ctx.body = {
+              status: 500,
+              err_message: '修改失败,订单付款状态非未付款'
+            }
+            return;
+          }
+          if (record && record.pay_status === '已付款' && record.trade_status != '退款完成') {
+            let result = await this.service.bill.update({
+              id,
+              trade_status,
+              refund_price
+            });
+            if (result) {
+              this.ctx.body = {
+                status: 200,
+                data: '修改成功'
+              }
+            } else {
+              this.ctx.body = {
+                status: 500,
+                err_message: '修改失败'
+              }
+            }
+          } else {
+            this.ctx.body = {
+              status: 500,
+              err_message: '修改失败, 没有此订单或订单状态不允许修改'
+            }
+          }
+          break;
+
+        default:
+          if (record && record.trade_status != '退款完成') {
+            let result = await this.service.bill.update({
+              id,
+              trade_status
+            });
+            if (result) {
+              this.ctx.body = {
+                status: 200,
+                data: '修改成功'
+              }
+            } else {
+              this.ctx.body = {
+                status: 500,
+                err_message: '修改失败'
+              }
+            }
+          } else {
+            this.ctx.body = {
+              status: 500,
+              err_message: '修改失败, 没有此订单或订单状态为退款完成'
+            }
+          }
+          break;
+      }
+    } else {
+      this.ctx.body = {
+        status: 500,
+        err_message: '修改失败,状态错误'
+      }
+    }
+
+  }
+
+  //修改订单价格
+  async price() {
+    const body = this.ctx.request.body;
+    const id = body.id;
+    let price = body.price;
+
+    if (typeof price != 'number') {
+      price = Number(price);
+    }
+    if (price < 0) {
+      this.ctx.body = {
+        status: 500,
+        err_message: '修改失败,金额非法'
+      }
+      return;
+    }
+    let record = await this.service.bill.find(id);
+    if (record && record.pay_status === '未付款') {
+      let result = await this.service.bill.update({
+        id,
+        price
+      });
+      if (result) {
+        this.ctx.body = {
+          status: 200,
+          data: '修改成功'
+        }
+      } else {
+        this.ctx.body = {
+          status: 500,
+          err_message: '修改失败'
+        }
+      }
+    } else {
+      this.ctx.body = {
+        status: 500,
+        err_message: '修改失败,订单付款状态非未付款'
+      }
+    }
+  }
+
+  //修改跟进销售
+  async worker() {
+    const body = this.ctx.request.body;
+    const id = body.id;
+    const work_id = body.work_id;
+
+    let result = await this.service.bill.update({
+      id,
+      work_id
+    });
+    if (result) {
+      this.ctx.body = {
+        status: 200,
+        data: '修改成功'
+      }
+    } else {
+      this.ctx.body = {
+        status: 500,
+        err_message: '修改失败'
+      }
+    }
+  }
+
+  //修改销售备注
+  async workerComment() {
+    const body = this.ctx.request.body;
+    const id = body.id;
+    const work_comment = body.work_comment;
+
+    let result = await this.service.bill.update({
+      id,
+      work_comment
+    });
+    if (result) {
+      this.ctx.body = {
+        status: 200,
+        data: '修改成功'
+      }
+    } else {
+      this.ctx.body = {
+        status: 500,
+        err_message: '修改失败'
+      }
+    }
   }
 }
 module.exports = BillController;

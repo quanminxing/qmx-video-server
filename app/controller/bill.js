@@ -162,7 +162,7 @@ class BillController extends Controller {
       let sql = 'where VB.is_del=false'
 
       const id = query.id ? ` and VB.id="${query.id}"` : '';
-      const user_id = query.user_id ? '' : '';
+      const openid = query.user_id ? '' : '';
       const phone = query.phone ? ` and VB.phone="${query.phone}"` : '';
       const name = query.name ? ` and VB.name="${query.name}"` : '';
       const business = query.business ? ` and VB.business="${query.business}"` : '';
@@ -187,8 +187,8 @@ class BillController extends Controller {
   async listByUser() {
     let result;
     const query = this.ctx.request.query;
-    const openid = query.openid;
-    const trade_status = query.trade_status;
+    const openid = query.user_id;
+    let trade_status = query.trade_status;
     const pageNum = parseInt(query.pageNum || 1);
     const pageSize = parseInt(query.pageSize || 10)
     let total, sql;
@@ -198,7 +198,14 @@ class BillController extends Controller {
     // });
     if (openid) {
       if (trade_status) {
-        sql = ` where VB.is_del = false and openid = '${openid}' and trade_status = '${trade_status}'`
+        console.log(trade_status)
+        trade_status = trade_status.split(',')
+
+        for(let i = 0; i < trade_status.length; i++) {
+          trade_status[i] = '"' + trade_status[i] + '"'
+        }
+        console.log(trade_status)
+        sql = ` where VB.is_del = false and openid = '${openid}' and trade_status IN (${trade_status})`
       } else {
         sql = ` where VB.is_del = false and openid = '${openid}'`
       }

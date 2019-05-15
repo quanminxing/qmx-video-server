@@ -49,11 +49,14 @@ exports.queryToXML = function (params, key) {
 }
 
 exports.getSign = function (params, key) {
+    console.log(key);
     let paramsArray = params.replace(' ', '').split('&').sort();
 
     let stringSign = (paramsArray.join('&') + key).replace(' ', '')
 
+    console.log(stringSign)
     let md5 = crypto.createHash('md5');
     let sign = md5.update(stringSign).digest('hex').toUpperCase();
+    console.log(sign)
     return sign;
 }

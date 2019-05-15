@@ -67,7 +67,7 @@ class PayController extends Controller {
                     //await this.service.pay.recordinsert(json.xml);
                     let timeStamp = Math.round(new Date() / 1000)
                     let secondSignStr = appid + '&nonce_str=' + json.xml.nonce_str + '&package=prepay_id=' + json.xml.prepay_id + '&signType=MD5' + '&timeStamp=' + timeStamp;
-                    let secondSign = Util.getSign(secondSignStr);
+                    let secondSign = Util.getSign(secondSignStr, key);
                     that.ctx.body = {
                         status: 200,
                         data: {

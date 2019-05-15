@@ -160,7 +160,7 @@ class BillController extends Controller {
       total = await this.service.bill.count('');
     } else {
       let sql = 'where VB.is_del=false'
-      
+
       const id = query.id ? ` and VB.id="${query.id}"` : '';
       const user_id = query.user_id ? '' : '';
       const phone = query.phone ? ` and VB.phone="${query.phone}"` : '';
@@ -172,7 +172,7 @@ class BillController extends Controller {
       const work_id = query.work_id ? ' and VB.work_id=' + query.work_id : '';
 
       sql += id + user_id + phone + name + business + trade_status + pay_status + order_time + work_id;
-      
+
       result = await this.service.bill.list(pageNum, pageSize, sql);
       total = await this.service.bill.count(sql);
     }
@@ -188,6 +188,7 @@ class BillController extends Controller {
     let result;
     const query = this.ctx.request.query;
     const openid = query.openid;
+    const trade_status = query.trade_status;
     const pageNum = parseInt(query.pageNum || 1);
     const pageSize = parseInt(query.pageSize || 10)
     let total, sql;
@@ -196,7 +197,11 @@ class BillController extends Controller {
     //   return d;
     // });
     if (openid) {
-      sql = ` where VB.is_del = false and openid = '${openid}'`
+      if (trade_status) {
+        sql = ` where VB.is_del = false and openid = '${openid}' and trade_status = '${trade_status}'`
+      } else {
+        sql = ` where VB.is_del = false and openid = '${openid}'`
+      }
       result = await this.service.bill.listByUser(sql, pageNum, pageSize);
       total = await this.service.bill.count(sql)
       this.ctx.body = {

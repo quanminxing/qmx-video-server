@@ -62,9 +62,9 @@ class BillService extends Service {
         + ` LEFT JOIN video_platform AS VPF on VV.platform_id = VPF.id`
         + ` LEFT JOIN video_column AS VCOL on VV.column_id = VCOL.id`
         + ` LEFT JOIN video_worker AS VWOK on VB.work_id = VWOK.id`
-        + ` LEFT JOIN video_pay_record AS VPR on VB.order_id = VPR.order_id`
+        + ` LEFT JOIN video_pay_record AS VPR on VB.order_id = VPR.order_id `
 
-        + `${cond}  order by timestamp desc limit ${pageSize} offset ${(pageNum - 1) * pageSize};`
+        + `${cond} order by timestamp desc limit ${pageSize} offset ${(pageNum - 1) * pageSize};`
       const articles = await this.app.mysql.query(sql);
       return articles;
     } catch (err) {
@@ -92,7 +92,7 @@ class BillService extends Service {
 
   // 搜索
   async search(pageNum, pageSize, where) {
-    let sql = "select id,name,work_id,price,status,business,time,scale,channel,date_format(timestamp,'%Y-%m-%d %H:%i') as timestamp, phone,category_id,openid,platform_id,column_id,video_id,comment from video_bill where"
+    let sql = "select id,name,work_id,price,status,business,time,scale,channel,date_format(timestamp,'%Y-%m-%d %H:%i') as timestamp, phone,category_id,openid,platform_id,column_id,video_id,comment, trade_status, pay_status from video_bill where"
     sql += ' ' + where;
     sql += ` order by timestamp desc limit ${pageSize} offset ${(pageNum - 1) * pageSize};`
     const articles = await this.app.mysql.query(sql);

@@ -32,15 +32,13 @@ class AdminController extends Controller {
     await this.ctx.render('index.html', {
       current: "people",
       key: await this.service.keyUnit.count(
-        'work_id = ' + work_id
+        ' work_id = ' + work_id
       ),
       video: await this.service.video.count(` and work_id = ${work_id}`),
       business: await this.service.business.count({
         work_id
       }),
-      bill: await this.service.bill.count({
-        work_id
-      }),
+      bill: await this.service.bill.count(''),
       title: "员工信息",
       user
     });

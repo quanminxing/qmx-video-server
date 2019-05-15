@@ -8,8 +8,8 @@ module.exports = app => {
 
   app.get('/adminlogin', app.controller.admin.adminLogin);
   app.get('/adminlogout', app.controller.admin.adminLogout);
-  app.get('/manager/index', app.controller.admin.index);
-  app.get('/manager/list', app.controller.admin.list)
+  app.get('/manager/index', staff, app.controller.admin.index);
+  app.get('/manager/list',staff, app.controller.admin.list)
   app.post('/login', app.controller.admin.login);
 
   //获取上传文件临时验证凭证
@@ -19,34 +19,34 @@ module.exports = app => {
   //商家库
   app.post('/business', admin, app.controller.business.main);
   app.get('/business', admin, app.controller.business.list);
-  app.get('/manager/business', app.controller.business.index);
+  app.get('/manager/business', staff, app.controller.business.index);
 
   //套餐管理
   app.post('/package', admin, app.controller.package.main);
   app.get('/package', app.controller.package.list);
   app.get('/package/findVideoByPackageId', app.controller.package.findVideoByPackageId);
-  app.get('/manager/package', app.controller.package.index);
+  app.get('/manager/package',staff, app.controller.package.index);
 
   //平台管理
   app.post('/platform', admin, app.controller.platform.main);
   app.get('/platform', app.controller.platform.list);
-  app.get('/manager/platform', app.controller.platform.index);
+  app.get('/manager/platform',staff, app.controller.platform.index);
 
   //视频功能管理
   app.post('/usage', admin, app.controller.usage.main);
   app.get('/usage', app.controller.usage.list);
-  app.get('/manager/usage', app.controller.usage.index);
+  app.get('/manager/usage',staff, app.controller.usage.index);
 
   //视频风格管理
   app.post('/style', admin, app.controller.style.main);
   app.get('/style', app.controller.style.list);
-  app.get('/manager/style', app.controller.style.index);
+  app.get('/manager/style',staff, app.controller.style.index);
 
   //栏目管理
   app.post('/column', admin, app.controller.column.main);
   app.get('/column', app.controller.column.list);
   app.get('/column/listall', app.controller.column.listAll);
-  app.get('/manager/column', app.controller.column.index);
+  app.get('/manager/column',staff, app.controller.column.index);
 
   //频道管理
   app.post('/api/channel', app.controller.channel.channel);
@@ -66,11 +66,11 @@ module.exports = app => {
   //推荐管理
   app.post('/recommand', admin, app.controller.recommand.main);
   app.get('/recommand', admin, app.controller.recommand.list);
-  app.get('/manager/recommand', app.controller.recommand.index);
+  app.get('/manager/recommand', staff, app.controller.recommand.index);
 
 
   //视频库
-  app.get('/manager/video/detail', admin, app.controller.video.detail);
+  app.get('/manager/video/detail', staff, app.controller.video.detail);
 
   app.post('/api/video', app.controller.video.main);
   app.get('/api/video', app.controller.video.list);
@@ -86,17 +86,17 @@ module.exports = app => {
 
   app.get('/api/video/detail', app.controller.video.getDetail);
   app.post('/api/video/top', app.controller.video.top);
-  app.get('/manager/video', app.controller.video.index);
+  app.get('/manager/video', staff, app.controller.video.index);
 
   //人员管理
   app.post('/people', admin, app.controller.people.main);
   app.get('/people', admin, app.controller.people.list);
-  app.get('/manager/people', app.controller.people.index);
+  app.get('/manager/people',staff, app.controller.people.index);
 
   //订单管理
   app.post('/api/bill', app.controller.bill.main);
   app.get('/api/bill', app.controller.bill.list);
-  app.get('/manager/bill', app.controller.bill.index);
+  app.get('/manager/bill',staff, app.controller.bill.index);
   app.get('/api/bill/listByUser', app.controller.bill.listByUser);
   app.get('/api/bill/count', app.controller.bill.tradeCount);
   app.post('/api/bill/tradeStatus', staff, app.controller.bill.tradeStatus);
@@ -112,13 +112,13 @@ module.exports = app => {
   app.post('/key', admin, app.controller.key.main);
   app.get('/key', admin, app.controller.key.list);
   app.get('/key/listall', admin, app.controller.key.listAll);
-  app.get('/manager/key', app.controller.key.index);
+  app.get('/manager/key', staff, app.controller.key.index);
 
 
   //类目管理
   app.post('/category', admin, app.controller.category.main);
   app.get('/category', app.controller.category.list);
-  app.get('/manager/category', app.controller.category.index);
+  app.get('/manager/category',staff, app.controller.category.index);
 
 
   //颗粒度内容上传

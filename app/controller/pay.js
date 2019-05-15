@@ -1,4 +1,4 @@
-const crypto = require('crypto');
+
 const Util = require('../lib/util');
 const xml2js = require('xml2js').parseString;
 const Controller = require('egg').Controller;
@@ -51,18 +51,8 @@ class PayController extends Controller {
 
         let params = appid + mch_id + notify_url + trade_type + total_fee + product_id + out_trade_no + body + openid + spbill_create_ip + nonce_str + time_expire
         
-        let paramsArray = params.replace(' ', '').split('&').sort();
-        
-        let stringSign = (paramsArray.join('&') + key).replace(' ', '')
- 
-        let md5 = crypto.createHash('md5');
-        let sign = md5.update(stringSign).digest('hex').toUpperCase();
-        paramsArray.push('sign=' + sign)
-        let dataXml = '<xml>\n'
-        for(var i=0; i<paramsArray.length; i++){
-			dataXml += '<' + paramsArray[i].split("=")[0] + '>' + paramsArray[i].split("=")[1] + '</' + paramsArray[i].split("=")[0] + '>\n'
-        }
-        dataXml += '</xml>'
+        let dataXml = Util.queryToXML(params, key);
+
         let result = await this.app.curl(prepare_url, {
             method:'POST',
             data: dataXml,
@@ -71,19 +61,21 @@ class PayController extends Controller {
         let that = this;
         //const parser = new xml2js.Parser();
         xml2js(result.data.toString(), {explicitArray:false}, (err, json) => {
-            console.log(err)
             console.log(json)
             if(json && json.xml) {
                 if(json.xml.return_code == 'SUCCESS' && json.xml.result_code == 'SUCCESS') {
                     //await this.service.pay.recordinsert(json.xml);
+                    let timeStamp = Math.round(new Date() / 1000)
+                    let secondSignStr = appid + '&nonce_str=' + json.xml.nonce_str + '&package=prepay_id=' + json.xml.prepay_id + '&signType=MD5' + '&timeStamp=' + timeStamp;
+                    let secondSign = Util.getSign(secondSignStr);
                     that.ctx.body = {
                         status: 200,
                         data: {
-                            appid:json.xml.appid,
-                            mch_id: json.xml.mch_id,
                             nonce_str: json.xml.nonce_str,
-                            prepay_id: json.xml.prepay_id,
-                            key: that.app.config.wechat.paykey
+                            package: 'prepay_id=' + json.xml.prepay_id,
+                            timeStamp: timeStamp,
+                            signType:'MD5',
+                            paySign: secondSign
                         }
                     }
                 } else if(json.xml.err_code_des == '201 商户订单号重复') {

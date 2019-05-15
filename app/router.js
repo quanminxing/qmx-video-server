@@ -105,7 +105,7 @@ module.exports = app => {
   app.post('/api/bill/workComment', staff, app.controller.bill.workerComment);
 
   //支付
-  app.post('/api/payPrepare', app.controller.pay.payPrepare);
+  app.post('/api/prepay', app.controller.pay.payPrepare);
   app.post('/api/pay/callback', app.controller.pay.callback);
 
   //颗粒度管理

@@ -161,18 +161,18 @@ class BillController extends Controller {
     } else {
       let sql = 'where VB.is_del=false'
       
-      const id = query.id ? ' and VB.id=' + query.id : '';
+      const id = query.id ? ` and VB.id="${query.id}"` : '';
       const user_id = query.user_id ? '' : '';
-      const phone = query.phone ? ' and VB.phone=' + query.phone : '';
-      const name = query.name ? 'and VB.name=' + query.name : '';
-      const business = query.business ? ' and VB.business=' + query.business : '';
-      const trade_status = query.trade_status ? ' and VB.trade_status=' + query.trade_status : '';
-      const pay_status = query.pay_status ? ' and VB.pay_status=' + query.pay_status : '';
-      const order_time = query.order_time ? ' and VB.order_time=' + query.order_time : '';
+      const phone = query.phone ? ` and VB.phone="${query.phone}"` : '';
+      const name = query.name ? ` and VB.name="${query.name}"` : '';
+      const business = query.business ? ` and VB.business="${query.business}"` : '';
+      const trade_status = query.trade_status ? ` and VB.trade_status="${query.trade_status}"` : '';
+      const pay_status = query.pay_status ? ` and VB.pay_status="${query.pay_status}"` : '';
+      const order_time = query.order_time ? ` and VB.order_time="${query.order_time}"` : '';
       const work_id = query.work_id ? ' and VB.work_id=' + query.work_id : '';
 
       sql += id + user_id + phone + name + business + trade_status + pay_status + order_time + work_id;
-      console.log(phone)
+      
       result = await this.service.bill.list(pageNum, pageSize, sql);
       total = await this.service.bill.count(sql);
     }

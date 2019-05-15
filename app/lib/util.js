@@ -18,13 +18,13 @@ exports.getSixRandom = function() {
 }
 
 exports.getNonceStr = function() {
-    const chars = ['0', '1', '2', '3', '4', '5','6','7','8','9',
+    const chars = [
     'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z',
     'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z']
     let min = Math.ceil(0);
     let max = Math.floor(chars.length);
     let nonceStr = '';
-    for(let round = 0; round < 10; round++) {
+    for(let round = 0; round < 20; round++) {
         nonceStr += chars[Math.floor(Math.random() * (max  - min + 1)) + min]
     }
     return nonceStr;

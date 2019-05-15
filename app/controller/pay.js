@@ -105,7 +105,10 @@ class PayController extends Controller {
         this.ctx.req.on('end', () => {
             console.log('\n\n\n\n\n\n回调')
             console.log(data)
-            xml2js(data.toString(), {explicitArray:false}, async(err, json) => {
+            xml2js(data, {explicitArray:false}, async(err, json) => {
+                console.log('\n\n\n\n')
+                
+                console.log(json)
                 if(json && json.xml) {
 
                     if(await this.service.pay.paycallback(json.xml)) {

@@ -23,6 +23,8 @@ class PayService extends Service {
         }
     }
     async paycallback(callbackdata) {
+        console.log('\n\n\n\n')
+        console.log(this.app)
         const conn = await this.app.mysql.beginTransaction();
         try {
             await conn.query(`UPDATE video_bill SET trade_status="待寄送", pay_status="已付款" WHERE order_id= "${callbackdata.out_trade_no}";`)

@@ -71,7 +71,7 @@ class PayController extends Controller {
                     that.ctx.body = {
                         status: 200,
                         data: {
-                            nonce_str: json.xml.nonce_str,
+                            nonceStr: json.xml.nonce_str,
                             package: 'prepay_id=' + json.xml.prepay_id,
                             timeStamp: timeStamp,
                             signType:'MD5',

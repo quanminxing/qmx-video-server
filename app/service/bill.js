@@ -33,8 +33,8 @@ class BillService extends Service {
     const cond = param ? param : ''
     console.log(cond)
     const articles = await this.app.mysql.query(
-      `select VB.id, VB.name, VB.work_id, VB.price, VB.status, VB.business, date_format(VB.timestamp, '%Y-%m-%d %H:%i') as timestamp,`
-      + ` VB.phone, VB.video_id, VB.comment, VB.email, VB.order_id, VB.pay_status, VB.refund_price, VB.refund_time, VB.trade_status,`
+      `select VB.id, VB.name, VB.work_id, VB.price, VB.status, VB.business, date_format(VB.timestamp, '%Y-%m-%d %H:%i:%s') as timestamp,`
+      + ` VB.phone, VB.video_id, VB.comment, VB.email, VB.order_id, VB.pay_status, VB.refund_price, VB.refund_time, VB.trade_status, VB.work_comment,`
       + ` VV.name AS video_name, VV.url AS video_url, VV.short_image AS video_short_image, VV.time AS video_time, VV.platform_id, VV.scale_id, VV.column_id, VV.category_id,`
       + ` VWOK.cname AS worker_name, VWOK.id AS worker_id,`
       + ` VPR.id AS pay_id, VPR.type AS pay_type, VPR.timestamp AS pay_timestamp, VPR.channel AS pay_channel, VPR.third_id AS pay_third_id, VPR.time AS pay_time, VPR.voucher AS pay_voucher, VPR.price AS pay_price`
@@ -51,9 +51,9 @@ class BillService extends Service {
     try {
       let sql = `select VB.id, VCOL.name as column_name, VV.name as video_name,`
         + ` VB.name, VB.work_id, VB.price, VB.status, VB.business, VV.time AS video_time,`
-        + ` VV.scale_id, date_format(VB.timestamp,'%Y-%m-%d %H:%i') as timestamp,`
+        + ` VV.scale_id, date_format(VB.timestamp,'%Y-%m-%d %H:%i:%s') as timestamp,`
         + ` VB.phone, VV.category_id, VC.name AS category_name, VV.platform_id, VPF.name as platform_name, VV.column_id,`
-        + ` VB.video_id, VB.comment, VB.email,VB.order_id, VB.pay_status, VB.refund_price, VB.refund_time, VB.trade_status,`
+        + ` VB.video_id, VB.comment, VB.email,VB.order_id, VB.pay_status, VB.refund_price, VB.refund_time, VB.trade_status, VB.work_comment,`
         + ` VWOK.cname AS worker_name,`
         + ` VPR.id AS pay_id, VPR.type AS pay_type, VPR.timestamp AS pay_timestamp, VPR.channel AS pay_channel, VPR.third_id AS pay_third_id, VPR.time AS pay_time, VPR.voucher AS pay_voucher, VPR.price AS pay_price`
         + ` from video_bill AS VB`
@@ -64,7 +64,7 @@ class BillService extends Service {
         + ` LEFT JOIN video_worker AS VWOK on VB.work_id = VWOK.id`
         + ` LEFT JOIN video_pay_record AS VPR on VB.order_id = VPR.order_id`
 
-        + ` where openid = '${openid}' and VB.status != 3 order by timestamp desc limit ${pageSize} offset ${(pageNum - 1) * pageSize};`
+        + ` where is_del = false and openid = '${openid}' and VB.status != 3 order by timestamp desc limit ${pageSize} offset ${(pageNum - 1) * pageSize};`
       const articles = await this.app.mysql.query(sql);
       return articles;
     } catch (err) {
@@ -75,7 +75,7 @@ class BillService extends Service {
   //获取各个交易状态下的订单数量
   async tradeCount(openid) {
     try {
-      let sql = `SELECT case when trade_status = '' or isnull(trade_status) then '其他' else trade_status end AS trade_status, count(*) as count FROM video_bill where openid='${openid}' group by trade_status`
+      let sql = `SELECT case when trade_status = '' or isnull(trade_status) then '其他' else trade_status end AS trade_status, count(*) as count FROM video_bill where is_del = false and openid='${openid}' group by trade_status`
       const result = await this.app.mysql.query(sql);
       return result;
     } catch (err) {

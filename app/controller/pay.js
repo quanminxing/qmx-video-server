@@ -66,7 +66,7 @@ class PayController extends Controller {
                 if(json.xml.return_code == 'SUCCESS' && json.xml.result_code == 'SUCCESS') {
                     //await this.service.pay.recordinsert(json.xml);
                     let timeStamp = Math.round(new Date() / 1000)
-                    let secondSignStr = appid + '&nonce_str=' + json.xml.nonce_str + '&package=prepay_id=' + json.xml.prepay_id + '&signType=MD5' + '&timeStamp=' + timeStamp;
+                    let secondSignStr = appid + '&nonceStr=' + json.xml.nonce_str + '&package=prepay_id=' + json.xml.prepay_id + '&signType=MD5' + '&timeStamp=' + timeStamp;
                     let secondSign = Util.getSign(secondSignStr, key);
                     that.ctx.body = {
                         status: 200,

@@ -5,7 +5,7 @@ const Controller = require('egg').Controller;
 class AdminController extends Controller {
   async loginByWechat() {
     try {
-      let appId = this.app.config.wechat.appid;
+      let appId = this.app.config.wechat.appId;
       let secret = this.app.config.wechat.secretKey;
       let { js_code } = this.ctx.request.body;
 

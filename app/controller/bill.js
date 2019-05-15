@@ -190,16 +190,19 @@ class BillController extends Controller {
     const openid = query.openid;
     const pageNum = parseInt(query.pageNum || 1);
     const pageSize = parseInt(query.pageSize || 10)
-
+    let total, sql;
     // result = result.map((d)=>{
     //   d.timestamp = moment(d.timestamp).format('YYYY-MM-DD hh:mm:ss');
     //   return d;
     // });
     if (openid) {
-      result = await this.service.bill.listByUser(openid, pageNum, pageSize);
+      sql = ` where VB.is_del = false and openid = '${openid}'`
+      result = await this.service.bill.listByUser(sql, pageNum, pageSize);
+      total = await this.service.bill.count(sql)
       this.ctx.body = {
         status: 200,
-        data: result
+        data: result,
+        total: total
       };
     } else {
       this.ctx.body = {

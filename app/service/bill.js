@@ -47,7 +47,7 @@ class BillService extends Service {
   }
 
   // 获取列表byren
-  async listByUser(openid, pageNum, pageSize) {
+  async listByUser(cond, pageNum, pageSize) {
     try {
       let sql = `select VB.id, VCOL.name as column_name, VV.name as video_name,`
         + ` VB.name, VB.work_id, VB.price, VB.status, VB.business, VV.time AS video_time,`
@@ -64,7 +64,7 @@ class BillService extends Service {
         + ` LEFT JOIN video_worker AS VWOK on VB.work_id = VWOK.id`
         + ` LEFT JOIN video_pay_record AS VPR on VB.order_id = VPR.order_id`
 
-        + ` where is_del = false and openid = '${openid}' and VB.status != 3 order by timestamp desc limit ${pageSize} offset ${(pageNum - 1) * pageSize};`
+        + `${cond}  order by timestamp desc limit ${pageSize} offset ${(pageNum - 1) * pageSize};`
       const articles = await this.app.mysql.query(sql);
       return articles;
     } catch (err) {

@@ -83,6 +83,11 @@ class PayController extends Controller {
                         status: 500,
                         err_message: '请求付款码失败，请等待五分钟后再尝试付款'
                     }
+                } else {
+                    that.ctx.body = {
+                        status: 500,
+                        err_message: json.xml.return_msg || '支付异常'
+                    }
                 }
 
             } else {

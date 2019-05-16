@@ -54,7 +54,7 @@ class BillService extends Service {
         + ` VPF.name as platform_name,`
         + ` VV.name as video_name, VV.category_id, VV.platform_id, VV.column_id, VV.time AS video_time, VV.scale_id, VV.is_model, VV.sence, VV.short_image, VV.usage_id,`
         + ` VC.name AS category_name,`
-        + ``
+        + ` VU.name AS usage_name,`
         + ` VWOK.cname AS worker_name,`
         + ` VPR.id AS pay_id, VPR.type AS pay_type, VPR.timestamp AS pay_timestamp, VPR.channel AS pay_channel, VPR.third_id AS pay_third_id, VPR.time AS pay_time, VPR.voucher AS pay_voucher, VPR.price AS pay_price`
         + ` from video_bill AS VB`

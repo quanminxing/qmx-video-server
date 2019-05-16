@@ -52,7 +52,7 @@ class BillService extends Service {
       let sql = `select VB.id, VB.phone, VCOL.name as column_name, VB.video_id, VB.comment, VB.email,VB.order_id, VB.pay_status, VB.refund_price, VB.refund_time, `
         + ` VB.name, VB.work_id, VB.price, VB.status, VB.business, VB.trade_status, VB.work_comment,date_format(VB.timestamp,'%Y-%m-%d %H:%i:%s') as timestamp,`
         + ` VPF.name as platform_name,`
-        + ` VV.name as video_name, VV.category_id, VV.platform_id, VV.column_id, VV.time AS video_time, VV.scale_id, VV.is_model, VV.sence, VV.short_image, VV.usage_id,`
+        + ` VV.name as video_name, VV.category_id, VV.platform_id, VV.column_id, VV.classify_id, VV.time AS video_time, VV.scale_id, VV.is_model, VV.sence, VV.short_image, VV.usage_id,`
         + ` VC.name AS category_name,`
         + ` VU.name AS usage_name,`
         + ` VWOK.cname AS worker_name,`

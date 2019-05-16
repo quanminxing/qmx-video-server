@@ -49,11 +49,12 @@ class BillService extends Service {
   // 获取列表byren
   async listByUser(cond, pageNum, pageSize) {
     try {
-      let sql = `select VB.id, VCOL.name as column_name, VV.name as video_name,`
-        + ` VB.name, VB.work_id, VB.price, VB.status, VB.business, VV.time AS video_time,`
-        + ` VV.scale_id, date_format(VB.timestamp,'%Y-%m-%d %H:%i:%s') as timestamp,`
-        + ` VB.phone, VV.category_id, VC.name AS category_name, VV.platform_id, VPF.name as platform_name, VV.column_id,`
-        + ` VB.video_id, VB.comment, VB.email,VB.order_id, VB.pay_status, VB.refund_price, VB.refund_time, VB.trade_status, VB.work_comment,`
+      let sql = `select VB.id, VB.phone, VCOL.name as column_name, VB.video_id, VB.comment, VB.email,VB.order_id, VB.pay_status, VB.refund_price, VB.refund_time, `
+        + ` VB.name, VB.work_id, VB.price, VB.status, VB.business, VB.trade_status, VB.work_comment,date_format(VB.timestamp,'%Y-%m-%d %H:%i:%s') as timestamp,`
+        + ` VPF.name as platform_name,`
+        + ` VV.name as video_name, VV.category_id, VV.platform_id, VV.column_id, VV.time AS video_time, VV.scale_id, VV.is_model, VV.sence, VV.short_image, VV.usage_id,`
+        + ` VC.name AS category_name,`
+        + ``
         + ` VWOK.cname AS worker_name,`
         + ` VPR.id AS pay_id, VPR.type AS pay_type, VPR.timestamp AS pay_timestamp, VPR.channel AS pay_channel, VPR.third_id AS pay_third_id, VPR.time AS pay_time, VPR.voucher AS pay_voucher, VPR.price AS pay_price`
         + ` from video_bill AS VB`
@@ -61,6 +62,7 @@ class BillService extends Service {
         + ` LEFT JOIN video_category AS VC on VV.category_id = VC.id `
         + ` LEFT JOIN video_platform AS VPF on VV.platform_id = VPF.id`
         + ` LEFT JOIN video_column AS VCOL on VV.column_id = VCOL.id`
+        + ` LEFT JOIN video_usage AS VU on VV.usage_id = VU.id`
         + ` LEFT JOIN video_worker AS VWOK on VB.work_id = VWOK.id`
         + ` LEFT JOIN video_pay_record AS VPR on VB.order_id = VPR.order_id `
 

@@ -171,7 +171,7 @@ class BillController extends Controller {
       const order_time = query.order_time ? ` and VB.order_time="${query.order_time}"` : '';
       const work_id = query.work_id ? ' and VB.work_id=' + query.work_id : '';
 
-      sql += id + user_id + phone + name + business + trade_status + pay_status + order_time + work_id;
+      sql += id + openid + phone + name + business + trade_status + pay_status + order_time + work_id;
 
       result = await this.service.bill.list(pageNum, pageSize, sql);
       total = await this.service.bill.count(sql);
@@ -191,14 +191,16 @@ class BillController extends Controller {
     let trade_status = query.trade_status;
     const pageNum = parseInt(query.pageNum || 1);
     const pageSize = parseInt(query.pageSize || 10)
+    const _search = query._search;
     let total, sql;
     // result = result.map((d)=>{
     //   d.timestamp = moment(d.timestamp).format('YYYY-MM-DD hh:mm:ss');
     //   return d;
     // });
     if (openid) {
-      if (trade_status) {
-        console.log(trade_status)
+
+      if (_search && trade_status) {
+
         trade_status = trade_status.split(',')
 
         for(let i = 0; i < trade_status.length; i++) {

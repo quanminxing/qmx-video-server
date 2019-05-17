@@ -168,9 +168,13 @@ class BillController extends Controller {
       const business = query.business ? ` and VB.business="${query.business}"` : '';
       const trade_status = query.trade_status ? ` and VB.trade_status="${query.trade_status}"` : '';
       const pay_status = query.pay_status ? ` and VB.pay_status="${query.pay_status}"` : '';
-      const order_time = query.order_time ? ` and VB.order_time="${query.order_time}"` : '';
+      let order_time = query.order_time ? ` and VB.order_time="${query.order_time}"` : '';
       const work_id = query.work_id ? ' and VB.work_id=' + query.work_id : '';
-
+      
+      if(order_time) {
+        order_time = order_time.split(',');
+        order_time = ` and VB.order_time BETWEEN '${order_time[0]}' and ${order_time[1]}`
+      }
       sql += id + openid + phone + name + business + trade_status + pay_status + order_time + work_id;
 
       result = await this.service.bill.list(pageNum, pageSize, sql);

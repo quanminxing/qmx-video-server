@@ -17,6 +17,7 @@ class BillService extends Service {
       comment: obj.comment,
       openid: obj.openid,
       timestamp: this.app.mysql.literals.now,
+      order_time: this.app.mysql.literals.now,
       email: obj.email,
       order_id: util.getDate() + '01' + util.getSixRandom(),
       pay_status:'未付款',
@@ -33,7 +34,7 @@ class BillService extends Service {
     const cond = param ? param : ''
     console.log(cond)
     const articles = await this.app.mysql.query(
-      `select VB.id, VB.name, VB.work_id, VB.price, VB.status, VB.business, date_format(VB.timestamp, '%Y-%m-%d %H:%i:%s') as timestamp,`
+      `select VB.id, VB.name, VB.work_id, VB.price, VB.status, VB.business, date_format(VB.timestamp, '%Y-%m-%d %H:%i:%s') as timestamp, date_format(VB.order_time, '%Y-%m-%d %H:%i:%s') AS order_time,`
       + ` VB.phone, VB.video_id, VB.comment, VB.email, VB.order_id, VB.pay_status, VB.refund_price, date_format(VB.refund_time,'%Y-%m-%d %H:%i:%s') AS refund_time, VB.trade_status, VB.work_comment,`
       + ` VV.name AS video_name, VV.url AS video_url, VV.short_image AS video_short_image, VV.time AS video_time, VV.platform_id, VV.scale_id, VV.column_id, VV.category_id,`
       + ` VWOK.cname AS worker_name, VWOK.id AS worker_id,`
@@ -50,7 +51,7 @@ class BillService extends Service {
   async listByUser(cond, pageNum, pageSize) {
     try {
       let sql = `select VB.id, VB.phone, VCOL.name as column_name, VB.video_id, VB.comment, VB.email,VB.order_id, VB.pay_status, VB.refund_price, date_format(VB.refund_time,'%Y-%m-%d %H:%i:%s') AS refund_time, `
-        + ` VB.name, VB.work_id, VB.price, VB.status, VB.business, VB.trade_status, VB.work_comment,date_format(VB.timestamp,'%Y-%m-%d %H:%i:%s') as timestamp,`
+        + ` VB.name, VB.work_id, VB.price, VB.status, VB.business, VB.trade_status, VB.work_comment,date_format(VB.timestamp,'%Y-%m-%d %H:%i:%s') as timestamp, date_format(VB.order_time, '%Y-%m-%d %H:%i:%s') AS order_time,`
         + ` VPF.name as platform_name,`
         + ` VV.name as video_name, VV.category_id, VV.platform_id, VV.column_id, VV.classify_id, VV.time AS video_time, VV.scale_id, VV.is_model, VV.sence, VV.short_image, VV.usage_id,`
         + ` VC.name AS category_name,`

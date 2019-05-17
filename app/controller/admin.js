@@ -103,6 +103,34 @@ class AdminController extends Controller {
     }
   };
 
+  async getMe() {
+    let user = {}
+    if (this.ctx.session && this.ctx.session.user) {
+      user = this.ctx.session.user;
+      this.ctx.body = {
+        status: 200,
+        data: {
+          user: {
+            id: user.id,
+            openid: user.openid,
+            position: user.position,
+            name: user.name,
+            cname: user.cname,
+            phone: user.phone,
+            description: user.description,
+            auth: user.auth,
+            timestamp: user.timestamp
+          }
+        }
+      }
+    } else {
+      this.ctx.body = {
+        status: 403,
+        err_message: '未登录'
+      }
+    }
+  }
+
   async getSTS() {
     // console.log(this.oss.options.accessKeyId);
     // this.oss.options.accessKeyId = 'LTAI22EYvc2T0NRK'

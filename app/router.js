@@ -12,6 +12,9 @@ module.exports = app => {
   app.get('/manager/list',staff, app.controller.admin.list)
   app.post('/login', app.controller.admin.login);
 
+  //用户
+  app.get('/api/user/me', app.controller.admin.getMe);
+
   //获取上传文件临时验证凭证
   app.get('/api/getSTS', app.controller.admin.getSTS);
 
@@ -166,6 +169,9 @@ module.exports = app => {
   app.get('/api/info/operateVideo', app.controller.info.operateVideo) 
   app.get('/api/info/regard', app.controller.info.regard)
   app.get('/api/info/worker', app.controller.info.worker)
+
+  // 微信api分享
+  app.get('/api/share/getacode', app.controller.share.getacode)
 
   //app.get('/manager', admin, app.controller.admin.manager);
 

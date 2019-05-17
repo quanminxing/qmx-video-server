@@ -156,8 +156,9 @@ class BillController extends Controller {
     let result, total;
 
     if (_search != 'true') {
-      result = await this.service.bill.list(pageNum, pageSize, '');
-      total = await this.service.bill.count('');
+      let sql = 'where VB.is_del=false'
+      result = await this.service.bill.list(pageNum, pageSize, sql);
+      total = await this.service.bill.count(sql);
     } else {
       let sql = 'where VB.is_del=false'
 

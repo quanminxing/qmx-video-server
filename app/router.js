@@ -171,7 +171,7 @@ module.exports = app => {
   app.get('/api/info/worker', app.controller.info.worker)
 
   // 微信api分享
-  app.get('/api/share/getacode', app.controller.share.getacode)
+  //app.get('/api/share/getacode', app.controller.share.getacode)
 
   //app.get('/manager', admin, app.controller.admin.manager);
 

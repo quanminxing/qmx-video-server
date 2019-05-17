@@ -276,21 +276,55 @@ class BillController extends Controller {
             } else {
               this.ctx.body = {
                 status: 500,
-                err_message: '修改失败'
+                err_message: '操作失败'
               }
             }
-          } else {
+          } else if(record && record.trade_status == '退款完成') {
             this.ctx.body = {
               status: 500,
-              err_message: '修改失败,没有此订单或订单状态不允许修改'
+              err_message: '操作失败,退款完成的订单不能修改交易状态'
+            }
+          } else if (record && record.pay_status == '已付款') {
+            this.ctx.body = {
+              status: 500,
+              err_message: '操作失败,已付款的订单,交易状态不能修改为待付款'
+            }
+          } else if(!record) {
+            this.ctx.body = {
+              status: 500,
+              err_message: '操作失败,未查询到订单信息'
             }
           }
           break;
         case '退款完成':
-          if (refund_price < 0 || refund_price > record.price) {
+        if(!record) {
+          this.ctx.body = {
+            status: 500,
+            err_message: '操作失败,未查询到订单信息'
+          }
+          return;
+        } else if (refund_price < 0) {
             this.ctx.body = {
               status: 500,
-              err_message: '修改失败,订单付款状态非未付款'
+              err_message: '操作失败,请输入退款金额'
+            }
+            return;
+          } else if(refund_price > record.price) {
+            this.ctx.body = {
+              status: 500,
+              err_message: '操作失败,退款金额不能大于订单金额'
+            }
+            return;
+          }  else if(record.pay_status != '已付款') {
+            this.ctx.body = {
+              status: 500,
+              err_message: '操作失败,未付款订单不能退款'
+            }
+            return;
+          } else if(record.trade_status == '退款完成') {
+            this.ctx.body = {
+              status: 500,
+              err_message: '操作失败,退款完成的订单不能重复退款'
             }
             return;
           }
@@ -339,7 +373,7 @@ class BillController extends Controller {
           } else {
             this.ctx.body = {
               status: 500,
-              err_message: '修改失败, 没有此订单或订单状态为退款完成'
+              err_message: '操作失败, 退款完成的订单不能修改交易状态'
             }
           }
           break;
@@ -347,7 +381,7 @@ class BillController extends Controller {
     } else {
       this.ctx.body = {
         status: 500,
-        err_message: '修改失败,状态错误'
+        err_message: '修改失败,提交的状态错误'
       }
     }
 

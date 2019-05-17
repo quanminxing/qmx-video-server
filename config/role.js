@@ -16,6 +16,8 @@ module.exports = app => {
 
     const login = ctx.session && ctx.session.adminLogin ? ctx.session.adminLogin : false;
     const role = ctx.session && ctx.session.user ? ctx.session.user.position : '';
+    console.log(role)
+    console.log(login)
     if(login && (role == '员工' || role == '管理员')) {
       return true
     } else {

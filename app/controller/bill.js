@@ -332,6 +332,7 @@ class BillController extends Controller {
             let result = await this.service.bill.update({
               id,
               trade_status,
+              refund_time: new Date(),
               refund_price
             });
             if (result) {

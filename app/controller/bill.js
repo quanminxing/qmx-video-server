@@ -348,7 +348,7 @@ class BillController extends Controller {
           } else {
             this.ctx.body = {
               status: 500,
-              err_message: '修改失败, 没有此订单或订单状态不允许修改'
+              err_message: ' 没有此订单或订单状态不允许修改'
             }
           }
           break;

@@ -162,14 +162,14 @@ class BillController extends Controller {
     } else {
       let sql = 'where VB.is_del=false'
 
-      const id = query.id ? ` and VB.id="${query.id}"` : '';
+      const id = query.id ? ` and VB.id=${query.id}` : '';
       const openid = query.user_id ? '' : ''; 
       const phone = query.phone ? ` and VB.phone="${query.phone}"` : '';
       const name = query.name ? ` and VB.name="${query.name}"` : '';
       const business = query.business ? ` and VB.business="${query.business}"` : '';
       const trade_status = query.trade_status ? ` and VB.trade_status="${query.trade_status}"` : '';
       const pay_status = query.pay_status ? ` and VB.pay_status="${query.pay_status}"` : '';
-      let order_time = query.order_time;
+      let order_time = query.order_time || '';
       const work_id = query.work_id ? ' and VB.work_id=' + query.work_id : '';
       
       if(order_time) {

@@ -1,5 +1,22 @@
 const crypto = require('crypto');
 
+let access_token = '';
+let expire_time = '';
+exports.getAccessToken = async function(appid, secret, app) {
+    
+    let token_url = 'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=' + appid + '&secret=' + secret;
+    if (access_token === '' || expire_time || (parseInt(new Date().getTime() / 1000) - expire_time < 300)) {
+        access_token = await app.curl(token_url);
+        if (access_token) {
+          const result = JSON.parse(access_token.data.toString());
+          access_token = result.access_token;
+          expire_time = parseInt(new Date().getTime() / 1000);
+          return access_token;
+        }
+      } else {
+        return  access_token ;
+      }
+}
 
 exports.getDate = function () {
     const date = new Date();

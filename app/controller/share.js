@@ -31,6 +31,7 @@ class ShareController extends Controller {
             data:  data,
             contentType: 'json',
         });
+        console.log(result.data.toString());
         this.ctx.response.set('content-type', 'image/jpeg');
         this.ctx.body = result.data
 

@@ -23,7 +23,7 @@ class BillService extends Service {
       pay_status:'未付款',
       refund_price:0.00,
       refund_time:null,
-      trade_status:'进行中',
+      trade_status:'待付款',
     });
 
     return result;

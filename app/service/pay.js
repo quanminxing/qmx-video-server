@@ -34,6 +34,9 @@ class PayService extends Service {
         }
     }
     async paycallback(callbackdata) {
+        console.log('callback')
+        console.log(new Date())
+        console.log(callbackdata)
         const info = callbackdata.attach.split('-');
         const order_id = info[1];
         const type = info[2];

@@ -281,7 +281,7 @@ class BillController extends Controller {
     if (!openid) {
       this.ctx.body = {
         status: 500,
-        err_message: 'openid null'
+        err_message: 'userid null'
       }
     } else {
       let result = await this.service.bill.tradeCount(openid);

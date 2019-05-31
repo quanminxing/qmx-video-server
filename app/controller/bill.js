@@ -246,7 +246,7 @@ class BillController extends Controller {
 
     if (openid) sql += ` and openid = "${openid}"`
 
-    let bill_record = await this.service.bill.list(1, 1, sql);
+    let bill_record = await this.service.bill.list(sql, 1, 1);
 
     if (bill_record.length <= 0) {
       this.ctx.body = {

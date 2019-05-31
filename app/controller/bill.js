@@ -163,7 +163,7 @@ class BillController extends Controller {
       let sql = 'where VB.is_del=false'
 
       const id = query.id ? ` and VB.id=${query.id}` : '';
-      const openid = query.user_id ? '' : ''; 
+      const openid = query.user_id ? '' : '';
       const phone = query.phone ? ` and VB.phone="${query.phone}"` : '';
       const name = query.name ? ` and VB.name="${query.name}"` : '';
       const business = query.business ? ` and VB.business="${query.business}"` : '';
@@ -171,8 +171,8 @@ class BillController extends Controller {
       const pay_status = query.pay_status ? ` and VB.pay_status="${query.pay_status}"` : '';
       let order_time = query.order_time || '';
       const work_id = query.work_id ? ' and VB.work_id=' + query.work_id : '';
-      
-      if(order_time) {
+
+      if (order_time) {
         order_time = order_time.split(',');
         order_time = ` and VB.timestamp between '${order_time[0] + ' 00:00:00'}' and '${order_time[1] + ' 23:59:59'}'`
       }
@@ -208,7 +208,7 @@ class BillController extends Controller {
 
         trade_status = trade_status.split(',')
 
-        for(let i = 0; i < trade_status.length; i++) {
+        for (let i = 0; i < trade_status.length; i++) {
           trade_status[i] = '"' + trade_status[i] + '"'
         }
         console.log(trade_status)
@@ -229,7 +229,49 @@ class BillController extends Controller {
         err_message: 'openid null'
       }
     }
+  }
 
+
+  async detail() {
+    const id = this.ctx.request.query.id;
+    const openid = this.ctx.request.openid;
+    let sql = ` where VB.is_del = false and VB.id = ${id}`
+    if (!id) {
+      this.ctx.body = {
+        status: 500,
+        err_message: 'id null'
+      }
+      return;
+    }
+
+    if (openid) sql += ` and openid = "${openid}"`
+
+    let bill_record = await this.service.bill.list(1, 1, sql);
+
+    if (bill_record.length <= 0) {
+      this.ctx.body = {
+        status: 500,
+        err_message: '未找到此订单'
+      }
+      return;
+    }
+    bill_record = bill_record[0]
+    const pay_record = await this.service.pay.findByOrder(bill_record.order_id);
+    delete bill_record.is_del;
+    delete bill_record.is_show;
+
+    if (!pay_record) {
+      bill_record.pay_info = {};
+
+    } else {
+      bill_record.pay_info = pay_record;
+
+    }
+
+    this.ctx.body = {
+      status: 200,
+      data: bill_record
+    }
   }
 
   //各交易状态数量
@@ -284,7 +326,7 @@ class BillController extends Controller {
                 err_message: '修改失败'
               }
             }
-          } else if(record && record.trade_status == '退款完成') {
+          } else if (record && record.trade_status == '退款完成') {
             this.ctx.body = {
               status: 500,
               err_message: '操作失败,退款完成的订单不能修改交易状态'
@@ -294,7 +336,7 @@ class BillController extends Controller {
               status: 500,
               err_message: '操作失败，已付款的订单,交易状态不能修改为待付款'
             }
-          } else if(!record) {
+          } else if (!record) {
             this.ctx.body = {
               status: 500,
               err_message: '操作失败,未查询到订单信息'
@@ -302,31 +344,31 @@ class BillController extends Controller {
           }
           break;
         case '退款完成':
-        if(!record) {
-          this.ctx.body = {
-            status: 500,
-            err_message: '操作失败,未查询到订单信息'
-          }
-          return;
-        } else if (refund_price < 0) {
+          if (!record) {
+            this.ctx.body = {
+              status: 500,
+              err_message: '操作失败,未查询到订单信息'
+            }
+            return;
+          } else if (refund_price < 0) {
             this.ctx.body = {
               status: 500,
               err_message: '操作失败,请输入退款金额'
             }
             return;
-          } else if(refund_price > record.price) {
+          } else if (refund_price > record.price) {
             this.ctx.body = {
               status: 500,
               err_message: '操作失败,退款金额不能大于订单金额'
             }
             return;
-          }  else if(record.pay_status != '已付款') {
+          } else if (record.pay_status != '已付款') {
             this.ctx.body = {
               status: 500,
               err_message: '操作失败,未付款订单不能退款'
             }
             return;
-          } else if(record.trade_status == '退款完成') {
+          } else if (record.trade_status == '退款完成') {
             this.ctx.body = {
               status: 500,
               err_message: '操作失败,退款完成的订单不能重复退款'
@@ -479,5 +521,268 @@ class BillController extends Controller {
       }
     }
   }
+
+  async buyerInfo() {
+    const body = this.ctx.request.body;
+    const id = body.id;
+    const name = body.name;
+    const business = body.business;
+    const phone = body.phone;
+    const email = body.email;
+    const comment = body.comment;
+
+    if (!id) {
+      this.ctx.body = {
+        status: 500,
+        err_message: 'id null'
+      }
+      return;
+    }
+    const result = await this.service.bill.update({
+      id,
+      name,
+      business,
+      phone,
+      email,
+      comment
+    });
+    if (!result) {
+      this.ctx.body = {
+        status: 500,
+        err_message: '修改失败'
+      }
+      return;
+    }
+    this.ctx.body = {
+      status: 200,
+      data: '修改成功'
+    }
+  }
+
+  async settle() {
+    const body = this.ctx.request.body;
+    const id = body.id;
+    const settle_status = body.settle_status;
+    const earnest_price = body.earnest_price;
+
+    if (!id) {
+      this.ctx.body = {
+        status: 500,
+        err_message: 'id null'
+      }
+      return;
+    }
+    const result = await this.service.bill.update({
+      id,
+      settle_status,
+      earnest_price,
+    });
+
+    if (!result) {
+      this.ctx.body = {
+        status: 500,
+        err_message: '修改失败'
+      }
+      return;
+    }
+    this.ctx.body = {
+      status: 200,
+      data: '修改成功'
+    }
+  }
+
+  async saleStatus() {
+    const body = this.ctx.request.body;
+    const id = body.id;
+    const sale_status = body.sale_status;
+    const refund_price = body.refund_price;
+    const status = ["待沟通", "需求沟通中", "需求不可行", "需求已确认", "待支付定金", "已支付定金", "待支付全款", "已支付全款", "脚本策划中", "待确认脚本", "脚本修改中", "脚本已确认", "待寄送样品", "样品已寄到", "拍摄排期中", "拍摄中", "后期排期中", "后期制作中", "待确认样片", "样片修改中", "样片已确认", "待支付尾款", "已支付尾款", "等待成片", "成片已交付", "交易成功", "退款中", "退款完成"];
+
+    if (!id) {
+      this.ctx.body = {
+        status: 500,
+        err_message: 'id null'
+      }
+      return;
+    }
+    if (!status.includes(sale_status)) {
+      this.ctx.body = {
+        status: 500,
+        err_message: '修改失败,状态错误'
+      }
+      return;
+    }
+
+    const bill_record = await this.service.find(id);
+    if (!bill_record) {
+      this.ctx.body = {
+        status: 500,
+        err_message: '修改失败,订单不存在'
+      }
+      return;
+    }
+    if (bill_record.sale_status === '退款完成') {
+      this.ctx.body = {
+        status: 500,
+        err_message: '操作失败，退款完成的订单不能修改销售进度'
+      }
+      return;
+    }
+
+    switch (sale_status) {
+      case '待支付定金':
+        if (!(bill_record.settle_status === '定金+尾款')) {
+          this.ctx.body = {
+            status: 500,
+            err_message: '操作失败，结算方式为“定金+尾款”的订单，销售进度才可以修改为“待支付定金”'
+          }
+          break;
+        }
+        if (!(bill_record.pay_status === '未付款')) {
+          this.ctx.body = {
+            status: 500,
+            err_message: '操作失败，未付款的订单，销售进度才可以修改为“待支付定金”'
+          }
+          break;
+        }
+        const result = await this.service.bill.update({
+          id,
+          sale_status
+        });
+        if (result) {
+          this.ctx.body = {
+            status: 200,
+            data: '修改成功'
+          }
+        } else {
+          this.ctx.body = {
+            status: 500,
+            err_message: '修改失败'
+          }
+        }
+        break;
+      case '待支付尾款':
+        if (!(bill_record.settle_status === '定金+尾款')) {
+          this.ctx.body = {
+            status: 500,
+            err_message: '操作失败，结算方式为“定金+尾款”的订单，销售进度才可以修改为“待支付尾款”'
+          }
+          break;
+        }
+        if (!(bill_record.pay_status === '已支付定金')) {
+          this.ctx.body = {
+            status: 500,
+            err_message: '操作失败，支付状态为“已支付定金”的订单，销售进度才可以修改为“待支付尾款”'
+          }
+          break;
+        }
+        const result = await this.service.bill.update({
+          id,
+          sale_status
+        });
+        if (result) {
+          this.ctx.body = {
+            status: 200,
+            data: '修改成功'
+          }
+        } else {
+          this.ctx.body = {
+            status: 500,
+            err_message: '修改失败'
+          }
+        }
+        break;
+      case '待支付全款':
+        if (!(bill_record.settle_status === '全款')) {
+          this.ctx.body = {
+            status: 500,
+            err_message: '操作失败，结算方式为“全款”的订单，销售进度才可以修改为“待支付全款”'
+          }
+          break;
+        }
+        if (!(bill_record.pay_status === '未付款')) {
+          this.ctx.body = {
+            status: 500,
+            err_message: '操作失败，未付款的订单，销售进度才可以修改为“待支付全款”'
+          }
+          break;
+        }
+        const result = await this.service.bill.update({
+          id,
+          sale_status
+        });
+        if (result) {
+          this.ctx.body = {
+            status: 200,
+            data: '修改成功'
+          }
+        } else {
+          this.ctx.body = {
+            status: 500,
+            err_message: '修改失败'
+          }
+        }
+        break;
+      case '退款完成':
+        if (!refund_price) {
+          this.ctx.body = {
+            status: 500,
+            err_message: '操作失败，请输入退款金额'
+          }
+          return;
+        }
+
+        if (refund_price > bill_record.paid_price) {
+          this.ctx.body = {
+            status: 500,
+            err_message: '操作失败，退款金额不能大于已付金额'
+          }
+          return;
+        }
+
+        if (bill_record.pay_status === '已支付定金' || bill_record.pay_status === '已支付尾款' || bill_record.pay_status === '已支付全款') {
+          const result = await this.service.bill.update({
+            id,
+            sale_status,
+            refund_price
+          });
+          if (result) {
+            this.ctx.body = {
+              status: 200,
+              data: '修改成功'
+            }
+          } else {
+            this.ctx.body = {
+              status: 500,
+              err_message: '修改失败'
+            }
+          }
+          break;
+        } else {
+          this.ctx.body = {
+            status: 500,
+            err_message: '操作失败，未付款的订单不能退款'
+          }
+        }
+      default:
+        const result = await this.service.bill.update({
+          id,
+          sale_status
+        });
+        if (result) {
+          this.ctx.body = {
+            status: 200,
+            data: '修改成功'
+          }
+        } else {
+          this.ctx.body = {
+            status: 500,
+            err_message: '修改失败'
+          }
+        }
+        break;
+    }
+  }
 }
+
 module.exports = BillController;

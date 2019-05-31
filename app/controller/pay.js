@@ -18,19 +18,23 @@ class PayController extends Controller {
 
         let bill_id = this.ctx.request.body.bill_id ;
         let openid = this.ctx.request.body.openid;
-        let spbill_create_ip = this.ctx.request.ip
+        let spbill_create_ip = this.ctx.request.ip;
+        let pay_type = this.ctx.request.pay_type;
+
+        if(!bill_id || !openid || !spbill_create_ip || !pay_type) {
+            this.ctx.body = {
+                status: 500,
+                err_message: 参数错误
+            }
+            return;
+        }
+
 
         let total_fee = '';
         let product_id = '';
         let out_trade_no = '';
         let body = '';
-        if(!bill_id || !openid) {
-            this.ctx.body = {
-                status: 500,
-                err_message: '参数错误'
-            }
-            return;
-        }
+
         let bill = await this.service.bill.find(bill_id);
         if(!bill) {
             this.ctx.body = {
@@ -44,8 +48,8 @@ class PayController extends Controller {
         nonce_str = '&nonce_str=' + nonce_str;
         total_fee = '&total_fee=' + bill.price * 100;
         product_id = bill.video_id ? '&product_id=' + bill.video_id : '其他';
-        out_trade_no =  bill.order_id ? '&out_trade_no=' + bill.order_id : '&out_trade_no=' + Util.getDate + '01' + Util.getSixRandom;
-        body = '&body=宜拍短视频工厂--短视频制作';
+        out_trade_no = 'ZF' + Util.getDate + Util.getSixRandom + pay_type === '全款' ? '01' : pay_type === '定金' ? '02' : pay_type === '尾款' ? '03' : '04';
+        body = '&body=宜拍短视频制作-订单编号' + bill_id + '-' + pay_type;
         time_expire = '&time_expire=' + time_expire.getFullYear() + ('0' + (time_expire.getMonth() + 1)).slice(-2) +('0' + time_expire.getDate()).slice(-2) + ('0' + time_expire.getHours()).slice(-2) + ('0' + time_expire.getMinutes()).slice(-2) + ('0' + time_expire.getSeconds()).slice(-2)
 
 
@@ -56,7 +60,7 @@ class PayController extends Controller {
         let result = await this.app.curl(prepare_url, {
             method:'POST',
             data: dataXml,
-            dataType: 'xml'
+            dataType: 'xml' 
         })
         let that = this;
         //const parser = new xml2js.Parser();

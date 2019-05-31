@@ -22,8 +22,12 @@ class BillService extends Service {
       order_id: util.getDate() + '01' + util.getSixRandom(),
       pay_status:'未付款',
       refund_price:0.00,
-      refund_time:null,
       trade_status:'待付款',
+      order_source: '宜拍小程序',
+      settle_status: '全款',
+      earnest_price: 0.00,
+      paid_price: 0.00,
+      sale_status: '需求沟通中'
     });
 
     return result;
@@ -33,18 +37,17 @@ class BillService extends Service {
   async list(pageNum, pageSize, param) {
     const cond = param ? param : ''
     console.log(cond)
-    const articles = await this.app.mysql.query(
-      `select VB.id, VB.name, VB.work_id, VB.price, VB.status, VB.business, date_format(VB.timestamp, '%Y-%m-%d %H:%i:%s') as timestamp, date_format(VB.order_time, '%Y-%m-%d %H:%i:%s') AS order_time,`
-      + ` VB.phone, VB.video_id, VB.comment, VB.email, VB.order_id, VB.pay_status, VB.refund_price, date_format(VB.refund_time,'%Y-%m-%d %H:%i:%s') AS refund_time, VB.trade_status, VB.work_comment,`
+    const bill_records = await this.app.mysql.query(
+      `select VB.id, VB.name, VB.work_id, VB.price, VB.status, VB.business, date_format(VB.timestamp, '%Y-%m-%d %H:%i:%s') as timestamp, `
+      + ` VB.phone, VB.video_id, VB.comment, VB.email, VB.order_id, VB.order_source, date_format(VB.order_time, '%Y-%m-%d %H:%i:%s') AS order_time, VB.pay_status, VB.refund_price, date_format(VB.refund_time,'%Y-%m-%d %H:%i:%s') AS refund_time, VB.trade_status, VB.work_comment,`
+      + ` date_format(VB.trade_time, '%Y-%m-%d %H:%i:%s') AS trade_time, VB.earnest_price, VB.paid_price, VB.sale_status,`
       + ` VV.name AS video_name, VV.url AS video_url, VV.short_image AS video_short_image, VV.time AS video_time, VV.platform_id, VV.scale_id, VV.column_id, VV.category_id,`
-      + ` VWOK.cname AS worker_name, VWOK.id AS worker_id,`
-      + ` VPR.id AS pay_id, VPR.type AS pay_type, VPR.timestamp AS pay_timestamp, VPR.channel AS pay_channel, VPR.third_id AS pay_third_id, VPR.time AS pay_time, VPR.voucher AS pay_voucher, VPR.price AS pay_price`
+      + ` VWOK.cname AS worker_name, VWOK.id AS worker_id`
       + ` from video_bill AS VB`
       + ` LEFT JOIN video_video AS VV on VB.video_id = VV.id`
       + ` LEFT JOIN video_worker AS VWOK on VB.work_id = VWOK.id`
-      + ` LEFT JOIN video_pay_record AS VPR on VB.order_id = VPR.order_id`
       + ` ${cond} order by timestamp desc limit ${pageSize} offset ${(pageNum - 1) * pageSize};`);
-    return articles;
+    return bill_records;
   }
 
   // 获取列表byren
@@ -56,8 +59,7 @@ class BillService extends Service {
         + ` VV.name as video_name, VV.category_id, VV.platform_id, VV.column_id, VV.classify_id, VV.time AS video_time, VV.scale_id, VV.is_model, VV.sence, VV.short_image, VV.usage_id,`
         + ` VC.name AS category_name,`
         + ` VU.name AS usage_name,`
-        + ` VWOK.cname AS worker_name,`
-        + ` VPR.id AS pay_id, VPR.type AS pay_type, VPR.timestamp AS pay_timestamp, VPR.channel AS pay_channel, VPR.third_id AS pay_third_id, VPR.time AS pay_time, VPR.voucher AS pay_voucher, VPR.price AS pay_price`
+        + ` VWOK.cname AS worker_name`
         + ` from video_bill AS VB`
         + ` LEFT JOIN video_video AS VV on video_id = VV.id`
         + ` LEFT JOIN video_category AS VC on VV.category_id = VC.id `
@@ -65,11 +67,10 @@ class BillService extends Service {
         + ` LEFT JOIN video_column AS VCOL on VV.column_id = VCOL.id`
         + ` LEFT JOIN video_usage AS VU on VV.usage_id = VU.id`
         + ` LEFT JOIN video_worker AS VWOK on VB.work_id = VWOK.id`
-        + ` LEFT JOIN video_pay_record AS VPR on VB.order_id = VPR.order_id `
 
         + `${cond} order by timestamp desc limit ${pageSize} offset ${(pageNum - 1) * pageSize};`
-      const articles = await this.app.mysql.query(sql);
-      return articles;
+      const bill_records = await this.app.mysql.query(sql);
+      return bill_records;
     } catch (err) {
       throw err;
     }
@@ -88,19 +89,12 @@ class BillService extends Service {
 
   // 获取某条信息
   async find(id) {
-    const article = await this.app.mysql.get('video_bill', { id });
+    const record = await this.app.mysql.get('video_bill', { id });
 
-    return article;
+    return record;
   }
 
-  // 搜索
-  async search(pageNum, pageSize, where) {
-    let sql = "select id,name,work_id,price,status,business,time,scale,channel,date_format(timestamp,'%Y-%m-%d %H:%i') as timestamp, phone,category_id,openid,platform_id,column_id,video_id,comment, trade_status, pay_status from video_bill where"
-    sql += ' ' + where;
-    sql += ` order by timestamp desc limit ${pageSize} offset ${(pageNum - 1) * pageSize};`
-    const articles = await this.app.mysql.query(sql);
-    return articles;
-  }
+
   // 总数
   async count(cond) {
     console.log(cond)

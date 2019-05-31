@@ -34,27 +34,36 @@ class BillService extends Service {
   }
 
   // 获取列表
-  async list(pageNum, pageSize, param) {
-    const cond = param ? param : ''
+  async list(cond, pageNum, pageSize) {
+    const param = cond ? cond : ''
     console.log(cond)
-    const bill_records = await this.app.mysql.query(
-      `select VB.id, VB.name, VB.work_id, VB.price, VB.status, VB.business, date_format(VB.timestamp, '%Y-%m-%d %H:%i:%s') as timestamp, `
-      + ` VB.phone, VB.video_id, VB.comment, VB.email, VB.order_id, VB.order_source, date_format(VB.order_time, '%Y-%m-%d %H:%i:%s') AS order_time, VB.pay_status, VB.refund_price, date_format(VB.refund_time,'%Y-%m-%d %H:%i:%s') AS refund_time, VB.trade_status, VB.work_comment,`
-      + ` date_format(VB.trade_time, '%Y-%m-%d %H:%i:%s') AS trade_time, VB.earnest_price, VB.paid_price, VB.sale_status,`
-      + ` VV.name AS video_name, VV.url AS video_url, VV.short_image AS video_short_image, VV.time AS video_time, VV.platform_id, VV.scale_id, VV.column_id, VV.category_id,`
-      + ` VWOK.cname AS worker_name, VWOK.id AS worker_id`
-      + ` from video_bill AS VB`
-      + ` LEFT JOIN video_video AS VV on VB.video_id = VV.id`
-      + ` LEFT JOIN video_worker AS VWOK on VB.work_id = VWOK.id`
-      + ` ${cond} order by timestamp desc limit ${pageSize} offset ${(pageNum - 1) * pageSize};`);
+    let sql = `select VB.id, VB.phone, VCOL.name as column_name, VB.video_id, VB.comment, VB.email,VB.order_id, VB.pay_status, VB.refund_price, date_format(VB.refund_time,'%Y-%m-%d %H:%i:%s') AS refund_time,`
+    + ` VB.name, VB.work_id, VB.price, VB.status, VB.business, VB.trade_status, VB.work_comment,date_format(VB.timestamp,'%Y-%m-%d %H:%i:%s') as timestamp, date_format(VB.order_time, '%Y-%m-%d %H:%i:%s') AS order_time,`
+    + ` date_format(VB.trade_time, '%Y-%m-%d %H:%i:%s') AS trade_time, VB.earnest_price, VB.paid_price, VB.sale_status, VB.settle_status, VB.order_source,`
+    + ` VPF.name as platform_name,`
+    + ` VV.name as video_name, VV.category_id, VV.platform_id, VV.column_id, VV.classify_id, VV.time AS video_time, VV.scale_id, VV.is_model, VV.sence, VV.short_image, VV.usage_id,`
+    + ` VC.name AS category_name,`
+    + ` VU.name AS usage_name,`
+    + ` VWOK.cname AS worker_name`
+    + ` from video_bill AS VB`
+    + ` LEFT JOIN video_video AS VV on video_id = VV.id`
+    + ` LEFT JOIN video_category AS VC on VV.category_id = VC.id `
+    + ` LEFT JOIN video_platform AS VPF on VV.platform_id = VPF.id`
+    + ` LEFT JOIN video_column AS VCOL on VV.column_id = VCOL.id`
+    + ` LEFT JOIN video_usage AS VU on VV.usage_id = VU.id`
+    + ` LEFT JOIN video_worker AS VWOK on VB.work_id = VWOK.id`
+
+    + ` ${param} order by timestamp desc limit ${pageSize} offset ${(pageNum - 1) * pageSize};`
+    const bill_records = await this.app.mysql.query(sql);
     return bill_records;
   }
 
   // 获取列表byren
   async listByUser(cond, pageNum, pageSize) {
     try {
-      let sql = `select VB.id, VB.phone, VCOL.name as column_name, VB.video_id, VB.comment, VB.email,VB.order_id, VB.pay_status, VB.refund_price, date_format(VB.refund_time,'%Y-%m-%d %H:%i:%s') AS refund_time, `
+      let sql = `select VB.id, VB.phone, VCOL.name as column_name, VB.video_id, VB.comment, VB.email,VB.order_id, VB.pay_status, VB.refund_price, date_format(VB.refund_time,'%Y-%m-%d %H:%i:%s') AS refund_time,`
         + ` VB.name, VB.work_id, VB.price, VB.status, VB.business, VB.trade_status, VB.work_comment,date_format(VB.timestamp,'%Y-%m-%d %H:%i:%s') as timestamp, date_format(VB.order_time, '%Y-%m-%d %H:%i:%s') AS order_time,`
+        + ` date_format(VB.trade_time, '%Y-%m-%d %H:%i:%s') AS trade_time, VB.earnest_price, VB.paid_price, VB.sale_status, VB.settle_status, VB.order_source,`
         + ` VPF.name as platform_name,`
         + ` VV.name as video_name, VV.category_id, VV.platform_id, VV.column_id, VV.classify_id, VV.time AS video_time, VV.scale_id, VV.is_model, VV.sence, VV.short_image, VV.usage_id,`
         + ` VC.name AS category_name,`

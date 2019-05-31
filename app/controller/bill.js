@@ -157,7 +157,7 @@ class BillController extends Controller {
 
     if (_search != 'true') {
       let sql = 'where VB.is_del=false'
-      result = await this.service.bill.list(pageNum, pageSize, sql);
+      result = await this.service.bill.list(sql, pageNum, pageSize);
       total = await this.service.bill.count(sql);
     } else {
       let sql = 'where VB.is_del=false'
@@ -178,7 +178,7 @@ class BillController extends Controller {
       }
       sql += id + openid + phone + name + business + trade_status + pay_status + order_time + work_id;
 
-      result = await this.service.bill.list(pageNum, pageSize, sql);
+      result = await this.service.bill.list(sql, pageNum, pageSize);
       total = await this.service.bill.count(sql);
     }
     this.ctx.body = {

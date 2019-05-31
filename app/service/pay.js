@@ -24,7 +24,9 @@ class PayService extends Service {
     }
     async findByOrder(order_id) { 
         try {
-            const record = await this.app.mysql.select('video_pay_record', { order_id });
+            const record = await this.app.mysql.select('video_pay_record', { 
+                where: {order_id}
+             });
 
             return record;
         } catch(err) {

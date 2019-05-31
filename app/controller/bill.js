@@ -564,6 +564,7 @@ class BillController extends Controller {
     const id = body.id;
     const settle_status = body.settle_status;
     const earnest_price = body.earnest_price;
+    const price = body.price;
 
     if (!id) {
       this.ctx.body = {
@@ -574,6 +575,7 @@ class BillController extends Controller {
     }
     const result = await this.service.bill.update({
       id,
+      price,
       settle_status,
       earnest_price,
     });

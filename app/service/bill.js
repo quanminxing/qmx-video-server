@@ -12,7 +12,6 @@ class BillService extends Service {
       status: obj.status || 0,
       business: obj.business,
       video_id: obj.video_id,
-      time: obj.time,
       phone: obj.phone,
       comment: obj.comment,
       openid: obj.openid,

@@ -33,7 +33,6 @@ class BillController extends Controller {
     const price = body.price != 'null' ? body.price : '';
     const business = body.business;
     const status = body.status;
-    const time = body.time;
     const scale = body.scale;
     const channel = body.channel;
     const phone = body.phone;
@@ -57,7 +56,6 @@ class BillController extends Controller {
           price,
           business,
           status,
-          time,
           phone,
           video_id,
           openid,
@@ -65,7 +63,7 @@ class BillController extends Controller {
           email
         });
 
-        newResult = await this.service.bill.list(1, 1, 'where VB.id = ' + result.insertId);
+        newResult = await this.service.bill.list('where VB.id = ' + result.insertId, 1, 1);
         let video_name, video_time, worker_name, worker_id;
         if (newResult.length > 0) {
           video_name = newResult[0].video_name ? newResult[0].video_name : '无'
@@ -114,7 +112,6 @@ class BillController extends Controller {
         price,
         business,
         status,
-        time,
         phone,
         video_id,
         comment,

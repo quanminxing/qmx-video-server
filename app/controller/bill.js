@@ -596,7 +596,7 @@ class BillController extends Controller {
     const sale_status = body.sale_status;
     const refund_price = body.refund_price;
     const status = ["待沟通", "需求沟通中", "需求不可行", "需求已确认", "待支付定金", "已支付定金", "待支付全款", "已支付全款", "脚本策划中", "待确认脚本", "脚本修改中", "脚本已确认", "待寄送样品", "样品已寄到", "拍摄排期中", "拍摄中", "后期排期中", "后期制作中", "待确认样片", "样片修改中", "样片已确认", "待支付尾款", "已支付尾款", "等待成片", "成片已交付", "交易成功", "退款中", "退款完成"];
-
+    let result = '';
     if (!id) {
       this.ctx.body = {
         status: 500,
@@ -644,7 +644,7 @@ class BillController extends Controller {
           }
           break;
         }
-        const result = await this.service.bill.update({
+        result = await this.service.bill.update({
           id,
           sale_status
         });
@@ -675,7 +675,7 @@ class BillController extends Controller {
           }
           break;
         }
-        const result = await this.service.bill.update({
+        result = await this.service.bill.update({
           id,
           sale_status
         });
@@ -706,7 +706,7 @@ class BillController extends Controller {
           }
           break;
         }
-        const result = await this.service.bill.update({
+       result = await this.service.bill.update({
           id,
           sale_status
         });
@@ -740,7 +740,7 @@ class BillController extends Controller {
         }
 
         if (bill_record.pay_status === '已支付定金' || bill_record.pay_status === '已支付尾款' || bill_record.pay_status === '已支付全款') {
-          const result = await this.service.bill.update({
+          result = await this.service.bill.update({
             id,
             sale_status,
             refund_price
@@ -764,7 +764,7 @@ class BillController extends Controller {
           }
         }
       default:
-        const result = await this.service.bill.update({
+        result = await this.service.bill.update({
           id,
           sale_status
         });

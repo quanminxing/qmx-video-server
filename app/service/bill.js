@@ -26,7 +26,7 @@ class BillService extends Service {
       settle_status: '全款',
       earnest_price: 0.00,
       paid_price: 0.00,
-      sale_status: '需求沟通中'
+      sale_status: '待支付全款'
     });
 
     return result;

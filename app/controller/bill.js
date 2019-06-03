@@ -612,7 +612,7 @@ class BillController extends Controller {
       return;
     }
 
-    const bill_record = await this.service.find(id);
+    const bill_record = await this.service.bill.find(id);
     if (!bill_record) {
       this.ctx.body = {
         status: 500,

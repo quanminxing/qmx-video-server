@@ -34,7 +34,8 @@ class PayController extends Controller {
         let product_id = '';
         let out_trade_no = '';
         let body = '';
-
+        let attach = '';
+        
         let bill = await this.service.bill.find(bill_id);
         if(!bill) {
             this.ctx.body = {

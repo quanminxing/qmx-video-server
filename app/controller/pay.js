@@ -49,11 +49,12 @@ class PayController extends Controller {
         total_fee = '&total_fee=' + bill.price * 100;
         product_id = bill.video_id ? '&product_id=' + bill.video_id : '&product_id=其他';
         out_trade_no = '&out_trade_no=ZF' + Util.getDate() + Util.getSixRandom() + (pay_type === '全款' ? '01' : pay_type === '定金' ? '02' : pay_type === '尾款' ? '03' : '04');
-        body = '&body=宜拍短视频制作-订单编号' + bill_id + '-' + pay_type;
+        body = '&body=宜拍短视频制作-订单编号' + bill.order_id + '-' + pay_type;
+        attach ='&attach=宜拍短视频制作-订单编号' + bill.order_id + '-' + pay_type;
         time_expire = '&time_expire=' + time_expire.getFullYear() + ('0' + (time_expire.getMonth() + 1)).slice(-2) +('0' + time_expire.getDate()).slice(-2) + ('0' + time_expire.getHours()).slice(-2) + ('0' + time_expire.getMinutes()).slice(-2) + ('0' + time_expire.getSeconds()).slice(-2)
 
 
-        let params = appid + mch_id + notify_url + trade_type + total_fee + product_id + out_trade_no + body + openid + spbill_create_ip + nonce_str + time_expire
+        let params = appid + mch_id + notify_url + trade_type + total_fee + product_id + out_trade_no + body + attach + openid + spbill_create_ip + nonce_str + time_expire
         
         let dataXml = Util.queryToXML(params, key);
 

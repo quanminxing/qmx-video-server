@@ -747,7 +747,8 @@ class BillController extends Controller {
             id,
             sale_status,
             refund_price,
-            trade_status: '退款完成'
+            trade_status: '退款完成',
+            refund_time: this.app.mysql.literals.now
           });
           if (result) {
             this.ctx.body = {

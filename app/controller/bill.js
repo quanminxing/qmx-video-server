@@ -743,7 +743,8 @@ class BillController extends Controller {
           result = await this.service.bill.update({
             id,
             sale_status,
-            refund_price
+            refund_price,
+            trade_status: '退款完成'
           });
           if (result) {
             this.ctx.body = {

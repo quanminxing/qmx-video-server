@@ -47,7 +47,15 @@ class PayController extends Controller {
         openid = '&openid=' + openid;
         spbill_create_ip = '&spbill_create_ip=' + spbill_create_ip;
         nonce_str = '&nonce_str=' + nonce_str;
-        total_fee = '&total_fee=' + bill.price * 100;
+        if(pay_type === '定金') {
+            total_fee = '&total_fee=' + bill.earnest_price * 100;
+        } else if(pay_type === '全款') {
+            total_fee = '&total_fee=' + bill.price * 100;
+        } else if(pay_type === '尾款') {
+            total_fee = '&total_fee=' + (bill.price * 100 - bill.earnest_price * 100);
+        } else {
+            total_fee = '&total_fee=' + bill.price * 100;
+        }
         product_id = bill.video_id ? '&product_id=' + bill.video_id : '&product_id=其他';
         out_trade_no = '&out_trade_no=ZF' + Util.getDate() + Util.getSixRandom() + (pay_type === '全款' ? '01' : pay_type === '定金' ? '02' : pay_type === '尾款' ? '03' : '04');
         body = '&body=宜拍短视频制作-订单编号' + bill.order_id + '-' + pay_type;

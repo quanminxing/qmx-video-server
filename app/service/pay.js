@@ -34,15 +34,9 @@ class PayService extends Service {
         }
     }
     async paycallback(callbackdata) {
-        console.log('callback')
-        console.log(new Date())
-        console.log(callbackdata)
         const info = callbackdata.attach.split('-');
         const order_id = info[1];
         const type = info[2];
-        console.log(new Date())
-        console.log('attach');
-        console.log(callbackdata.attach);
         const payRecord = await this.app.mysql.select('video_pay_record', {
             where: {
                 order_id: order_id,

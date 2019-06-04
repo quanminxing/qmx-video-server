@@ -646,7 +646,8 @@ class BillController extends Controller {
         }
         result = await this.service.bill.update({
           id,
-          sale_status
+          sale_status,
+          trade_status: '待付款'
         });
         if (result) {
           this.ctx.body = {
@@ -677,7 +678,8 @@ class BillController extends Controller {
         }
         result = await this.service.bill.update({
           id,
-          sale_status
+          sale_status,
+          trade_status: '待付款'
         });
         if (result) {
           this.ctx.body = {
@@ -706,9 +708,10 @@ class BillController extends Controller {
           }
           break;
         }
-       result = await this.service.bill.update({
+        result = await this.service.bill.update({
           id,
-          sale_status
+          sale_status,
+          trade_status: '待付款'
         });
         if (result) {
           this.ctx.body = {
@@ -764,10 +767,119 @@ class BillController extends Controller {
             err_message: '操作失败，未付款的订单不能退款'
           }
         }
+      case '需求不可行':
+        result = await this.service.bill.update({
+          id,
+          sale_status,
+          trade_status: '交易关闭'
+        });
+        if (result) {
+          this.ctx.body = {
+            status: 200,
+            data: '修改成功'
+          }
+        } else {
+          this.ctx.body = {
+            status: 500,
+            err_message: '修改失败'
+          }
+        }
+        break;
+      case '待确认脚本':
+        result = await this.service.bill.update({
+          id,
+          sale_status,
+          trade_status: '待确认'
+        });
+        if (result) {
+          this.ctx.body = {
+            status: 200,
+            data: '修改成功'
+          }
+        } else {
+          this.ctx.body = {
+            status: 500,
+            err_message: '修改失败'
+          }
+        }
+        break;
+      case '待寄送样品':
+        result = await this.service.bill.update({
+          id,
+          sale_status,
+          trade_status: '待寄送'
+        });
+        if (result) {
+          this.ctx.body = {
+            status: 200,
+            data: '修改成功'
+          }
+        } else {
+          this.ctx.body = {
+            status: 500,
+            err_message: '修改失败'
+          }
+        }
+        break;
+      case '待确认样片':
+          result = await this.service.bill.update({
+            id,
+            sale_status,
+            trade_status: '待确认'
+          });
+          if (result) {
+            this.ctx.body = {
+              status: 200,
+              data: '修改成功'
+            }
+          } else {
+            this.ctx.body = {
+              status: 500,
+              err_message: '修改失败'
+            }
+          }
+          break;
+      case '交易成功':
+          result = await this.service.bill.update({
+            id,
+            sale_status,
+            trade_status: '交易成功'
+          });
+          if (result) {
+            this.ctx.body = {
+              status: 200,
+              data: '修改成功'
+            }
+          } else {
+            this.ctx.body = {
+              status: 500,
+              err_message: '修改失败'
+            }
+          }
+          break;
+      case '退款中':
+          result = await this.service.bill.update({
+            id,
+            sale_status,
+            trade_status: '退款中'
+          });
+          if (result) {
+            this.ctx.body = {
+              status: 200,
+              data: '修改成功'
+            }
+          } else {
+            this.ctx.body = {
+              status: 500,
+              err_message: '修改失败'
+            }
+          }
+          break;
       default:
         result = await this.service.bill.update({
           id,
-          sale_status
+          sale_status,
+          trade_status: '进行中'
         });
         if (result) {
           this.ctx.body = {

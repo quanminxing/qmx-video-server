@@ -67,7 +67,7 @@ class BillService extends Service {
         + ` VV.name as video_name, VV.category_id, VV.platform_id, VV.column_id, VV.classify_id, VV.time AS video_time, VV.scale_id, VV.is_model, VV.sence, VV.short_image, VV.usage_id,`
         + ` VC.name AS category_name,`
         + ` VU.name AS usage_name,`
-        + ` VWOK.cname AS worker_name, IFNULL(VWOK.phone == , "15345817944") AS worker_phone`
+        + ` VWOK.cname AS worker_name, IFNULL(!(VWOK.phone == ""), "15345817944") AS worker_phone`
         + ` from video_bill AS VB`
         + ` LEFT JOIN video_video AS VV on video_id = VV.id`
         + ` LEFT JOIN video_category AS VC on VV.category_id = VC.id `

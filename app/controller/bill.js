@@ -562,7 +562,7 @@ class BillController extends Controller {
     const settle_status = body.settle_status;
     const earnest_price = body.earnest_price;
     const price = body.price;
-
+    let result = '';
     if (!id) {
       this.ctx.body = {
         status: 500,
@@ -570,12 +570,23 @@ class BillController extends Controller {
       }
       return;
     }
-    const result = await this.service.bill.update({
-      id,
-      price,
-      settle_status,
-      earnest_price,
-    });
+    if (settle_status === '定金+尾款') {
+      result = await this.service.bill.update({
+        id,
+        price,
+        sale_status: '待支付定金',
+        settle_status,
+        earnest_price,
+      });
+    } else if (settle_status === '全款') {
+      result = await this.service.bill.update({
+        id,
+        price,
+        sale_status: '待支付全款',
+        settle_status,
+        earnest_price,
+      });
+    }
 
     if (!result) {
       this.ctx.body = {
@@ -823,59 +834,59 @@ class BillController extends Controller {
         }
         break;
       case '待确认样片':
-          result = await this.service.bill.update({
-            id,
-            sale_status,
-            trade_status: '待确认'
-          });
-          if (result) {
-            this.ctx.body = {
-              status: 200,
-              data: '修改成功'
-            }
-          } else {
-            this.ctx.body = {
-              status: 500,
-              err_message: '修改失败'
-            }
+        result = await this.service.bill.update({
+          id,
+          sale_status,
+          trade_status: '待确认'
+        });
+        if (result) {
+          this.ctx.body = {
+            status: 200,
+            data: '修改成功'
           }
-          break;
+        } else {
+          this.ctx.body = {
+            status: 500,
+            err_message: '修改失败'
+          }
+        }
+        break;
       case '交易成功':
-          result = await this.service.bill.update({
-            id,
-            sale_status,
-            trade_status: '交易成功'
-          });
-          if (result) {
-            this.ctx.body = {
-              status: 200,
-              data: '修改成功'
-            }
-          } else {
-            this.ctx.body = {
-              status: 500,
-              err_message: '修改失败'
-            }
+        result = await this.service.bill.update({
+          id,
+          sale_status,
+          trade_status: '交易成功'
+        });
+        if (result) {
+          this.ctx.body = {
+            status: 200,
+            data: '修改成功'
           }
-          break;
+        } else {
+          this.ctx.body = {
+            status: 500,
+            err_message: '修改失败'
+          }
+        }
+        break;
       case '退款中':
-          result = await this.service.bill.update({
-            id,
-            sale_status,
-            trade_status: '退款中'
-          });
-          if (result) {
-            this.ctx.body = {
-              status: 200,
-              data: '修改成功'
-            }
-          } else {
-            this.ctx.body = {
-              status: 500,
-              err_message: '修改失败'
-            }
+        result = await this.service.bill.update({
+          id,
+          sale_status,
+          trade_status: '退款中'
+        });
+        if (result) {
+          this.ctx.body = {
+            status: 200,
+            data: '修改成功'
           }
-          break;
+        } else {
+          this.ctx.body = {
+            status: 500,
+            err_message: '修改失败'
+          }
+        }
+        break;
       default:
         result = await this.service.bill.update({
           id,

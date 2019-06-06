@@ -908,7 +908,8 @@ class BillController extends Controller {
         result = await this.service.bill.update({
           id,
           sale_status,
-          trade_status: '交易成功'
+          trade_status: '交易成功',
+          trade_time: this.app.mysql.literals.now
         });
         if (result) {
           this.ctx.body = {

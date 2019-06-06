@@ -579,7 +579,7 @@ class BillController extends Controller {
       }
       return;
     }
-    if(earnest_price <= 0) {
+    if(settle_status !== '全款' && earnest_price <= 0) {
       this.ctx.body = {
         status: 500,
         err_message: '操作失败，定金金额必须大于0'

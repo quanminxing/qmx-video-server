@@ -24,9 +24,11 @@ class PayService extends Service {
     }
     async findByOrder(order_id) { 
         try {
-            const record = await this.app.mysql.select('video_pay_record', { 
-                where: {order_id}
-             });
+            let sql = 'select id, type, channel, third_id, voucher, price, pay_serial, order_id,'
+            + ' date_format(timestamp,"%Y-%m-%d %H:%i:%s") AS timestamp, date_format(end_time,"%Y-%m-%d %H:%i:%s") AS end_time'
+            + ' from video_pay_record'
+            + ' where order_id="' + order_id + '"'
+            const record = await this.app.mysql.query(sql)
 
             return record;
         } catch(err) {

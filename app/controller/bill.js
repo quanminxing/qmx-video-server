@@ -789,7 +789,13 @@ class BillController extends Controller {
           }
           return;
         }
-
+        if(bill_record.pay_status === '未付款') {
+          this.ctx.body = {
+            status: 500,
+            err_message: '操作失败，未付款的订单不能退款'
+          }
+          return;
+        }
         if (refund_price > bill_record.paid_price) {
           this.ctx.body = {
             status: 500,

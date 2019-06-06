@@ -169,7 +169,7 @@ class BillController extends Controller {
       let order_time = query.order_time || '';
       const work_id = query.work_id ? ' and VB.work_id=' + query.work_id : '';
       const order_id = query.order_id ? ' and VB.order_id="' + query.order_id + '"' : '';
-      const sale_status = query.sale_status ? ' and VB.order="' + query.sale_status + '"' : '';
+      const sale_status = query.sale_status ? ' and VB.sale_status="' + query.sale_status + '"' : '';
 
       if (order_time) {
         order_time = order_time.split(',');

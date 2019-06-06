@@ -570,6 +570,51 @@ class BillController extends Controller {
       }
       return;
     }
+    if(price < 0) {
+      this.ctx.body = {
+        status: 500,
+        err_message: '操作失败，订单价格必须大于0'
+      }
+      return;
+    }
+    if(earnest_price < 0) {
+      this.ctx.body = {
+        status: 500,
+        err_message: '操作失败，定金金额必须大于0'
+      }
+      return;
+    }
+    if(price <= earnest_price) {
+      this.ctx.body = {
+        status: 500,
+        err_message: '操作失败，定金金额必须小于订单价格'
+      }
+      return;
+    }
+
+    const bill_record = await this.service.bill.find(id);
+    if(!bill_record) {
+      this.ctx.body = {
+        status: 500,
+        err_message: '修改失败,没有此订单'
+      }
+      return;
+    }
+    if(bill_record.pay_status !== '未付款') {
+      this.ctx.body = {
+        status: 500,
+        err_message: '操作失败，已付款的订单，不能修改结算方式、价格、定金'
+      }
+      return;
+    }
+    if(bill_record.trade_status === '退款完成') {
+      this.ctx.body = {
+        status: 500,
+        err_message: '操作失败：退款完成的订单，不能修改结算方式、价格、定金'
+      }
+      return;
+    }
+
     if (settle_status === '定金+尾款') {
       result = await this.service.bill.update({
         id,

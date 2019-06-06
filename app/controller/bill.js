@@ -784,13 +784,13 @@ class BillController extends Controller {
         }
         break;
       case '退款完成':
-        if (refund_price === '') {
-          this.ctx.body = {
-            status: 500,
-            err_message: '操作失败，请输入退款金额'
-          }
-          return;
-        }
+        // if (refund_price <) {
+        //   this.ctx.body = {
+        //     status: 500,
+        //     err_message: '操作失败，请输入退款金额'
+        //   }
+        //   return;
+        // }
         if(bill_record.pay_status === '未付款') {
           this.ctx.body = {
             status: 500,

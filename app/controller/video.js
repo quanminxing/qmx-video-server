@@ -175,6 +175,7 @@ class VideoController extends Controller {
 		const category = body.category;
 		const related_id = body.related_id;
 		const script_url = body.script_url;
+		const local_id = body.local_id;
 
 		if (oper === 'add') {
 
@@ -210,7 +211,8 @@ class VideoController extends Controller {
 					platform,
 					category,
 					related_id,
-					script_url
+					script_url,
+					local_id
 				});
 
 				let log = this.service.workerLog.insert({

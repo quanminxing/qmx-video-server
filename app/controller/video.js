@@ -356,7 +356,7 @@ class VideoController extends Controller {
 		const model = query.model ? ' and VV.is_model = ' + query.model : '';
 		const sence = query.sence ? ' and VV.sence = ' + query.sence : '';
 		const related_id = query.related_id ? ' and VV.related_id = ' + query.related_id : '';
-		const local_id = query.local_id ? ' and VV.local_id = ' + query.local_id : '';
+		const local_id = query.local_id ? ' and VV.local_id = "' + query.local_id + '"' : '';
 		const pageSize = query.pageSize ? query.pageSize : 20;
 		const pageNum = query.pageNum ? query.pageNum : 1;
 		const sidx = query.sidx ? 'VV.' + query.sidx : 'uv';
@@ -435,7 +435,7 @@ class VideoController extends Controller {
 		const model = query.model ? ' and VV.is_model = ' + query.model : '';
 		const sence = query.sence ? ' and VV.sence = ' + query.sence : '';
 		const related_id = query.related_id ? ' and VV.related_id = ' + query.related_id : '';
-		const local_id = query.local_id ? ' and VV.local_id = ' + query.local_id : '';
+		const local_id = query.local_id ? ' and VV.local_id = "' + query.local_id + '"' : '';
 
 		const pageSize = query.pageSize ? query.pageSize : 20;
 		const pageNum = query.pageNum ? query.pageNum : 1;

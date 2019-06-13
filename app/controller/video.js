@@ -356,6 +356,7 @@ class VideoController extends Controller {
 		const model = query.model ? ' and VV.is_model = ' + query.model : '';
 		const sence = query.sence ? ' and VV.sence = ' + query.sence : '';
 		const related_id = query.related_id ? ' and VV.related_id = ' + query.related_id : '';
+		const local_id = query.local_id ? ' and VV.local_id = ' + query.local_id : '';
 		const pageSize = query.pageSize ? query.pageSize : 20;
 		const pageNum = query.pageNum ? query.pageNum : 1;
 		const sidx = query.sidx ? 'VV.' + query.sidx : 'uv';
@@ -383,7 +384,7 @@ class VideoController extends Controller {
 				}
 			} else {
 				try {
-					let sql = column_id + name + category_id + priceSql + classifySql + platform_id + usage_id + model + sence + related_id + ' and VV.is_wechat = true'
+					let sql = column_id + name + category_id + priceSql + classifySql + platform_id + usage_id + model + sence + related_id + local_id + ' and VV.is_wechat = true'
 					let result = this.service.video.search(pageNum, pageSize, sql, orderby)
 					let count = this.service.video.count(sql)
 					let [data, total] = await Promise.all([result, count]);
@@ -434,6 +435,8 @@ class VideoController extends Controller {
 		const model = query.model ? ' and VV.is_model = ' + query.model : '';
 		const sence = query.sence ? ' and VV.sence = ' + query.sence : '';
 		const related_id = query.related_id ? ' and VV.related_id = ' + query.related_id : '';
+		const local_id = query.local_id ? ' and VV.local_id = ' + query.local_id : '';
+
 		const pageSize = query.pageSize ? query.pageSize : 20;
 		const pageNum = query.pageNum ? query.pageNum : 1;
 		const sidx = query.sidx? 'VV.' + query.sidx : 'VV.timestamp';
@@ -454,7 +457,7 @@ class VideoController extends Controller {
 				}
 			} else {
 				try {
-					let sql = column_id + name + category_id + priceSql + classifySql + platform_id + usage_id + model + sence + related_id
+					let sql = column_id + name + category_id + priceSql + classifySql + platform_id + usage_id + model + sence + related_id + local_id
 					let result = this.service.video.search(pageNum, pageSize, sql, orderby)
 					let count = this.service.video.count(sql)
 					let [data, total] = await Promise.all([result, count]);

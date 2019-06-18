@@ -3,7 +3,7 @@ const env = process.env;
 
 exports.mysql = {
   client: {
-    host: '47.111.172.69',
+    host: '120.0.0.1',
     port: 3306,
     user: 'root',
     password: 'root123',
@@ -73,17 +73,7 @@ exports.alipay = {
 //     bucket: 'qmx-video',
 //   },
 // };
-exports.bucket1_sts = {
-  sts: true,
-  accessKeyId: 'LTAI22EYvc2T0NRK',
-  accessKeySecret: 'tvCWJfWc2x0WXWu0R5VfBHV0P3OAQy',
-}
-exports.bucket1 = {
-  endpoint: 'https://oss-cn-hangzhou.aliyuncs.com',
-  accessKeyId: 'LTAIEcGWDcS9bLAI',
-  accessKeySecret: '4bplw4xzM54fgYnXSnaI11SirQcqVh',
-  bucket: 'qmx-video',
-}
+
 
 exports.userrole = {
   failureHandler(action) {

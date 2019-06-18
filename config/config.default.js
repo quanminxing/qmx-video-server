@@ -65,15 +65,6 @@ exports.alipay = {
     sign_type:"MD5"
 };
 
-// exports.oss = {
-//   client: {
-//     accessKeyId: 'LTAIEcGWDcS9bLAI',
-//     accessKeySecret: '4bplw4xzM54fgYnXSnaI11SirQcqVh',
-//     endpoint: 'oss-cn-hangzhou-internal.aliyuncs.com',
-//     bucket: 'qmx-video',
-//   },
-// };
-
 
 exports.userrole = {
   failureHandler(action) {

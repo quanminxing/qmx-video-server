@@ -8,7 +8,7 @@ class PayService extends Service {
                 timestamp: this.app.mysql.literals.now,
                 channel: data.channel || '微信支付',
                 third_id: data.transaction_id || '',
-                end_time: data.end_time || '',
+                end_time: data.end_time || null,
                 voucher: data.voucher || '',
                 price: data.price,
                 order_id: data.order_id,

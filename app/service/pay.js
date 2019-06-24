@@ -43,7 +43,7 @@ class PayService extends Service {
     }
     async findByOrder(order_id) {
         try {
-            let sql = 'select VPR.id, VPR.order_id, VPR.serial, VPR.type, VPR.channel, VPR.third_id, VPR.voucher, date_format(VPR.timestamp,"%Y-%m-%d %H:%i:%s") AS timestamp, date_format(VPR.end_time,"%Y-%m-%d %H:%i:%s") AS end_time, VPR.price, VPR.verify, VPR.verify_info, date_format(VPR.verify_time,"%Y-%m-%d %H:%i:%s") AS verify_time '
+            let sql = 'select VPR.id, VPR.order_id, VPR.serial, VPR.type, VPR.channel, VPR.third_id, VPR.voucher, date_format(VPR.timestamp,"%Y-%m-%d %H:%i:%s") AS timestamp, date_format(VPR.end_time,"%Y-%m-%d %H:%i:%s") AS end_time, VPR.price, VPR.verify, VPR.verify_info, date_format(VPR.verify_time,"%Y-%m-%d %H:%i:%s") AS verify_time, '
             + ` VB.name, VB.business, VB.phone, VB.email`
             + ` from video_pay_record AS VPR`
             + ` LEFT JOIN video_bill AS VB on VPR.order_id = VB.order_id`

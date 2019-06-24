@@ -47,7 +47,7 @@ class PayService extends Service {
             + ` VB.name, VB.business, VB.phone, VB.email`
             + ` from video_pay_record AS VPR`
             + ` LEFT JOIN video_bill AS VB on VPR.order_id = VB.order_id`
-            + ` where VPR.order_id="${order_id}";`
+            + ` where VPR.order_id="${order_id}" order by VPR.id;`
             const record = await this.app.mysql.query(sql)
 
             return record;

@@ -43,7 +43,8 @@ class BillService extends Service {
     + ` VV.name as video_name, VV.category_id, VV.platform_id, VV.column_id, VV.classify_id, VV.time AS video_time, VV.scale_id, VV.is_model, VV.sence, VV.short_image, VV.usage_id,`
     + ` VC.name AS category_name,`
     + ` VU.name AS usage_name,`
-    + ` IF(VWOK.cname = "" || ISNULL(VWOK.cname)=1, "汪涛", VWOK.cname) AS worker_name, IF(VWOK.phone = "" || ISNULL(VWOK.phone)=1, "15345817944", VWOK.phone) AS worker_phone`
+    + ` IF(VWOK.cname = "" || ISNULL(VWOK.cname)=1, "汪涛", VWOK.cname) AS worker_name, IF(VWOK.phone = "" || ISNULL(VWOK.phone)=1, "15345817944", VWOK.phone) AS worker_phone,`
+    //+ ` (select verify from video_pay_record where video_pay_record.order_id = VB.order_id order by video_pay_record.timestamp limit 1) AS pay_verify`
     + ` from video_bill AS VB`
     + ` LEFT JOIN video_video AS VV on video_id = VV.id`
     + ` LEFT JOIN video_category AS VC on VV.category_id = VC.id `
@@ -63,11 +64,12 @@ class BillService extends Service {
       let sql = `select VB.id, VB.phone, VCOL.name as column_name, VB.video_id, VB.comment, VB.email,VB.order_id, VB.pay_status, VB.refund_price, date_format(VB.refund_time,'%Y-%m-%d %H:%i:%s') AS refund_time,`
         + ` VB.name, IF(VB.work_id=0, 15, VB.work_id) AS work_id, VB.price, VB.status, VB.business, VB.trade_status, VB.work_comment,date_format(VB.timestamp,'%Y-%m-%d %H:%i:%s') as timestamp, date_format(VB.order_time, '%Y-%m-%d %H:%i:%s') AS order_time,`
         + ` date_format(VB.trade_time, '%Y-%m-%d %H:%i:%s') AS trade_time, VB.earnest_price, VB.paid_price, VB.sale_status, VB.settle_status, VB.order_source,`
-        + ` VPF.name as platform_name,`
+        + ` VPF.name as platform_name, `
         + ` VV.name as video_name, VV.category_id, VV.platform_id, VV.column_id, VV.classify_id, VV.time AS video_time, VV.scale_id, VV.is_model, VV.sence, VV.short_image, VV.usage_id,`
         + ` VC.name AS category_name,`
         + ` VU.name AS usage_name,`
-        + ` IF(VWOK.cname = "" || ISNULL(VWOK.cname)=1, "汪涛", VWOK.cname) AS worker_name, IF(VWOK.phone = "" || ISNULL(VWOK.phone)=1, "15345817944", VWOK.phone) AS worker_phone`
+        + ` IF(VWOK.cname = "" || ISNULL(VWOK.cname)=1, "汪涛", VWOK.cname) AS worker_name, IF(VWOK.phone = "" || ISNULL(VWOK.phone)=1, "15345817944", VWOK.phone) AS worker_phone,`
+        //+ ` (select id AS pay_id, serial AS pay_serial from video_pay_record where video_pay_record.order_id = VB.order_id order by video_pay_record.timestamp limit 1) AS pay_verify`
         + ` from video_bill AS VB`
         + ` LEFT JOIN video_video AS VV on video_id = VV.id`
         + ` LEFT JOIN video_category AS VC on VV.category_id = VC.id `
@@ -102,6 +104,12 @@ class BillService extends Service {
     return record;
   }
 
+  async findByOrder(order_id) {
+    const result = this.app.mysql.get('video_bill', {
+      order_id: order_id
+    })
+    return result;
+  }
 
   // 总数
   async count(cond) {
@@ -113,7 +121,9 @@ class BillService extends Service {
 
   // 更新
   async update(data) {
-    const result = await this.app.mysql.update('video_bill', data);
+    let result;
+    result = await this.app.mysql.update('video_bill', data);
+ 
 
     return result.affectedRows === 1;
   }

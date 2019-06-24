@@ -1,17 +1,21 @@
 const Service = require('egg').Service;
 
 class PayService extends Service {
-    async recordinsert(data) {
+    async insert(data) {
         try {
             let result = await this.app.mysql.insert('video_pay_record', {
-                type: "全款",
+                type: data.type || "全款",
                 timestamp: this.app.mysql.literals.now,
-                channel: '微信支付',
-                third_id: data.transaction_id,
-                time: data.time_end,
-                voucher: '',
-                price: data.cash_fee,
-                order_id: data.out_trade_no
+                channel: data.channel || '微信支付',
+                third_id: data.transaction_id || '',
+                end_time: data.end_time || '',
+                voucher: data.voucher || '',
+                price: data.price,
+                order_id: data.order_id,
+                verify: data.verify,
+                verify_info: data.verify_info,
+                verify_time: data.verify_time,
+                serial: data.serial
             });
             if (!result) {
                 return false;
@@ -22,12 +26,28 @@ class PayService extends Service {
             throw err;
         }
     }
-    async findByOrder(order_id) { 
+
+    async listAll(cond, pageNum, pageSize) {
+        try{
+            let sql = 'select VPR.id, VPR.order_id, VPR.serial, VPR.type, VPR.channel, VPR.third_id, VPR.voucher, date_format(VPR.timestamp,"%Y-%m-%d %H:%i:%s") AS timestamp, date_format(VPR.end_time,"%Y-%m-%d %H:%i:%s") AS end_time, VPR.price, VPR.verify, VPR.verify_info, date_format(VPR.verify_time,"%Y-%m-%d %H:%i:%s") AS verify_time, '
+            + ` VB.name, VB.business, VB.phone, VB.email`
+            + ` from video_pay_record AS VPR`
+            + ` LEFT JOIN video_bill AS VB on VPR.order_id = VB.order_id`
+            + ` where 1=1 ${cond} order by VPR.serial desc limit ${pageSize} offset ${(pageNum - 1) * pageSize};`
+            const result = await this.app.mysql.query(sql);
+            
+            return result;
+        } catch (err) {
+            throw err
+        }
+    }
+    async findByOrder(order_id) {
         try {
-            let sql = 'select id, type, channel, third_id, voucher, price, pay_serial, order_id,'
-            + ' date_format(timestamp,"%Y-%m-%d %H:%i:%s") AS timestamp, date_format(end_time,"%Y-%m-%d %H:%i:%s") AS end_time'
-            + ' from video_pay_record'
-            + ' where order_id="' + order_id + '"'
+            let sql = 'select VPR.id, VPR.order_id, VPR.serial, VPR.type, VPR.channel, VPR.third_id, VPR.voucher, date_format(VPR.timestamp,"%Y-%m-%d %H:%i:%s") AS timestamp, date_format(VPR.end_time,"%Y-%m-%d %H:%i:%s") AS end_time, VPR.price, VPR.verify, VPR.verify_info, date_format(VPR.verify_time,"%Y-%m-%d %H:%i:%s") AS verify_time '
+            + ` VB.name, VB.business, VB.phone, VB.email`
+            + ` from video_pay_record AS VPR`
+            + ` LEFT JOIN video_bill AS VB on VPR.order_id = VB.order_id`
+            + ` where order_id="${order_id}";`
             const record = await this.app.mysql.query(sql)
 
             return record;
@@ -35,6 +55,18 @@ class PayService extends Service {
             throw err;
         }
     }
+    
+    async verify(pay_id) {
+        // {
+        //     id: pay_id,
+        //     verify: '审核未通过',
+        //     verify_info: verify_info,
+        //     verify_time: this.app.mysql.literals.now,
+        //     end_time: end_time,
+        //     third_id: third_id
+        // }
+    }
+
     async paycallback(callbackdata) {
         const info = callbackdata.attach.split('-');
         const order_id = info[1];
@@ -59,7 +91,7 @@ class PayService extends Service {
             try {
                 await conn.query(sql)
                 await conn.insert('video_pay_record', {
-                    pay_serial: callbackdata.out_trade_no,
+                    serial: callbackdata.out_trade_no,
                     type: type || '其他',
                     timestamp: this.app.mysql.literals.now,
                     channel: '微信支付',
@@ -75,6 +107,15 @@ class PayService extends Service {
                 await conn.rollback();
                 throw err;
             }
+        }
+    }
+    async update(data) {
+        try {
+            let result = await this.app.mysql.update('video_pay_record', data);
+
+            return result.affectedRows === 1;
+        } catch (err) {
+            throw err;
         }
     }
 }

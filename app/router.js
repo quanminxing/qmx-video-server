@@ -112,9 +112,13 @@ module.exports = app => {
   app.post('/api/bill/saleStatus',staff,  app.controller.bill.saleStatus);
 
   //支付
+  app.get('/api/pay/listAll', app.controller.pay.listAll);
+  app.get('/api/pay/listById', app.controller.pay.listById);
   app.post('/api/pay/prepay', app.controller.pay.payPrepare);
   app.post('/api/pay/callback', app.controller.pay.callback);
-
+  app.post('/api/pay/payByBank', app.controller.pay.payByBank);
+  app.post('/api/pay/verify', app.controller.pay.verify);
+  
   //颗粒度管理
   app.post('/key', admin, app.controller.key.main);
   app.get('/key', admin, app.controller.key.list);

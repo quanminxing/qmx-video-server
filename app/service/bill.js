@@ -44,7 +44,7 @@ class BillService extends Service {
     + ` VC.name AS category_name,`
     + ` VU.name AS usage_name,`
     + ` IF(VWOK.cname = "" || ISNULL(VWOK.cname)=1, "汪涛", VWOK.cname) AS worker_name, IF(VWOK.phone = "" || ISNULL(VWOK.phone)=1, "15345817944", VWOK.phone) AS worker_phone`
-    //+ ` (select verify from video_pay_record where video_pay_record.order_id = VB.order_id order by video_pay_record.timestamp limit 1) AS pay_verify`
+
     + ` from video_bill AS VB`
     + ` LEFT JOIN video_video AS VV on video_id = VV.id`
     + ` LEFT JOIN video_category AS VC on VV.category_id = VC.id `
@@ -68,8 +68,8 @@ class BillService extends Service {
         + ` VV.name as video_name, VV.category_id, VV.platform_id, VV.column_id, VV.classify_id, VV.time AS video_time, VV.scale_id, VV.is_model, VV.sence, VV.short_image, VV.usage_id,`
         + ` VC.name AS category_name,`
         + ` VU.name AS usage_name,`
-        + ` IF(VWOK.cname = "" || ISNULL(VWOK.cname)=1, "汪涛", VWOK.cname) AS worker_name, IF(VWOK.phone = "" || ISNULL(VWOK.phone)=1, "15345817944", VWOK.phone) AS worker_phone`
-        //+ ` (select id AS pay_id, serial AS pay_serial from video_pay_record where video_pay_record.order_id = VB.order_id order by video_pay_record.timestamp limit 1) AS pay_verify`
+        + ` IF(VWOK.cname = "" || ISNULL(VWOK.cname)=1, "汪涛", VWOK.cname) AS worker_name, IF(VWOK.phone = "" || ISNULL(VWOK.phone)=1, "15345817944", VWOK.phone) AS worker_phone,`
+        + ` (select concat_ws(',', id, verify, type) from video_pay_record  where order_id = VB.order_id order by id desc limit 1) AS pay_info`
         + ` from video_bill AS VB`
         + ` LEFT JOIN video_video AS VV on video_id = VV.id`
         + ` LEFT JOIN video_category AS VC on VV.category_id = VC.id `
@@ -85,7 +85,7 @@ class BillService extends Service {
       throw err;
     }
   }
-  
+
   //获取各个交易状态下的订单数量
   async tradeCount(openid) {
     try {

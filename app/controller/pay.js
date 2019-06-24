@@ -26,15 +26,17 @@ class PayController extends Controller {
         }
         
         const result = await this.service.pay.listAll(sql, pageNum, pageSize);
+        const total = await this.service.pay.count(sql);
         if(result) {
             this.ctx.body = {
                 status: 200,
-                data: result
+                data: result,
+                total: total
             }
         } else {
             this.ctx.body = {
                 status: 500,
-                err_message: ' '
+                err_message: ''
             }
         }
     }

@@ -58,7 +58,7 @@ class PayService extends Service {
 
     async count(cond) {
         console.log(cond)
-        const count = await this.app.mysql.query(`select count(*) from video_pay_record AS VPR where 1=1 and ${cond}`);
+        const count = await this.app.mysql.query(`select count(*) from video_pay_record AS VPR where 1=1 ${cond}`);
     
         return count[0]['count(*)'];
     }

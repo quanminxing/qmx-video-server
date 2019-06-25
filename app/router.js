@@ -128,7 +128,7 @@ module.exports = app => {
 
   //支付
   app.get('/api/pay/listAll', admin, app.controller.pay.listAll);
-  app.get('/api/pay/listById', admin, app.controller.pay.listById);
+  app.get('/api/pay/listById', app.controller.pay.listById);
   app.post('/api/pay/prepay', app.controller.pay.payPrepare);
   app.post('/api/pay/callback', app.controller.pay.callback);
   app.post('/api/pay/payByBank', app.controller.pay.payByBank);

@@ -177,7 +177,6 @@ class PayController extends Controller {
             return;
         }
 
-
         const pay_record = await this.service.pay.listAll(` and VPR.id = ${pay_id}`, 1, 1)
         const bill_record = await this.service.bill.findByOrder(pay_record[0].order_id);
         if (!pay_record || pay_record.length <= 0) {

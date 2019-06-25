@@ -602,6 +602,15 @@ class BillController extends Controller {
       }
       return;
     }
+    const pay_record = await this.service.pay.findByOrder(bill_record.order_id, ' and verify = "待审核"');
+    if(pay_record && pay_record.length > 0) {
+      this.ctx.body = {
+        status: 500,
+        err_message: "操作失败，此订单有待审核的支付记录，请审核后操作"
+      }
+      return;
+    }
+
     if(bill_record.pay_status !== '未付款') {
       this.ctx.body = {
         status: 500,

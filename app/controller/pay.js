@@ -167,20 +167,29 @@ class PayController extends Controller {
                 status: 500,
                 err_message: 'pay_id is null'
             }
+            return;
         }
         if(!verify) {
             this.ctx.body = {
                 status: 500,
                 err_message: 'verify is null'
             }
+            return;
         }
         if(!end_time) {
             this.ctx.body = {
                 status: 500,
                 err_message: 'end_time is null'
             }
+            return;
         }
-
+        if(!verify_info) {
+            this.ctx.body = {
+                status: 500,
+                err_message: 'verify_info is null'
+            }
+            return;
+        }
         const pay_record = await this.service.pay.listAll(` and VPR.id = ${pay_id}`, 1, 1)
         const bill_record = await this.service.bill.findByOrder(pay_record[0].order_id);
         if(!pay_record || pay_record.length <= 0) {

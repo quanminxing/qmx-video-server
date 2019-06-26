@@ -96,6 +96,21 @@ module.exports = app => {
   app.get('/people', admin, app.controller.people.list);
   app.get('/manager/people',staff, app.controller.people.index);
 
+  // //订单管理
+  // app.post('/api/bill', app.controller.bill.main);
+  // app.get('/api/bill', app.controller.bill.list);
+  // app.get('/api/bill/detail', app.controller.bill.detail);
+  // app.get('/manager/bill',staff, app.controller.bill.index);
+  // app.get('/api/bill/listByUser', app.controller.bill.listByUser);
+  // app.get('/api/bill/count', app.controller.bill.tradeCount);
+  // app.post('/api/bill/tradeStatus', staff, app.controller.bill.tradeStatus);
+  // app.post('/api/bill/price', staff,  app.controller.bill.price);
+  // app.post('/api/bill/work', admin, app.controller.bill.worker);
+  // app.post('/api/bill/workComment', staff, app.controller.bill.workerComment);
+  // app.post('/api/bill/buyerInfo', app.controller.bill.buyerInfo);
+  // app.post('/api/bill/settleStatus',staff, app.controller.bill.settle);
+  // app.post('/api/bill/saleStatus',staff,  app.controller.bill.saleStatus);
+
   //订单管理
   app.post('/api/bill', app.controller.bill.main);
   app.get('/api/bill', app.controller.bill.list);
@@ -103,28 +118,13 @@ module.exports = app => {
   app.get('/manager/bill',staff, app.controller.bill.index);
   app.get('/api/bill/listByUser', app.controller.bill.listByUser);
   app.get('/api/bill/count', app.controller.bill.tradeCount);
-  app.post('/api/bill/tradeStatus', staff, app.controller.bill.tradeStatus);
-  app.post('/api/bill/price', staff,  app.controller.bill.price);
-  app.post('/api/bill/work', admin, app.controller.bill.worker);
-  app.post('/api/bill/workComment', staff, app.controller.bill.workerComment);
+  app.post('/api/bill/tradeStatus', app.controller.bill.tradeStatus);
+  app.post('/api/bill/price',  app.controller.bill.price);
+  app.post('/api/bill/work', app.controller.bill.worker);
+  app.post('/api/bill/workComment', app.controller.bill.workerComment);
   app.post('/api/bill/buyerInfo', app.controller.bill.buyerInfo);
-  app.post('/api/bill/settleStatus',staff, app.controller.bill.settle);
-  app.post('/api/bill/saleStatus',staff,  app.controller.bill.saleStatus);
-
-    // //订单管理
-    // app.post('/api/bill', app.controller.bill.main);
-    // app.get('/api/bill', app.controller.bill.list);
-    // app.get('/api/bill/detail', app.controller.bill.detail);
-    // app.get('/manager/bill',staff, app.controller.bill.index);
-    // app.get('/api/bill/listByUser', app.controller.bill.listByUser);
-    // app.get('/api/bill/count', app.controller.bill.tradeCount);
-    // app.post('/api/bill/tradeStatus', app.controller.bill.tradeStatus);
-    // app.post('/api/bill/price',  app.controller.bill.price);
-    // app.post('/api/bill/work', app.controller.bill.worker);
-    // app.post('/api/bill/workComment', app.controller.bill.workerComment);
-    // app.post('/api/bill/buyerInfo', app.controller.bill.buyerInfo);
-    // app.post('/api/bill/settleStatus', app.controller.bill.settle);
-    // app.post('/api/bill/saleStatus',  app.controller.bill.saleStatus);
+  app.post('/api/bill/settleStatus', app.controller.bill.settle);
+  app.post('/api/bill/saleStatus',  app.controller.bill.saleStatus);
 
   //支付
   app.get('/api/pay/listAll', admin, app.controller.pay.listAll);

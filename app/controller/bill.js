@@ -640,7 +640,7 @@ class BillController extends Controller {
         price,
         sale_status: '待支付全款',
         settle_status,
-        earnest_price,
+        earnest_price: 0,
       });
     }
 

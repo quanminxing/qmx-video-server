@@ -562,8 +562,8 @@ class BillController extends Controller {
     const body = this.ctx.request.body;
     const id = body.id;
     const settle_status = body.settle_status;
-    const earnest_price = body.earnest_price;
-    const price = body.price;
+    const earnest_price = parseFloat(body.earnest_price);
+    const price = parseFloat(body.price);
     let result = '';
     if (!id) {
       this.ctx.body = {

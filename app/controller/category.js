@@ -24,7 +24,7 @@ class CategoryController extends Controller {
     const name = body.name;
     const parent_id = body.parent_id;
     const level = body.level;
-    const work_id = this.ctx.session && this.ctx.session.user && this.ctx.session.user.id ? this.ctx.session.user.id : '';
+    const work_id = this.ctx.session && this.ctx.session.user && this.ctx.session.user.id ? this.ctx.session.user.id : 0;
 
     if (oper === 'add') {
 

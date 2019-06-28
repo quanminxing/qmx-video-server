@@ -23,7 +23,7 @@ class UsageController extends Controller {
     const body = this.ctx.request.body;
     const oper = body.oper;
     let id = body.id;
-    const work_id = this.ctx.session && this.ctx.session.user && this.ctx.session.user.id ? this.ctx.session.user.id : '';
+    const work_id = this.ctx.session && this.ctx.session.user && this.ctx.session.user.id ? this.ctx.session.user.id : 0;
     const comment = body.comment;
     const name = body.name;
     const status = body.status

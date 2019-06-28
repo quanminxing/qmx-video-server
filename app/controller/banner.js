@@ -3,7 +3,7 @@ class BannerController extends Controller {
 	async banner() {
 		const body = this.ctx.request.body;
 		let id = body.id;
-		const work_id = this.ctx.session && this.ctx.session.user && this.ctx.session.user.id ? this.ctx.session.user.id : '';
+		const work_id = this.ctx.session && this.ctx.session.user && this.ctx.session.user.id ? this.ctx.session.user.id : 0;
 		const oper = body.oper;
 		const img_name = body.img_name;
 		const url_name = body.url_name;
@@ -84,7 +84,7 @@ class BannerController extends Controller {
 	}
 
 	async remove() {
-		const work_id = this.ctx.session && this.ctx.session.user && this.ctx.session.user.id ? this.ctx.session.user.id : ''; //this.ctx.session.user.id;
+		const work_id = this.ctx.session && this.ctx.session.user && this.ctx.session.user.id ? this.ctx.session.user.id : 0; //this.ctx.session.user.id;
 		let ids = this.ctx.request.body.ids;
 		try {
 			if (typeof (ids) == 'string') {

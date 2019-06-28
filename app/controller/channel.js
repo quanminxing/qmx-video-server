@@ -12,7 +12,7 @@ class ChannelController extends Controller {
         const weight = body.weight || 0;
         const img_url = body.img_url || '';
         const comment = body.comment || '';
-        const work_id = this.ctx.session && this.ctx.session.user && this.ctx.session.user.id ? this.ctx.session.user.id : '';
+        const work_id = this.ctx.session && this.ctx.session.user && this.ctx.session.user.id ? this.ctx.session.user.id : 0;
 
         if (oper === 'add') {
             try {
@@ -169,7 +169,7 @@ class ChannelController extends Controller {
             const body = this.ctx.request.body;
 
             const ids = body.ids;
-            const work_id = this.ctx.session && this.ctx.session.user && this.ctx.session.user.id ? this.ctx.session.user.id : '';
+            const work_id = this.ctx.session && this.ctx.session.user && this.ctx.session.user.id ? this.ctx.session.user.id : 0;
 
             let result = this.service.channel.remove(ids);
 

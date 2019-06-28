@@ -43,7 +43,7 @@ class BillController extends Controller {
     const column_id = body.column_id;
     const openid = body.openid;
     const email = body.email;
-    const work_id = body.work_id || '';
+    const work_id = body.work_id || 0;
 
     let result;
     let newResult;
@@ -167,7 +167,7 @@ class BillController extends Controller {
       const trade_status = query.trade_status ? ` and VB.trade_status="${query.trade_status}"` : '';
       const pay_status = query.pay_status ? ` and VB.pay_status="${query.pay_status}"` : '';
       let order_time = query.order_time || '';
-      const work_id = query.work_id ? ' and VB.work_id=' + query.work_id : '';
+      const work_id = query.work_id ? ' and VB.work_id=' + query.work_id : 0;
       const order_id = query.order_id ? ' and VB.order_id="' + query.order_id + '"' : '';
       const sale_status = query.sale_status ? ' and VB.sale_status="' + query.sale_status + '"' : '';
 
@@ -479,7 +479,7 @@ class BillController extends Controller {
   async worker() {
     const body = this.ctx.request.body;
     const id = body.id;
-    const work_id = body.work_id;
+    const work_id = body.work_id || 0;
 
     let result = await this.service.bill.update({
       id,

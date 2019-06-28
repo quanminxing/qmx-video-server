@@ -23,7 +23,7 @@ class AdminController extends Controller {
 
   async index() {
     const query = this.ctx.request.query;
-    const work_id = this.ctx.session && this.ctx.session.user && this.ctx.session.user.id ? this.ctx.session.user.id : '';
+    const work_id = this.ctx.session && this.ctx.session.user && this.ctx.session.user.id ? this.ctx.session.user.id : 0;
     let user = await this.service.people.find(work_id);
 
     // if (this.ctx.session.user.auth === 0) {
@@ -50,7 +50,7 @@ class AdminController extends Controller {
     const query = this.ctx.request.query;
     const pageNum = +query.pageNumber || 1;
     const pageSize = +query.pageSize || 100;
-    const work_id = this.ctx.session && this.ctx.session.user && this.ctx.session.user.id ? this.ctx.session.user.id : '';
+    const work_id = this.ctx.session && this.ctx.session.user && this.ctx.session.user.id ? this.ctx.session.user.id : 0;
     let result, total;
     result = await this.service.workerLog.listByUser(pageNum, pageSize, work_id);
     total = await this.service.workerLog.count({ work_id });

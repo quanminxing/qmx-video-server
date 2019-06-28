@@ -112,7 +112,7 @@ class VideoController extends Controller {
 
 		const id = this.ctx.request.query.id;
 		const detail = await this.service.video.find(id);
-		const work_id = this.ctx.session && this.ctx.session.user && this.ctx.session.user.id ? this.ctx.session.user.id : '';
+		const work_id = this.ctx.session && this.ctx.session.user && this.ctx.session.user.id ? this.ctx.session.user.id : 0;
 		detail[0].timestamp = moment(detail[0].timestamp).format('YYYY-MM-DD hh:mm:ss')
 		if (detail[0].url.indexOf('embed') !== -1) {
 			detail[0].isqq = 1
@@ -145,7 +145,7 @@ class VideoController extends Controller {
 		const body = this.ctx.request.body;
 		const oper = body.oper;
 		let id = body.id;
-		const work_id = this.ctx.session && this.ctx.session.user && this.ctx.session.user.id ? this.ctx.session.user.id : '';
+		const work_id = this.ctx.session && this.ctx.session.user && this.ctx.session.user.id ? this.ctx.session.user.id : 0;
 		const name = body.name;
 		const description = body.description;
 		const category_id = body.category_id;
@@ -651,8 +651,8 @@ class VideoController extends Controller {
 	}
 	async remove() {
 		const body = this.ctx.request.body;
-		let ids = body.ids;
-		const work_id = this.ctx.session && this.ctx.session.user && this.ctx.session.user.id ? this.ctx.session.user.id : null;
+		let ids = body.ids ? body.ids.split(',') : [];
+		const work_id = this.ctx.session && this.ctx.session.user && this.ctx.session.user.id ? this.ctx.session.user.id : 0;
 		try {
 			await this.service.workerLog.insert({
 				event: '删除视频' + ids,

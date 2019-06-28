@@ -29,7 +29,7 @@ class PeopleController extends Controller {
     const description = body.description;
     const password = body.password;
     const auth = body.auth;
-    const work_id = this.ctx.session && this.ctx.session.user && this.ctx.session.user.id ? this.ctx.session.user.id : '';
+    const work_id = this.ctx.session && this.ctx.session.user && this.ctx.session.user.id ? this.ctx.session.user.id : 0;
 
     if (oper === 'add') {
 

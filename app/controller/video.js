@@ -433,7 +433,7 @@ class VideoController extends Controller {
 		const usage_id = query.usage_id ? ' and VV.usage_id = ' + query.usage_id : '';
 		const price = query.price ? query.price.split(',') : '';
 		const model = query.model ? ' and VV.is_model = ' + query.model : '';
-		const sence = query.sence ? ' and VV.sence = ' + query.sence : '';
+		const sence = query.sence ? ` and VV.sence = "${query.sence}"` : '';
 		const related_id = query.related_id ? ' and VV.related_id = ' + query.related_id : '';
 		const local_id = query.local_id ? ' and VV.local_id = "' + query.local_id + '"' : '';
 

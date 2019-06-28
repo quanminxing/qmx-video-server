@@ -651,7 +651,7 @@ class VideoController extends Controller {
 	}
 	async remove() {
 		const body = this.ctx.request.body;
-		let ids = body.ids ? body.ids.split(',') : [];
+		let ids = body.ids;
 		const work_id = this.ctx.session && this.ctx.session.user && this.ctx.session.user.id ? this.ctx.session.user.id : 0;
 		try {
 			await this.service.workerLog.insert({

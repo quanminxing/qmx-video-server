@@ -372,7 +372,7 @@ class VideoController extends Controller {
 		if(query.sidx) {
 			orderby += `order by ${sidx} ${sord}`
 		} else {
-			orderby += `order by VV.is_top desc, ${sidx} ${sord}`
+			orderby += `order by VV.is_top desc, VV.timestamp desc, ${sidx} ${sord}`
 		}
 		if (_search === 'true') {
 			if (id) {

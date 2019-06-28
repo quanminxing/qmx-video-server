@@ -160,7 +160,8 @@ class VideoService extends Service {
 			sence: obj.sence,
 			platform: obj.platform,
 			category: obj.category,
-			script_url: obj.script_url
+			script_url: obj.script_url,
+			related_id: obj.related_id
 		});
 
 		return result.affectedRows === 1;

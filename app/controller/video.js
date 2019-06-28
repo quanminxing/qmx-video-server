@@ -439,7 +439,7 @@ class VideoController extends Controller {
 
 		const pageSize = query.pageSize ? query.pageSize : 20;
 		const pageNum = query.pageNum ? query.pageNum : 1;
-		const sidx = query.sidx? 'VV.' + query.sidx : 'VV.timestamp';
+		const sidx = query.sidx? 'VV.' + query.sidx : 'VV.id';
 		const sord = query.sord || 'desc';
 
 		let orderby = '';

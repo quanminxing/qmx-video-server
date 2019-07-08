@@ -98,6 +98,7 @@ class PeopleController extends Controller {
     }
 
     this.ctx.body = {
+      status: 200,
       total: total,
       data: result
     };

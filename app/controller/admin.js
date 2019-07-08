@@ -114,7 +114,7 @@ class AdminController extends Controller {
             id: user.id,
             openid: user.openid,
             position: user.position,
-            name: user.name,
+            username: user.username,
             cname: user.cname,
             phone: user.phone,
             description: user.description,

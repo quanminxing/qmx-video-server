@@ -1009,8 +1009,8 @@ class BillController extends Controller {
   }
   async getSaleReport() {
     const query = this.ctx.request.query;
-    const timeUp = query.timeUp;
-    const timeDown = query.timeDown;
+    const timeUp = query.timeUp + ' 23:59:59';
+    const timeDown = query.timeDown + ' 00:00:00';
 
     if(!timeDown || !timeUp) {
       this.ctx.body = {

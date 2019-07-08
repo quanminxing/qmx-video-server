@@ -50,7 +50,10 @@ class PeopleController extends Controller {
         work_id
       });
 
-      this.ctx.body = 'success';
+      this.ctx.body = {
+        status:200,
+        data:'添加成功'
+      }
 
     } else if (oper === 'edit') {
 
@@ -71,7 +74,10 @@ class PeopleController extends Controller {
         work_id
       });
 
-      this.ctx.body = 'success';
+      this.ctx.body = {
+        status:200,
+        data:'修改成功'
+      };
     }
   }
 

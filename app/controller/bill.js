@@ -2,8 +2,12 @@
 
 const moment = require('moment');
 const marked = require('marked');
+const XLSX = require("xlsx");
+const fs = require('fs');
+const path = require('path');
 const counter = require('../lib/count');
 const mail = require('../lib/mail');
+const Util = require('../lib/util')
 const Controller = require('egg').Controller;
 class BillController extends Controller {
   async index() {
@@ -167,7 +171,7 @@ class BillController extends Controller {
       const trade_status = query.trade_status ? ` and VB.trade_status="${query.trade_status}"` : '';
       const pay_status = query.pay_status ? ` and VB.pay_status="${query.pay_status}"` : '';
       let order_time = query.order_time || '';
-      const work_id = query.work_id ? ' and VB.work_id=' + query.work_id : 0;
+      const work_id = query.work_id ? ' and VB.work_id=' + query.work_id : '';
       const order_id = query.order_id ? ' and VB.order_id="' + query.order_id + '"' : '';
       const sale_status = query.sale_status ? ' and VB.sale_status="' + query.sale_status + '"' : '';
 
@@ -230,6 +234,31 @@ class BillController extends Controller {
     }
   }
 
+  async product() {
+    const body = this.ctx.request.body;
+    const product_name = body.product_name
+    const product_url = body.product_url
+    const product_scale = body.product_scale
+    const bill_id = body.bill_id
+
+    const result = await this.service.bill.update({
+      id:bill_id,
+      product_name,
+      product_url,
+      product_scale
+    });
+    if(result) {
+      this.ctx.body = {
+        status:200,
+        data:'修改成功'
+      }
+    } else {
+      this.ctx.body = {
+        status: 500,
+        data:'修改失败'
+      }
+    }
+  }
 
   async detail() {
     const id = this.ctx.request.query.id;
@@ -572,21 +601,21 @@ class BillController extends Controller {
       }
       return;
     }
-    if(price < 0) {
+    if (price < 0) {
       this.ctx.body = {
         status: 500,
         err_message: '操作失败，订单价格必须大于0'
       }
       return;
     }
-    if(settle_status !== '全款' && earnest_price <= 0) {
+    if (settle_status !== '全款' && earnest_price <= 0) {
       this.ctx.body = {
         status: 500,
         err_message: '操作失败，定金金额必须大于0'
       }
       return;
     }
-    if(price <= earnest_price) {
+    if (price <= earnest_price) {
       this.ctx.body = {
         status: 500,
         err_message: '操作失败，定金金额必须小于订单价格'
@@ -595,7 +624,7 @@ class BillController extends Controller {
     }
 
     const bill_record = await this.service.bill.find(id);
-    if(!bill_record) {
+    if (!bill_record) {
       this.ctx.body = {
         status: 500,
         err_message: '修改失败,没有此订单'
@@ -603,7 +632,7 @@ class BillController extends Controller {
       return;
     }
     const pay_record = await this.service.pay.findByOrder(bill_record.order_id, ' and verify = "待审核"');
-    if(pay_record && pay_record.length > 0) {
+    if (pay_record && pay_record.length > 0) {
       this.ctx.body = {
         status: 500,
         err_message: "操作失败，此订单有待审核的支付记录，请审核后操作"
@@ -611,14 +640,14 @@ class BillController extends Controller {
       return;
     }
 
-    if(bill_record.pay_status !== '未付款') {
+    if (bill_record.pay_status !== '未付款') {
       this.ctx.body = {
         status: 500,
         err_message: '操作失败，已付款的订单，不能修改结算方式、价格、定金'
       }
       return;
     }
-    if(bill_record.trade_status === '退款完成') {
+    if (bill_record.trade_status === '退款完成') {
       this.ctx.body = {
         status: 500,
         err_message: '操作失败：退款完成的订单，不能修改结算方式、价格、定金'
@@ -695,7 +724,7 @@ class BillController extends Controller {
       return;
     }
     const pay_record = await this.service.pay.findByOrder(bill_record.order_id, ' and verify = "待审核"');
-    if(pay_record && pay_record.length > 0) {
+    if (pay_record && pay_record.length > 0) {
       this.ctx.body = {
         status: 500,
         err_message: '操作失败，存在待审核的支付记录，请先完成审核'
@@ -808,7 +837,7 @@ class BillController extends Controller {
         //   }
         //   return;
         // }
-        if(bill_record.pay_status === '未付款') {
+        if (bill_record.pay_status === '未付款') {
           this.ctx.body = {
             status: 500,
             err_message: '操作失败，未付款的订单不能退款'
@@ -977,6 +1006,93 @@ class BillController extends Controller {
         }
         break;
     }
+  }
+  async getSaleReport() {
+    const query = this.ctx.request.query;
+    const timeUp = query.timeUp;
+    const timeDown = query.timeDown;
+
+    if(!timeDown || !timeUp) {
+      this.ctx.body = {
+        status: 500,
+        err_message: 'time is wrong'
+      }
+      return;
+    }
+    const xlsxFile = path.join(__dirname,'../public/model.xlsx');
+    if(!fs.existsSync(xlsxFile)) {
+      console.log('model.xlsx not found');
+      return;
+    }
+
+    let buf = fs.readFileSync(xlsxFile);
+    let wb = XLSX.read(buf, {type:'buffer'});
+    // 获取 Excel 中所有表名
+    let sheetNames = wb.SheetNames; // 返回 ['sheet1', 'sheet2',……]
+    // 根据表名获取对应某张表
+    let worksheet = wb.Sheets[sheetNames[0]];
+    let saleStatus = ["待沟通", "需求沟通中", "需求不可行", "需求已确认", "待支付定金", "已支付定金", "待支付全款", "已支付全款", "脚本策划中", "待确认脚本", "脚本修改中", "脚本已确认", "待寄送样品", "样品已寄到", "拍摄排期中", "拍摄中", "后期排期中", "后期制作中", "待确认样片", "样片修改中", "样片已确认", "待支付尾款", "已支付尾款", "等待成片", "成片已交付", "交易成功", "退款中", "退款完成"];
+    var wscols = [
+      {wch: 15},
+      {wch: 15},
+      {wch: 15},
+      {wch: 30},
+    ];
+    worksheet['!cols'] = wscols;
+    let result;
+    //待沟通
+    
+    for(let i = 0; i < saleStatus.length; i ++) {
+      result = await this.service.bill.list(`where VB.is_del = false and VB.sale_status = "${saleStatus[i]}" and VB.timestamp between "${timeDown}" and "${timeUp}"`);
+      if(result.length > 0) {
+        let cur;
+        for(let j = 0; j < result.length; j++) {
+          switch (result[j].classify_id) {
+            case 1:
+              cur = i + 2 + (0 * 28);
+              worksheet['C' + cur].v += 1;
+              if(result[j].product_name) {
+                worksheet['D' + cur].v += 1;
+              }
+              break;
+          case 2:
+              cur = i + 2 + (1 * 28);
+              worksheet['C' + cur].v += 1;
+              if(result[j].product_name) {
+                worksheet['D' + cur].v += 1;
+              }
+              break;
+          case 3:
+              cur = i + 2 + (2 * 28);
+              worksheet['C' + cur].v += 1;
+              if(result[j].product_name) {
+                worksheet['D' + cur].v += 1;
+              }
+              break;
+          case 4:
+              cur = i + 2 + (3 * 28);
+              worksheet['C' + cur].v += 1;
+              if(result[j].product_name) {
+                worksheet['D' + cur].v += 1;
+              }
+              break;
+          case 5:
+              cur = i + 2 + (4 * 28);
+              worksheet['C' + cur].v += 1;
+              if(result[j].product_name) {
+                worksheet['D' + cur].v += 1;
+              }
+              break;
+          }
+        }
+      }
+    }
+    const outFilePath = path.join(__dirname, `../public/report/${Util.getDate()}.xlsx`);
+    await XLSX.writeFile(wb, outFilePath)
+    this.ctx.set('content-type', 'application/octet-stream');
+    this.ctx.response.attachment(outFilePath);
+    this.ctx.status = 200;
+    this.ctx.body = fs.createReadStream(outFilePath);
   }
 }
 

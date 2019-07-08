@@ -92,8 +92,9 @@ module.exports = app => {
   app.get('/manager/video', staff, app.controller.video.index);
 
   //人员管理
-  app.post('/people', admin, app.controller.people.main);
-  app.get('/people', admin, app.controller.people.list);
+  app.post('/api/people', admin, app.controller.people.main);
+  app.get('/api/people', admin, app.controller.people.list);
+  app.post('/api/people/del', admin, app.controller.people.remove);
   app.get('/manager/people',staff, app.controller.people.index);
 
   //订单管理
@@ -110,7 +111,9 @@ module.exports = app => {
   app.post('/api/bill/buyerInfo', app.controller.bill.buyerInfo);
   app.post('/api/bill/settleStatus',staff, app.controller.bill.settle);
   app.post('/api/bill/saleStatus',staff,  app.controller.bill.saleStatus);
+  app.post('/api/bill/product', app.controller.bill.product);
 
+  app.get('/api/bill/getSaleReport', app.controller.bill.getSaleReport);
   // //订单管理
   // app.post('/api/bill', app.controller.bill.main);
   // app.get('/api/bill', app.controller.bill.list);

@@ -24,6 +24,7 @@
     "egg-static": "^2.2.0",
     "egg-userrole": "^2.1.0",
     "egg-view-nunjucks": "^2.0.0",
+    "js-xlsx": "^0.8.22",
     "marked": "^0.3.5",
     "moment": "^2.13.0",
     "node-xlsx": "^0.12.1",

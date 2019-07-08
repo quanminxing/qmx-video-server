@@ -83,9 +83,9 @@ class AdminController extends Controller {
   };
 
   async login() {
-    const name = this.ctx.request.body.name;
+    const username = this.ctx.request.body.username;
     const password = this.ctx.request.body.password;
-    const login = await this.service.people.login(name, password);
+    const login = await this.service.people.login(username, password);
 
     if (login && login.length !== 0) {
       this.ctx.session.adminLogin = true;

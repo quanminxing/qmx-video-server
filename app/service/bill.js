@@ -35,9 +35,9 @@ class BillService extends Service {
   // 获取列表
   async list(cond, pageNum, pageSize) {
     const param = cond ? cond : ''
-    console.log(cond)
     let sql = `select VB.id, VB.phone, VCOL.name as column_name, VB.video_id, VB.comment, VB.email,VB.order_id, VB.pay_status, VB.refund_price, date_format(VB.refund_time,'%Y-%m-%d %H:%i:%s') AS refund_time,`
     + ` VB.name, IF(VB.work_id=0, 15, VB.work_id) AS work_id, VB.price, VB.status, VB.business, VB.trade_status, VB.work_comment,date_format(VB.timestamp,'%Y-%m-%d %H:%i:%s') as timestamp, date_format(VB.order_time, '%Y-%m-%d %H:%i:%s') AS order_time,`
+    + ` VB.product_name, VB.product_url, VB.product_scale,`
     + ` date_format(VB.trade_time, '%Y-%m-%d %H:%i:%s') AS trade_time, VB.earnest_price, VB.paid_price, VB.sale_status, VB.settle_status, VB.order_source,`
     + ` VPF.name as platform_name,`
     + ` VV.name as video_name, VV.category_id, VV.platform_id, VV.column_id, VV.classify_id, VV.time AS video_time, VV.scale_id, VV.is_model, VV.sence, VV.short_image, VV.usage_id,`
@@ -53,7 +53,10 @@ class BillService extends Service {
     + ` LEFT JOIN video_usage AS VU on VV.usage_id = VU.id`
     + ` LEFT JOIN video_worker AS VWOK on VB.work_id = VWOK.id`
 
-    + ` ${param} order by timestamp desc limit ${pageSize} offset ${(pageNum - 1) * pageSize};`
+    + ` ${param} order by timestamp desc`
+    if(pageNum && pageSize) {
+      sql += ` limit ${pageSize} offset ${(pageNum - 1) * pageSize};`
+    }
     const bill_records = await this.app.mysql.query(sql);
     return bill_records;
   }
@@ -64,6 +67,7 @@ class BillService extends Service {
       let sql = `select VB.id, VB.phone, VCOL.name as column_name, VB.video_id, VB.comment, VB.email,VB.order_id, VB.pay_status, VB.refund_price, date_format(VB.refund_time,'%Y-%m-%d %H:%i:%s') AS refund_time,`
         + ` VB.name, IF(VB.work_id=0, 15, VB.work_id) AS work_id, VB.price, VB.status, VB.business, VB.trade_status, VB.work_comment,date_format(VB.timestamp,'%Y-%m-%d %H:%i:%s') as timestamp, date_format(VB.order_time, '%Y-%m-%d %H:%i:%s') AS order_time,`
         + ` date_format(VB.trade_time, '%Y-%m-%d %H:%i:%s') AS trade_time, VB.earnest_price, VB.paid_price, VB.sale_status, VB.settle_status, VB.order_source,`
+        + ` VB.product_name, VB.product_url, VB.product_scale,`
         + ` VPF.name as platform_name, `
         + ` VV.name as video_name, VV.category_id, VV.platform_id, VV.column_id, VV.classify_id, VV.time AS video_time, VV.scale_id, VV.is_model, VV.sence, VV.short_image, VV.usage_id,`
         + ` VC.name AS category_name,`
@@ -124,7 +128,6 @@ class BillService extends Service {
     let result;
     result = await this.app.mysql.update('video_bill', data);
  
-
     return result.affectedRows === 1;
   }
 

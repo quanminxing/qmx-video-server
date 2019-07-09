@@ -253,7 +253,7 @@ class BillController extends Controller {
         data: '修改成功'
       }
       if (!this.ctx.session.user) {
-        const bill_record = await this.service.bill.list(` where id=${bill_id}`)
+        const bill_record = await this.service.bill.list(` where VB.id=${bill_id}`)
         let mailHtml = `1、需求简表内容如下</br>`
 
           + `宝贝名称：${bill_record[0].product_name}</br>`

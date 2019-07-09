@@ -264,7 +264,7 @@ class BillController extends Controller {
 
           + `2、订单信息如下</br>`
 
-          + `订单编号：19060323595901123456</br>`
+          + `订单编号：${bill_record[0].order_id}</br>`
 
           + `联系人：${bill_record[0].name}</br>`
           + `联系方式：${bill_record[0].phone}</br>`

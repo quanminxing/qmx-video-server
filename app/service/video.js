@@ -80,12 +80,12 @@ class VideoService extends Service {
 		+ ` (select group_concat(name separator',') from video_category where FIND_IN_SET(id, VV.category)) AS category,`
 		+ ` (select group_concat(name separator',') from video_platform where FIND_IN_SET(id, VV.platform)) AS platform`
 		+ ' from video_video AS VV' 
-		+ ' LEFT JOIN video_category AS VCG on VV.category_id = VCG.id' 
-		+ ' LEFT JOIN video_platform AS VPF on VV.platform_id = VPF.id' 
-		+ ' LEFT JOIN video_column AS VCO on VV.column_id = VCO.id' 
-		+ ' LEFT JOIN video_usage AS VU on VV.usage_id = VU.id' 
-		+ ' LEFT JOIN video_style AS VS on VV.style_id = VS.id' 
-		+ ' LEFT JOIN video_hot AS VHOT on VV.id = VHOT.video_id' 
+		+ ' LEFT JOIN video_category AS VCG on VV.category_id = VCG.id'
+		+ ' LEFT JOIN video_platform AS VPF on VV.platform_id = VPF.id'
+		+ ' LEFT JOIN video_column AS VCO on VV.column_id = VCO.id'
+		+ ' LEFT JOIN video_usage AS VU on VV.usage_id = VU.id'
+		+ ' LEFT JOIN video_style AS VS on VV.style_id = VS.id'
+		+ ' LEFT JOIN video_hot AS VHOT on VV.id = VHOT.video_id'
 		+ ' where VV.id = ? and VV.is_wechat = true;', [id]);
 
 		return article;

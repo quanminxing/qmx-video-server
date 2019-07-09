@@ -72,8 +72,8 @@ class BillController extends Controller {
         if (newResult.length > 0) {
           video_name = newResult[0].video_name ? newResult[0].video_name : '无'
           video_time = newResult[0].video_time ? newResult[0].video_time.split(':').join('分') + '秒' : '无'
-          worker_name = newResult[0].worker_name ? newResult[0].worker_name : '无'
-          worker_id = newResult[0].worker_id ? newResult[0].worker_id : '无'
+          worker_name = newResult[0].worker_name ? newResult[0].worker_name : ''
+          worker_id = newResult[0].worker_id ? newResult[0].worker_id : ''
         } else {
           video_name = '无'
           video_time = '无'
@@ -85,7 +85,7 @@ class BillController extends Controller {
             `样片视频：${video_name}</br>` +
             `样片时长：${video_time}</br>` +
             `订单价格：${price}</br>` +
-            `推荐人：${worker_id} -- ${worker_name}</br>` +
+            `推荐人：${worker_id !== '' ? worker_id + '--' : ''} ${worker_name}</br>` +
             //`样片功能：室内场景</br>` +
             `公司名称：${business}</br>` +
             `联系人：${name}</br>` +

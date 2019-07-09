@@ -252,34 +252,36 @@ class BillController extends Controller {
         status: 200,
         data: '修改成功'
       }
-      const bill_record = await this.service.bill.list(` where id=${bill_id}`)
-      let mailHtml = `1、需求简表内容如下`
+      if (!this.ctx.session.user) {
+        const bill_record = await this.service.bill.list(` where id=${bill_id}`)
+        let mailHtml = `1、需求简表内容如下`
 
-        `宝贝名称：${bill_record[0].product_name}`
+          `宝贝名称：${bill_record[0].product_name}`
 
-        `宝贝链接：${bill_record[0].product_url}`
+          `宝贝链接：${bill_record[0].product_url}`
 
-        `视频比例：${bill_record[0].product_scale}`
+          `视频比例：${bill_record[0].product_scale}`
 
-        `2、订单信息如下`
+          `2、订单信息如下`
 
-        `订单编号：19060323595901123456`
+          `订单编号：19060323595901123456`
 
-        `联系人：${bill_record[0].name}`
-        `联系方式：${bill_record[0].phone}`
+          `联系人：${bill_record[0].name}`
+          `联系方式：${bill_record[0].phone}`
 
-        `商品：${bill_record[0].usage_comment}-${bill_record[0].usage_name}`
+          `商品：${bill_record[0].usage_comment}-${bill_record[0].usage_name}`
 
-        `商品价格：${bill_record[0].price}`
+          `商品价格：${bill_record[0].price}`
 
-        `样片：${bill_record[0].video_id}-${bill_record[0].video_name}`
+          `样片：${bill_record[0].video_id}-${bill_record[0].video_name}`
 
-        `请及时与客户确认需求`
+          `请及时与客户确认需求`
 
-      let toMailAddress = bill_record[0].worker_email ? bill_record[0].worker_email : this.app.config.mailaddress;
-      mail.sendMail('客户提交需求简表提醒', mailHtml, toMailAddress, function (info) {   //'你收到一份来自全民星小视频的brief', '请在后台查看id为' + result.insertId +'的订单'
-        console.log(info);
-      });
+        let toMailAddress = bill_record[0].worker_email ? bill_record[0].worker_email : this.app.config.mailaddress;
+        mail.sendMail('客户提交需求简表提醒', mailHtml, toMailAddress, function (info) {   //'你收到一份来自全民星小视频的brief', '请在后台查看id为' + result.insertId +'的订单'
+          console.log(info);
+        });
+      }
     } else {
       this.ctx.body = {
         status: 500,

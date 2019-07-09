@@ -254,6 +254,7 @@ class BillController extends Controller {
       }
       if (!this.ctx.session.user) {
         const bill_record = await this.service.bill.list(` where VB.id=${bill_id}`)
+        const video_record = await this.service.video.search(1,1,` and VV.id=${bill_record[0].video_id}`,'')
         let mailHtml = `1、需求简表内容如下</br>`
 
           + `宝贝名称：${bill_record[0].product_name}</br>`
@@ -269,7 +270,7 @@ class BillController extends Controller {
           + `联系人：${bill_record[0].name}</br>`
           + `联系方式：${bill_record[0].phone}</br>`
 
-          + `商品：${bill_record[0].usage_comment}-${bill_record[0].usage_name}</br>`
+          + `商品：${video_record[0] ? video_record[0].related_id + '-': ''} ${video_record[0] ? video_record[0].related_name : '无'}</br>`
 
           + `商品价格：${bill_record[0].price}</br>`
 

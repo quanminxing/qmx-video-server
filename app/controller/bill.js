@@ -242,20 +242,48 @@ class BillController extends Controller {
     const bill_id = body.bill_id
 
     const result = await this.service.bill.update({
-      id:bill_id,
+      id: bill_id,
       product_name,
       product_url,
       product_scale
     });
-    if(result) {
+    if (result) {
       this.ctx.body = {
-        status:200,
-        data:'修改成功'
+        status: 200,
+        data: '修改成功'
       }
+      const bill_record = await this.service.bill.list(` where id=${bill_id}`)
+      let mailHtml = `1、需求简表内容如下`
+
+        `宝贝名称：${bill_record[0].product_name}`
+
+        `宝贝链接：${bill_record[0].product_url}`
+
+        `视频比例：${bill_record[0].product_scale}`
+
+        `2、订单信息如下`
+
+        `订单编号：19060323595901123456`
+
+        `联系人：${bill_record[0].name}`
+        `联系方式：${bill_record[0].phone}`
+
+        `商品：${bill_record[0].usage_comment}-${bill_record[0].usage_name}`
+
+        `商品价格：${bill_record[0].price}`
+
+        `样片：${bill_record[0].video_id}-${bill_record[0].video_name}`
+
+        `请及时与客户确认需求`
+
+      let toMailAddress = bill_record[0].worker_email ? bill_record[0].worker_email : this.app.config.mailaddress;
+      mail.sendMail('客户提交需求简表提醒', mailHtml, toMailAddress, function (info) {   //'你收到一份来自全民星小视频的brief', '请在后台查看id为' + result.insertId +'的订单'
+        console.log(info);
+      });
     } else {
       this.ctx.body = {
         status: 500,
-        data:'修改失败'
+        data: '修改失败'
       }
     }
   }
@@ -1012,74 +1040,74 @@ class BillController extends Controller {
     const timeUp = query.timeUp + ' 23:59:59';
     const timeDown = query.timeDown + ' 00:00:00';
 
-    if(!timeDown || !timeUp) {
+    if (!timeDown || !timeUp) {
       this.ctx.body = {
         status: 500,
         err_message: 'time is wrong'
       }
       return;
     }
-    const xlsxFile = path.join(__dirname,'../public/model.xlsx');
-    if(!fs.existsSync(xlsxFile)) {
+    const xlsxFile = path.join(__dirname, '../public/model.xlsx');
+    if (!fs.existsSync(xlsxFile)) {
       console.log('model.xlsx not found');
       return;
     }
 
     let buf = fs.readFileSync(xlsxFile);
-    let wb = XLSX.read(buf, {type:'buffer'});
+    let wb = XLSX.read(buf, { type: 'buffer' });
     // 获取 Excel 中所有表名
     let sheetNames = wb.SheetNames; // 返回 ['sheet1', 'sheet2',……]
     // 根据表名获取对应某张表
     let worksheet = wb.Sheets[sheetNames[0]];
     let saleStatus = ["待沟通", "需求沟通中", "需求不可行", "需求已确认", "待支付定金", "已支付定金", "待支付全款", "已支付全款", "脚本策划中", "待确认脚本", "脚本修改中", "脚本已确认", "待寄送样品", "样品已寄到", "拍摄排期中", "拍摄中", "后期排期中", "后期制作中", "待确认样片", "样片修改中", "样片已确认", "待支付尾款", "已支付尾款", "等待成片", "成片已交付", "交易成功", "退款中", "退款完成"];
     var wscols = [
-      {wch: 15},
-      {wch: 15},
-      {wch: 15},
-      {wch: 30},
+      { wch: 15 },
+      { wch: 15 },
+      { wch: 15 },
+      { wch: 30 },
     ];
     worksheet['!cols'] = wscols;
     let result;
     //待沟通
-    
-    for(let i = 0; i < saleStatus.length; i ++) {
+
+    for (let i = 0; i < saleStatus.length; i++) {
       result = await this.service.bill.list(`where VB.is_del = false and VB.sale_status = "${saleStatus[i]}" and VB.timestamp between "${timeDown}" and "${timeUp}"`);
-      if(result.length > 0) {
+      if (result.length > 0) {
         let cur;
-        for(let j = 0; j < result.length; j++) {
+        for (let j = 0; j < result.length; j++) {
           switch (result[j].classify_id) {
             case 1:
               cur = i + 2 + (0 * 28);
               worksheet['C' + cur].v += 1;
-              if(result[j].product_name) {
+              if (result[j].product_name) {
                 worksheet['D' + cur].v += 1;
               }
               break;
-          case 2:
+            case 2:
               cur = i + 2 + (1 * 28);
               worksheet['C' + cur].v += 1;
-              if(result[j].product_name) {
+              if (result[j].product_name) {
                 worksheet['D' + cur].v += 1;
               }
               break;
-          case 3:
+            case 3:
               cur = i + 2 + (2 * 28);
               worksheet['C' + cur].v += 1;
-              if(result[j].product_name) {
+              if (result[j].product_name) {
                 worksheet['D' + cur].v += 1;
               }
               break;
-          case 4:
+            case 4:
               cur = i + 2 + (3 * 28);
               worksheet['C' + cur].v += 1;
-              if(result[j].product_name) {
+              if (result[j].product_name) {
                 worksheet['D' + cur].v += 1;
               }
               break;
-          case 5:
+            case 5:
               cur = i + 2 + (4 * 28);
               worksheet['C' + cur].v += 1;
-              if(result[j].product_name) {
+              if (result[j].product_name) {
                 worksheet['D' + cur].v += 1;
               }
               break;

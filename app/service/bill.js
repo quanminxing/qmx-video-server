@@ -42,8 +42,9 @@ class BillService extends Service {
     + ` VPF.name as platform_name,`
     + ` VV.name as video_name, VV.category_id, VV.platform_id, VV.column_id, VV.classify_id, VV.time AS video_time, VV.scale_id, VV.is_model, VV.sence, VV.short_image, VV.usage_id,`
     + ` VC.name AS category_name,`
-    + ` VU.name AS usage_name,`
-    + ` IF(VWOK.cname = "" || ISNULL(VWOK.cname)=1, "汪涛", VWOK.cname) AS worker_name, IF(VWOK.phone = "" || ISNULL(VWOK.phone)=1, "15345817944", VWOK.phone) AS worker_phone`
+    + ` VU.name AS usage_name,VU.comment AS usage_comment,`
+    + ` IF(VWOK.cname = "" || ISNULL(VWOK.cname)=1, "汪涛", VWOK.cname) AS worker_name, IF(VWOK.phone = "" || ISNULL(VWOK.phone)=1, "15345817944", VWOK.phone) AS worker_phone,`
+    + ` IF(VWOK.email = "" || ISNULL(VWOK.email)=1, "", VWOK.email) AS worker_email`
 
     + ` from video_bill AS VB`
     + ` LEFT JOIN video_video AS VV on video_id = VV.id`

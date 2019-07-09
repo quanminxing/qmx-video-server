@@ -254,28 +254,28 @@ class BillController extends Controller {
       }
       if (!this.ctx.session.user) {
         const bill_record = await this.service.bill.list(` where id=${bill_id}`)
-        let mailHtml = `1、需求简表内容如下`
+        let mailHtml = `1、需求简表内容如下</br>`
 
-          `宝贝名称：${bill_record[0].product_name}`
+          + `宝贝名称：${bill_record[0].product_name}</br>`
 
-          `宝贝链接：${bill_record[0].product_url}`
+          + `宝贝链接：${bill_record[0].product_url}</br>`
 
-          `视频比例：${bill_record[0].product_scale}`
+          + `视频比例：${bill_record[0].product_scale}</br>`
 
-          `2、订单信息如下`
+          + `2、订单信息如下</br>`
 
-          `订单编号：19060323595901123456`
+          + `订单编号：19060323595901123456</br>`
 
-          `联系人：${bill_record[0].name}`
-          `联系方式：${bill_record[0].phone}`
+          + `联系人：${bill_record[0].name}</br>`
+          + `联系方式：${bill_record[0].phone}</br>`
 
-          `商品：${bill_record[0].usage_comment}-${bill_record[0].usage_name}`
+          + `商品：${bill_record[0].usage_comment}-${bill_record[0].usage_name}</br>`
 
-          `商品价格：${bill_record[0].price}`
+          + `商品价格：${bill_record[0].price}</br>`
 
-          `样片：${bill_record[0].video_id}-${bill_record[0].video_name}`
+          + `样片：${bill_record[0].video_id}-${bill_record[0].video_name}</br>`
 
-          `请及时与客户确认需求`
+          + `请及时与客户确认需求</br>`
 
         let toMailAddress = bill_record[0].worker_email ? bill_record[0].worker_email : this.app.config.mailaddress;
         mail.sendMail('客户提交需求简表提醒', mailHtml, toMailAddress, function (info) {   //'你收到一份来自全民星小视频的brief', '请在后台查看id为' + result.insertId +'的订单'

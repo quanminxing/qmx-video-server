@@ -28,7 +28,7 @@
     "marked": "^0.3.5",
     "moment": "^2.13.0",
     "node-xlsx": "^0.12.1",
-    "nodemailer": "^4.6.8",
+    "nodemailer": "^6.4.16",
     "thunkify": "~2.1.2",
     "upyun": "~2.0.4",
     "xml2js": "^0.4.19"

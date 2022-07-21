@@ -8,7 +8,7 @@ exports.sendMail = function(title, htmlText, address, cb){
         port: 465, // port
         auth: {
             user: 'qmx_alert@163.com',
-            pass: 'helloworld1234'
+            pass: ''
         }
     });
     // const mailOption = {
